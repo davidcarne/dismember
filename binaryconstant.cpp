@@ -1,0 +1,198 @@
+#include "trace.h"
+#include "memlocdata.h"
+#include "binaryconstant.h"
+#include "datatype.h"
+
+
+
+
+class BinaryConstantDataType : public DataType {
+public:
+	
+	BinaryConstantDataType(Trace * t, std::string name, nparse_e type, u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs = 0);
+	
+	virtual const std::string getName() const;
+	virtual address_t getElemSize() const;
+	
+	virtual void rename(std::string newname);
+	virtual bool isMutable() const;
+	// need to add an "editor popup display"
+	
+protected:
+		
+		/**
+		* \brief instantiate a new instance of the datatype
+		 * @param t The trace to which the instance will belong. This does not insert it into the trace, but merely
+		 *	uses the trace to setup the datatype.
+		 * @param addr The start address
+		 * @return the instantiated object, NULL on error
+		 */
+		virtual MemlocData * instantiateForTraceAndAddress(address_t addr) const;
+	
+private:
+		
+		class BinaryConstant : public MemlocData {
+public:
+			
+			
+			virtual ~BinaryConstant() {};
+			
+			virtual u32	get_length() const;
+			
+			virtual bool is_executable() const;
+			virtual bool logically_continues() const;
+			
+			/* The slist requirement will go away later when this returns tokens */
+			virtual const std::string get_textual();
+			
+			
+protected:
+				BinaryConstant(const DataType * creator, Trace * ctx, address_t address, u32 elemsize, 
+							enum endian_e endian = ENDIAN_LITTLE);
+			
+			friend class BinaryConstantDataType;	
+private:
+				u32 m_elemsize;
+			
+			enum endian_e m_endian;
+		};
+	
+	
+	std::string m_name;
+	size_t m_elemsize;
+};
+
+
+const DataType * datatype_u8_le = NULL;
+const DataType * datatype_s8_le = NULL;
+
+const DataType * datatype_u16_le = NULL;
+const DataType * datatype_s16_le = NULL;
+
+const DataType * datatype_u32_le = NULL;
+const DataType * datatype_s32_le = NULL;
+
+const DataType * datatype_u64_le = NULL;
+const DataType * datatype_s64_le = NULL;
+
+/**
+ * \brief Create a new BinaryConstantDataType
+ */
+BinaryConstantDataType::BinaryConstantDataType(Trace * t, std::string name, nparse_e type, u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs) : 
+	DataType(t), m_name(name), m_elemsize(len)
+{
+		 t->insertDataType(this->getName(),this);
+}
+
+const std::string BinaryConstantDataType::getName() const
+{
+	return m_name;
+}
+
+address_t BinaryConstantDataType::getElemSize() const
+{
+	return m_elemsize;
+}
+
+
+void BinaryConstantDataType::rename(std::string newname)
+{
+	m_name = newname;
+}
+
+bool BinaryConstantDataType::isMutable() const
+{
+	return false;
+}
+
+MemlocData * BinaryConstantDataType::instantiateForTraceAndAddress(address_t addr) const
+{
+	return new BinaryConstant(this, m_ctx, addr, m_elemsize);
+}
+
+BinaryConstantDataType::BinaryConstant::BinaryConstant(const DataType * creator, Trace * ctx, address_t address, u32 elemsize, enum endian_e endian) : MemlocData(creator, ctx, address), m_elemsize(elemsize), m_endian(endian)
+{
+}
+
+
+u32	BinaryConstantDataType::BinaryConstant::get_length() const
+{
+	return m_elemsize;
+}
+
+bool BinaryConstantDataType::BinaryConstant::is_executable() const
+{
+	return false;
+}
+
+/* The slist requirement will go away later when this returns tokens */
+const std::string BinaryConstantDataType::BinaryConstant::get_textual()
+{
+	std::string res="";
+	switch (m_elemsize)
+	{
+		case 1:
+			res += ".db";
+			break;
+			
+		case 2:
+			res += ".dh";
+			break;
+			
+		case 4:
+			res += ".dw";
+			break;
+		
+		case 8:
+			res += ".dq";
+			break;
+			
+		default:
+			res += ".d?";
+	}
+	res += "\t";
+
+	res += "0x";
+	for (u32 bind = 0; bind< m_elemsize; bind++)
+	{
+		char bytebuf[3]="??";
+		
+		address_t addr;
+		
+		if (m_endian == ENDIAN_LITTLE)
+			addr = get_addr() + (m_elemsize - bind - 1);
+		else
+			addr = get_addr() + bind;
+		
+		
+		uint8_t data;
+		
+		if (m_ctx->readByte(addr, &data))
+			snprintf(bytebuf, 3, "%02x", data);
+		else
+			snprintf(bytebuf, 3, "??");
+		res += bytebuf;
+	}
+
+	
+	return res;
+}
+
+
+bool BinaryConstantDataType::BinaryConstant::logically_continues() const {
+	return false;
+}
+
+// HACK HACK HACK
+void createBinaryConstantDataTypes(Trace * t)
+{
+	if (!datatype_u8_le) datatype_u8_le = new BinaryConstantDataType(t, "u8_le", BTYPE_PLAIN, 1, false, BSIGN_NONE);
+	if (!datatype_u16_le) datatype_u16_le = new BinaryConstantDataType(t, "u16_le", BTYPE_PLAIN, 2, false, BSIGN_NONE);
+	if (!datatype_u32_le) datatype_u32_le = new BinaryConstantDataType(t, "u32_le", BTYPE_PLAIN, 4, false, BSIGN_NONE);
+	if (!datatype_u64_le) datatype_u64_le = new BinaryConstantDataType(t, "u64_le", BTYPE_PLAIN, 8, false, BSIGN_NONE);
+	
+	if (!datatype_s8_le) datatype_s8_le = new BinaryConstantDataType(t, "s8_le", BTYPE_PLAIN, 1, false, BSIGN_STD);
+	if (!datatype_s16_le) datatype_s16_le = new BinaryConstantDataType(t, "s16_le", BTYPE_PLAIN, 2, false, BSIGN_STD);
+	if (!datatype_s32_le) datatype_s32_le = new BinaryConstantDataType(t, "s32_le", BTYPE_PLAIN, 4, false, BSIGN_STD);
+	if (!datatype_s64_le) datatype_s64_le = new BinaryConstantDataType(t, "s64_le", BTYPE_PLAIN, 8, false, BSIGN_STD);
+}
