@@ -13,21 +13,25 @@
  */
 class DataType {
 	public:
-	// This doesn't work - always references the base class getName. bah.
-	DataType(Trace * t) : m_ctx(t){
-	};
-	// { t->insertDataType(this->getName(),this); };
+	/**
+	 * \brief Get the name of the datatype [for display]
+	 *
+	 * @return the name of the dattatype
+	 */
+	virtual const std::string getName() const = 0;
 	
 	/**
 	 * \brief Get the name of the datatype [for display]
 	 *
 	 * @return the name of the dattatype
 	 */
-	virtual const std::string getName() const {
-		return "inval-err";
-	};
+	virtual const std::string getDisplayName() const
+	{
+		if (m_displayname.length() == 0)
+			return getName();
+		return m_displayname;
+	}
 	
-
 	/**
 	 * \brief get the size that this datatype could take up
 	 *
@@ -35,25 +39,46 @@ class DataType {
 	 */
 	virtual address_t getElemSize() const = 0;
 	
-	virtual void rename(std::string newname) = 0;
+	/**
+	 * \brief create an alias name for a datatype
+	 */
+	virtual void alias(std::string newname)
+	{
+		m_displayname = newname;
+	}
+	
+	/**
+	 * @return if the datatype is mutable
+	 */
 	virtual bool isMutable() const = 0;
 	
 	// need to add an "editor popup display"
 	
+	/**
+	 * @return the trace context that this datatype belongs to
+	 */
+	const Trace * getTraceContext() const {
+		return m_ctx;
+	}
+	
 	protected:
-		
+	/**
+	 * \brief Default constructor for the datatype class - cannot fully construct a datatype.
+	 */
+	DataType(Trace * t) : m_ctx(t) {
+	};
+	
 	/**
 	* \brief instantiate a new instance of the datatype
-	* @param t The trace to which the instance will belong. This does not insert it into the trace, but merely
-	*	uses the trace to setup the datatype.
 	* @param addr The start address
 	* @return the instantiated object, NULL on error
 	*/
-	virtual MemlocData * instantiateForTraceAndAddress(address_t addr) const = 0;
+	virtual MemlocData * instantiate(address_t addr) const = 0;
 	
+private:
 	friend class Trace;
-	
 	Trace * m_ctx;
+	std::string m_displayname;
 	
 };
 

@@ -1,10 +1,10 @@
 #ifndef _ROUTINELIST_H_
 #define _ROUTINELIST_H_
 
-class RoutineList: public wxListView
+class RoutineListView: public wxListView
 {
 public:
-	RoutineList(wxFrame *parent, Trace &ctx);
+	RoutineListView(wxFrame *parent, Trace &ctx);
 	void OnSelect(wxListEvent& event);
 	void OnShow(wxCommandEvent& event);
 	void OnSort(wxListEvent& event);

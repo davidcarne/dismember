@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 
-bool Trace::resolve(address_t addr,u8 bytes, u8 * buf)
+bool Trace::resolve(address_t addr,u8 bytes, u8 * buf) const
 {
 	assert(buf);
 	
@@ -21,7 +21,7 @@ bool Trace::resolve(address_t addr,u8 bytes, u8 * buf)
 	return false;
 }
 
-u32 Trace::ldw(address_t taddr)
+u32 Trace::ldw(address_t taddr) const
 {
 	u32 buf;
 	if (!resolve(taddr,4, (u8*)&buf))
@@ -31,7 +31,7 @@ u32 Trace::ldw(address_t taddr)
 	return endian_swap32(buf);
 }
 
-bool Trace::readByte(address_t taddr, uint8_t * data)
+bool Trace::readByte(address_t taddr, uint8_t * data) const
 {
 	uint8_t dummy;
 	

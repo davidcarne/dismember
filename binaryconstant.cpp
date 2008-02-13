@@ -9,7 +9,8 @@
 class BinaryConstantDataType : public DataType {
 public:
 	
-	BinaryConstantDataType(Trace * t, std::string name, nparse_e type, u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs = 0);
+	BinaryConstantDataType(Trace * t, std::string name, nparse_e type, u32 len, bool big_endian, 
+						   nparse_sign_e is_signed, u32 excessoffs = 0);
 	
 	virtual const std::string getName() const;
 	virtual address_t getElemSize() const;
@@ -27,7 +28,7 @@ protected:
 		 * @param addr The start address
 		 * @return the instantiated object, NULL on error
 		 */
-		virtual MemlocData * instantiateForTraceAndAddress(address_t addr) const;
+		virtual MemlocData * instantiate(address_t addr) const;
 	
 private:
 		
@@ -47,7 +48,7 @@ public:
 			
 			
 protected:
-				BinaryConstant(const DataType * creator, Trace * ctx, address_t address, u32 elemsize, 
+				BinaryConstant(const DataType * creator, const Trace * ctx, address_t address, u32 elemsize, 
 							enum endian_e endian = ENDIAN_LITTLE);
 			
 			friend class BinaryConstantDataType;	
@@ -78,7 +79,8 @@ const DataType * datatype_s64_le = NULL;
 /**
  * \brief Create a new BinaryConstantDataType
  */
-BinaryConstantDataType::BinaryConstantDataType(Trace * t, std::string name, nparse_e type, u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs) : 
+BinaryConstantDataType::BinaryConstantDataType(Trace * t, std::string name, nparse_e type, 
+											   u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs) : 
 	DataType(t), m_name(name), m_elemsize(len)
 {
 		 t->insertDataType(this->getName(),this);
@@ -105,12 +107,15 @@ bool BinaryConstantDataType::isMutable() const
 	return false;
 }
 
-MemlocData * BinaryConstantDataType::instantiateForTraceAndAddress(address_t addr) const
+MemlocData * BinaryConstantDataType::instantiate(address_t addr) const
 {
-	return new BinaryConstant(this, m_ctx, addr, m_elemsize);
+	return new BinaryConstant(this, getTraceContext(), addr, m_elemsize);
 }
 
-BinaryConstantDataType::BinaryConstant::BinaryConstant(const DataType * creator, Trace * ctx, address_t address, u32 elemsize, enum endian_e endian) : MemlocData(creator, ctx, address), m_elemsize(elemsize), m_endian(endian)
+BinaryConstantDataType::BinaryConstant::BinaryConstant(const DataType * creator, 
+													   const Trace * ctx, address_t address, 
+													   u32 elemsize, enum endian_e endian) : 
+	MemlocData(creator, ctx, address, elemsize), m_elemsize(elemsize), m_endian(endian)
 {
 }
 
@@ -167,7 +172,7 @@ const std::string BinaryConstantDataType::BinaryConstant::get_textual()
 		
 		uint8_t data;
 		
-		if (m_ctx->readByte(addr, &data))
+		if (get_ctx()->readByte(addr, &data))
 			snprintf(bytebuf, 3, "%02x", data);
 		else
 			snprintf(bytebuf, 3, "??");

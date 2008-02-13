@@ -12,9 +12,9 @@ Instruction * ARMArchitecture::create_instruction(Trace * ctx, address_t addr)
 {
 	return new ARMInstruction(ctx, addr, ctx->ldw(addr));
 }
-
+/*
 endian_e ARMArchitecture::getArchEndian(void)
 {
 	// HACK HACK HACK - this should be queried on creation
 	return ENDIAN_LITTLE;
-}
+}*/

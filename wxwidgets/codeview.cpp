@@ -1,7 +1,7 @@
 #include "codeview.h"
 #include <math.h>
 #include "ids.h"
-#include "loaders/loaderfactory.h"
+#include "../loaders/loaderfactory.h"
 #include "datatypelist.h"
 #include "codeviewcanvas.h"
 #include "toolbar.h"
@@ -73,7 +73,7 @@ CodeView::CodeView(const wxString& title, Trace & ctx) :
 	m_windows.empty();
 	
 	m_canvas = new CodeViewCanvas(this, ctx);
-	m_routines = new RoutineList(this, ctx);
+	m_routines = new RoutineListView(this, ctx);
 	TopToolBar *tb = new TopToolBar(this);
 	m_dataview = new DataView(this, ctx);
 	m_datatypelist = new DataTypeList(this, ctx);

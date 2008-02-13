@@ -2,9 +2,50 @@
 
 #include "memlocdata.h"
 
-MemlocData::MemlocData(const DataType * creator, Trace * ctx, address_t addr)
- : m_creator(creator), m_address(addr), m_ctx(ctx), m_comment(0)
+MemlocData::MemlocData(const DataType * creator, const Trace * ctx, address_t addr, u32 length)
+: m_creator(creator), m_address(addr), m_ctx(ctx)
 {
+	m_next = ctx->lookup_memloc(m_address + length, true);
+	if (m_next)
+		m_next->m_prev = this;
+	
+	m_prev = ctx->lookup_memloc(m_address - 1, false);
+	if (m_prev)
+		m_prev->m_next = this;
+	
+}
+
+MemlocData::~MemlocData()
+{
+	if (m_prev)
+		m_prev->m_next = NULL;
+	
+	if (m_next)
+		m_next->m_prev = NULL;
+}
+
+MemlocData * MemlocData::getPreviousContiguous()
+{
+	if (m_prev)
+		return m_prev;
+	
+	m_prev = m_ctx->lookup_memloc(m_address -1, false);
+	if (m_prev)
+		m_prev->m_next = this;
+	
+	return m_prev;
+}
+
+MemlocData *  MemlocData::getNextContiguous()
+{
+	if (m_next)
+		return m_next;
+	
+	m_next = m_ctx->lookup_memloc(m_address + get_length(), true);
+	if (m_next)
+		m_next->m_prev = this;
+	
+	return m_next;
 }
 
 address_t	MemlocData::get_addr() const
@@ -98,7 +139,7 @@ bool MemlocData::get_explicit() const
 }
 
 
-Trace * MemlocData::get_ctx() const
+const Trace * MemlocData::get_ctx() const
 {
 	return m_ctx;
 }

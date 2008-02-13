@@ -1,10 +1,12 @@
-#include "trace.h"
-#include "memlocdata.h"
-
 #include <stack>
 #include <stdlib.h>
-
 #include <stdexcept>
+
+
+#include "trace.h"
+#include "memlocdata.h"
+#include "instruction.h"
+#include "architecture.h"
 
 
 void Trace::undefine(address_t start)
@@ -58,17 +60,17 @@ void Trace::follow_code_build_insns(address_t start)
 	
 		//fprintf(stderr, "%p %x %x %p %p: %x %x\n", curr, addr, curr->get_addr(), instrns[addr], instrns[addr-4],  curr->get_pcflags(), curr->get_direct_jump_addr());
 		// Decided where to look next
-		if (curr->get_pcflags() & PCFLAG_CONTINUE)
+		if (curr->get_pcflags() & Instruction::PCFLAG_CONTINUE)
 		{
 			// easy call if its an incremental instr
-			addr += 4;
+			addr += curr->get_length();
 			
 			// If this instruction could also branch, save it
-			if ((curr->get_pcflags() & PCFLAG_LOCMASK) == PCFLAG_DIRLOC)
+			if ((curr->get_pcflags() & Instruction::PCFLAG_LOCMASK) == Instruction::PCFLAG_DIRLOC)
 				analysis_addrs.push(curr->get_direct_jump_addr());
 			
 		}
-		else if ((curr->get_pcflags() & PCFLAG_LOCMASK) == PCFLAG_DIRLOC)
+		else if ((curr->get_pcflags() & Instruction::PCFLAG_LOCMASK) == Instruction::PCFLAG_DIRLOC)
 		{
 			addr = curr->get_direct_jump_addr();
 			//printf("following dirjump %x\n", addr);

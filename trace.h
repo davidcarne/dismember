@@ -1,13 +1,14 @@
 #ifndef _TRACE_H_
 #define _TRACE_H_
 
-#include "types.h"
-
 #include <ext/hash_map>
 #include <list>
 #include <map>
 #include <string>
 #include <set>
+#include <stdint.h>
+
+#include "types.h"
 
 // Forward Declarations to reduce compile times
 class MemlocData;
@@ -16,45 +17,8 @@ class Instruction;
 class DataType;
 class Symbol;
 class Comment;
-
-
-#define XR_TYPE_JMP		0x0
-#define XR_TYPE_FNCALL	0x1
-#define XR_TYPE_DATA	0x2
-
-#include <stdint.h>
-
-struct comment {
-	address_t addr;
-	std::string text;
-	int lines;
-};
-
-class Xref {
-private:
-	typedef MemlocData xr_mtype;
-	
-public:
-	address_t get_src_addr() const;
-	address_t get_dst_addr() const;
-	const xr_mtype * get_src_inst() const;
-	const xr_mtype * get_dst_inst() const;
-	u32 get_type() const;
-	
-	bool operator==(const Xref & x);
-	
-protected:
-	Xref(Trace * lookup, address_t srcaddr, address_t dstaddr, u32 type);
-	friend class Trace;
-	
-private:
-	address_t m_srcaddr;
-	address_t m_dstaddr;
-	
-	u32 m_type;
-	
-	Trace * m_lookuptrace;
-};
+class Architecture;
+class Xref;
 
 typedef std::multimap<address_t, Xref *> xref_map;
 typedef xref_map::iterator xref_map_i;
@@ -71,14 +35,6 @@ typedef __gnu_cxx::hash_map<address_t, MemlocData * > memlochash_t;
 typedef memlochash_t::iterator memlochash_i;
 typedef memlochash_t::const_iterator memlochash_ci;
 
-class Architecture {
-public:
-	virtual ~Architecture() {};
-	virtual std::string get_short_name() const = 0; 
-	virtual Instruction * create_instruction(Trace * ctx, address_t addr) = 0;
-	virtual endian_e getArchEndian(void) = 0;
-	// also here we have the create from serializer factory method
-};
 
 #include "memsegment.h"
 #include "symlist.h"
@@ -106,25 +62,23 @@ public:
 	Xref *create_xref(address_t src, address_t dst, u32 type);
 	Comment *create_comment(std::string comment, address_t addr);
 	
-	const Symbol * lookup_symbol(const std::string & symname);
-	const Symbol * lookup_symbol(address_t addr);
+	const Symbol * lookup_symbol(const std::string & symname) const;
+	const Symbol * lookup_symbol(address_t addr) const;
 
-	Comment *lookup_comment(address_t addr);
+	Comment *lookup_comment(address_t addr) const;
 	
-	MemlocData * lookup_memloc(address_t addr, bool exactmatch=true);
+	MemlocData * lookup_memloc(address_t addr, bool exactmatch=true) const;
 	memloclist_ci memloc_list_begin() const;
 	memloclist_ci memloc_list_end() const;
 	
 	void remove_memloc(address_t addr);
 	
-	SymbolList::symname_ci sym_begin_name();
-	SymbolList::symname_ci sym_end_name();
-	SymbolList::symaddr_ci sym_begin_addr();
-	SymbolList::symaddr_ci sym_end_addr();
-	Symbol * find_ordered_symbol(uint32_t index, SymbolList::symsortorder_e order);
+	SymbolList::symname_ci sym_begin_name() const;
+	SymbolList::symname_ci sym_end_name() const;
+	SymbolList::symaddr_ci sym_begin_addr() const;
+	SymbolList::symaddr_ci sym_end_addr() const;
+	Symbol * find_ordered_symbol(uint32_t index, SymbolList::symsortorder_e order) const;
 	uint32_t get_symbol_count(void) const;
-		
-	//bool load_binary(const char * filename, u32 base);
 	
 	// callbacks.cpp
 	void registerMemlocHook(CallbackBase<MemlocData *> *);
@@ -141,10 +95,10 @@ public:
 	// Anything larger than a byte needs to be looked at thru the architecture
 	// and eventually, we can have more than one arch per file. need to decide how to do this
 	// but one global ldw/ldh handler isn't gonna work
-	u32 ldw(address_t taddr) __attribute__((deprecated));
+	u32 ldw(address_t taddr) const __attribute__((deprecated));
 	
 	// Read a byte from memory
-	bool readByte(address_t taddr, uint8_t * data);
+	bool readByte(address_t taddr, uint8_t * data) const;
 	
 	// Factor out into a specific algorithm class..
 	// this doesn't need internal knowledge of trace
@@ -175,7 +129,7 @@ public:
 	DataTypeReg::datatypereg_ci getDataTypeBegin() const;
 	DataTypeReg::datatypereg_ci getDataTypeEnd() const;
 	
-	DataType * lookupDataType(std::string name);
+	DataType * lookupDataType(std::string name) const;
 	void insertDataType(std::string name, DataType * d);
 private:
 	/* Private xref types */
@@ -188,8 +142,8 @@ private:
 	/* Serialize by name */
 	Architecture * m_arch;
 	
-	/* do not serialize */
-	MemSegment * m_last_segment;
+	/* do not serialize - cache*/
+	mutable MemSegment * m_last_segment;
 	
 	/* Needs serializing */
 	CommentList m_commentlist;
@@ -217,7 +171,7 @@ private:
 	xref_map m_xrefs_from;
 
 	/* This needs and the memseglist_t need to be pushed to another object */
-	bool resolve(address_t, u8, u8*);
+	bool resolve(address_t, u8, u8*) const;
 
 	/* Callback stuff - do not serialize */
 	typedef std::list<CallbackBase<MemlocData *> *> memloc_hook_list;
@@ -231,6 +185,10 @@ private:
 	void notifySymbolChange(Symbol *, HookChange);
 };
 
+inline bool addressIsBeginningOfMemory(const Trace * t, address_t addr)
+{
+	return !t->readByte(addr-1, NULL);
+}
 
 #ifdef _BIG_ENDIAN
 #define endian_swap32( V )           \
@@ -244,20 +202,5 @@ private:
 #define endian_swap32( V ) (V)
 #define endian_swap16( V ) (V)
 #endif
-
-
-#define  CPSR_T	0x20
-#define  CPSR_F	0x40
-#define  CPSR_I	0x80
-#define  CPSR_flags	0xf0000000
-#define  CPSR_V	0x10000000
-#define  CPSR_C	0x20000000
-#define  CPSR_Z 0x40000000
-#define  CPSR_N	0x80000000
-#define  CPSR_Vbits	28
-#define  CPSR_Cbits	29
-#define  CPSR_Zbits	30
-#define  CPSR_Nbits	31
-#define SPSR -1
 
 #endif

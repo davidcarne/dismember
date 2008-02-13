@@ -22,7 +22,7 @@
 Trace::Trace(Architecture * arch) : m_arch(arch)
 {
 	m_last_segment = NULL;
-	// HACK HACK HACK
+	/** \todo Creating and binding binary constants needs to be done much more gracefully */
 	createBinaryConstantDataTypes(this);
 	createStringConstantDataTypes(this);
 }
@@ -34,7 +34,7 @@ void Trace::analyze(address_t start)
 	build_xrefs();
 	build_xref_syms();
 	
-	// HACK< removeme
+	/** \todo notifications need to be reworked, a global notification is a bit of a hack */
 	notifyMemlocChange(NULL, HOOK_MODIFY);
 }
 
@@ -43,8 +43,9 @@ bool Trace::add_segment(MemSegment * m)
 {
 	assert(m);
 	
-	// HACK< removeme
+	/** \todo notifications need to be reworked, a global notification is a bit of a hack. Also, a dedicated memory segment cat would be good */
 	notifyMemlocChange(NULL, HOOK_MODIFY);
+	
 	address_t start = m->get_start(), end = start + m->get_length();
 
 	memseglist_ci ci = m_mem_segments.begin(),
@@ -66,7 +67,7 @@ bool Trace::add_segment(MemSegment * m)
 void Trace::createMemlocDataAt(DataType * d, address_t addr)
 {
 	assert(d);
-	insert_memlocd(d->instantiateForTraceAndAddress(addr));
+	insert_memlocd(d->instantiate(addr));
 }
 
 Trace::~Trace()
@@ -74,27 +75,27 @@ Trace::~Trace()
 }
 
 /* Symbol accessors */
-SymbolList::symname_ci Trace::sym_begin_name()
+SymbolList::symname_ci Trace::sym_begin_name() const
 {
 	return m_symlist.begin_name();
 }
 
-SymbolList::symname_ci Trace::sym_end_name()
+SymbolList::symname_ci Trace::sym_end_name() const
 {
 	return m_symlist.end_name();
 }
 
-SymbolList::symaddr_ci Trace::sym_begin_addr()
+SymbolList::symaddr_ci Trace::sym_begin_addr() const
 {
 	return m_symlist.begin_addr();
 }
 
-SymbolList::symaddr_ci Trace::sym_end_addr()
+SymbolList::symaddr_ci Trace::sym_end_addr() const
 {
 	return m_symlist.end_addr();
 }
 
-Symbol * Trace::find_ordered_symbol(uint32_t index, SymbolList::symsortorder_e order)
+Symbol * Trace::find_ordered_symbol(uint32_t index, SymbolList::symsortorder_e order) const
 {
 	return m_symlist.find_ordered_symbol(index, order);
 }
@@ -104,13 +105,13 @@ uint32_t Trace::get_symbol_count(void) const
 	return  m_symlist.get_symbol_count();
 }
 
-const Symbol * Trace::lookup_symbol(const std::string & symname)
+const Symbol * Trace::lookup_symbol(const std::string & symname) const
 {
 	const Symbol *sy = m_symlist.get_symbol(symname);
 	return sy;
 }
 
-const Symbol * Trace::lookup_symbol(address_t addr)
+const Symbol * Trace::lookup_symbol(address_t addr) const
 {
 	const Symbol *sy = m_symlist.get_symbol(addr);
 	return sy;
@@ -138,7 +139,7 @@ void Trace::insert_memlocd(MemlocData * a)
 	m_memdata[addr] = a;
 }
 
-MemlocData * Trace::lookup_memloc(address_t addr, bool exactmatch)
+MemlocData * Trace::lookup_memloc(address_t addr, bool exactmatch) const
 {	
 	// Try and do a fast hash lookup
 	memlochash_ci i = m_memdata_hash.find(addr);
@@ -150,7 +151,7 @@ MemlocData * Trace::lookup_memloc(address_t addr, bool exactmatch)
 		// Slower "address inside data" lookup
 		// Find the one after
 		// and see if the one before contains the addr
-		memloclist_i ib = m_memdata.upper_bound(addr);
+		memloclist_ci ib = m_memdata.upper_bound(addr);
 		if (ib != m_memdata.begin())
 		{
 			ib--;
@@ -195,7 +196,7 @@ Comment *Trace::create_comment(std::string cmt, address_t addr)
 	return m_commentlist.set_comment(addr, cmt);
 }
 
-Comment *Trace::lookup_comment(address_t addr)
+Comment *Trace::lookup_comment(address_t addr) const
 {
 	return m_commentlist.get_comment(addr);
 }
@@ -264,7 +265,7 @@ DataTypeReg::datatypereg_ci Trace::getDataTypeEnd() const
 	return m_datatypelist.getEnd();
 }
 	
-DataType * Trace::lookupDataType(std::string name)
+DataType * Trace::lookupDataType(std::string name) const
 {
 	return m_datatypelist.lookupDataType(name);
 }

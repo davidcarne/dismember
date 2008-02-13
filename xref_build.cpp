@@ -1,7 +1,9 @@
 #include "trace.h"
 #include "memlocdata.h"
+#include "instruction.h"
 #include "binaryconstant.h"
 #include "datatype.h"
+#include "xref.h"
 
 Xref *Trace::create_xref(address_t srcaddr, address_t dstaddr, u32 type)
 {
@@ -22,7 +24,7 @@ Xref *Trace::create_xref(address_t srcaddr, address_t dstaddr, u32 type)
 	// Mark as a function call
 	if (dst)
 	{
-		if (type == XR_TYPE_FNCALL)
+		if (type == Xref::XR_TYPE_FNCALL)
 		{
 			Instruction * instdst;
 			instdst = dynamic_cast<Instruction *>(dst);
@@ -48,21 +50,24 @@ void Trace::build_xrefs()
 		Instruction * id = dynamic_cast<Instruction*>((*i).second);
 		if (id)
 		{
-			if ((id->get_pcflags() & PCFLAG_LOCMASK) == PCFLAG_DIRLOC)
-				create_xref(id->get_addr(), id->get_direct_jump_addr(), id->get_pcflags() & PCFLAG_DIRLK ? XR_TYPE_FNCALL : XR_TYPE_JMP);
+			// workaround for what appears to be a gcc/linker bug
+			u32 a = Xref::XR_TYPE_FNCALL;
+			u32 b = Xref::XR_TYPE_JMP;
+			if ((id->get_pcflags() & Instruction::PCFLAG_LOCMASK) == Instruction::PCFLAG_DIRLOC)
+				create_xref(id->get_addr(), id->get_direct_jump_addr(), id->get_pcflags() & Instruction::PCFLAG_DIRLK ? a : b);
 			
-			if (id->get_pcflags() & PCFLAG_DREF)
+			if (id->get_pcflags() & Instruction::PCFLAG_DREF)
 			{
 				address_t daddr = id->get_data_ref_addr();
 				
 				MemlocData * ddst = lookup_memloc(daddr);
 				
 				u32 size = 0;
-				if ((id->get_pcflags() & PCFLAG_DSMASK) == PCFLAG_DSWORD)
+				if ((id->get_pcflags() & Instruction::PCFLAG_DSMASK) == Instruction::PCFLAG_DSWORD)
 				{
 					size = 4;
 				}
-				else if ((id->get_pcflags() & PCFLAG_DSMASK) == PCFLAG_DSBYTE)
+				else if ((id->get_pcflags() & Instruction::PCFLAG_DSMASK) == Instruction::PCFLAG_DSBYTE)
 				{	
 					size = 1;
 				}
@@ -72,16 +77,16 @@ void Trace::build_xrefs()
 					switch (size) {
 						// HACK HACK HACK - changeme
 						case 1:
-							insert_memlocd(datatype_u8_le->instantiateForTraceAndAddress(daddr));
+							insert_memlocd(datatype_u8_le->instantiate(daddr));
 							break;
 							
 						case 4:
-							insert_memlocd(datatype_u32_le->instantiateForTraceAndAddress(daddr));
+							insert_memlocd(datatype_u32_le->instantiate(daddr));
 							break;
 					}
 				}
 				
-				create_xref(id->get_addr(), daddr, XR_TYPE_DATA);
+				create_xref(id->get_addr(), daddr, Xref::XR_TYPE_DATA);
 			}
 
 		}
@@ -120,7 +125,7 @@ void Trace::build_xref_syms()
 						break;
 				}
 			}
-			else if (aid && aid->get_pcflags() & PCFLAG_FNENT) {
+			else if (aid && aid->get_pcflags() & Instruction::PCFLAG_FNENT) {
 				sprintf(type, "code");
 				subroutine = true;
 				sprintf(namebuf, "_sub_%08X", id->get_addr());

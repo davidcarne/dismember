@@ -5,6 +5,7 @@
 #include "datatypelist.h"
 #include "../memlocdata.h"
 #include <stdexcept>
+#include "../xref.h"
 
 static wxFont G_font;
 static int G_font_height;

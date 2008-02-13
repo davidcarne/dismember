@@ -3,7 +3,7 @@
 #include "codeviewcanvas.h"
 #include "routinelist.h"
 
-RoutineList::RoutineList(wxFrame *frame, Trace &ctx)
+RoutineListView::RoutineListView(wxFrame *frame, Trace &ctx)
  : wxListView(frame, wxID_ANY, wxDefaultPosition, wxSize(180, 475), wxLC_REPORT | wxLC_VIRTUAL), m_trace(ctx)
 {
 	m_parent = frame;
@@ -15,9 +15,9 @@ RoutineList::RoutineList(wxFrame *frame, Trace &ctx)
 	m_locs->Check(true);
 	m_subs->Check(true);
 
-	Callback<Symbol*, RoutineList> *cb = new Callback<Symbol*, RoutineList>;
+	Callback<Symbol*, RoutineListView> *cb = new Callback<Symbol*, RoutineListView>;
 	cb->setClass(this);
-	cb->setCallback(&RoutineList::UpdateSymbol);
+	cb->setCallback(&RoutineListView::UpdateSymbol);
 	m_trace.registerSymbolHook(cb);
 	
 	SetWindowStyleFlag(wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_VIRTUAL);
@@ -27,7 +27,7 @@ RoutineList::RoutineList(wxFrame *frame, Trace &ctx)
 	SetItemCount(0);
 }
 
-inline bool RoutineList::isAllowed(const Symbol *sym) const
+inline bool RoutineListView::isAllowed(const Symbol *sym) const
 {
 // apparently way too slow
 	return true;
@@ -45,7 +45,7 @@ inline bool RoutineList::isAllowed(const Symbol *sym) const
 	return true;
 }
 
-void RoutineList::UpdateSymbol(Symbol *s, HookChange hc)
+void RoutineListView::UpdateSymbol(Symbol *s, HookChange hc)
 {
 	switch (hc) {
 	case HOOK_DELETE:
@@ -63,7 +63,7 @@ void RoutineList::UpdateSymbol(Symbol *s, HookChange hc)
 	//Update();
 }
 
-void RoutineList::Update()
+void RoutineListView::Update()
 {
 	int n, max = m_trace.get_symbol_count();
 #if 0
@@ -83,7 +83,7 @@ void RoutineList::Update()
 	Refresh();
 }
 
-wxString RoutineList::OnGetItemText(long item, long column) const
+wxString RoutineListView::OnGetItemText(long item, long column) const
 {
 	SymbolList::symsortorder_e order = SymbolList::SYMORDER_ADDR;
 	if (m_sort_by == SYMBOL)
@@ -109,7 +109,7 @@ wxString RoutineList::OnGetItemText(long item, long column) const
 	return _("");
 }
 
-void RoutineList::OnSort(wxListEvent& event)
+void RoutineListView::OnSort(wxListEvent& event)
 {
 	switch (event.GetColumn()) {
 	case 0:	m_sort_by = SYMBOL; Update(); break;
@@ -119,7 +119,7 @@ void RoutineList::OnSort(wxListEvent& event)
 	Update();
 }
 
-void RoutineList::OnSelect(wxListEvent& WXUNUSED(event))
+void RoutineListView::OnSelect(wxListEvent& WXUNUSED(event))
 {
 	SymbolList::symsortorder_e order = SymbolList::SYMORDER_ADDR;
 	if (m_sort_by == SYMBOL)
@@ -133,20 +133,20 @@ void RoutineList::OnSelect(wxListEvent& WXUNUSED(event))
 }
 
 
-void RoutineList::OnShow(wxCommandEvent& event)
+void RoutineListView::OnShow(wxCommandEvent& event)
 {
 	Update();
 }
 
-void RoutineList::OnRightDown(wxMouseEvent& m)
+void RoutineListView::OnRightDown(wxMouseEvent& m)
 {
 	PopupMenu(&m_menu, m.GetPosition());
 	m.Skip();
 }
 
-BEGIN_EVENT_TABLE(RoutineList, wxListView)
-EVT_RIGHT_DOWN(RoutineList::OnRightDown)
-EVT_LIST_ITEM_ACTIVATED(wxID_ANY, RoutineList::OnSelect)
-EVT_LIST_COL_CLICK(wxID_ANY, RoutineList::OnSort)
-EVT_MENU(wxID_ANY, RoutineList::OnShow)
+BEGIN_EVENT_TABLE(RoutineListView, wxListView)
+EVT_RIGHT_DOWN(RoutineListView::OnRightDown)
+EVT_LIST_ITEM_ACTIVATED(wxID_ANY, RoutineListView::OnSelect)
+EVT_LIST_COL_CLICK(wxID_ANY, RoutineListView::OnSort)
+EVT_MENU(wxID_ANY, RoutineListView::OnShow)
 END_EVENT_TABLE()

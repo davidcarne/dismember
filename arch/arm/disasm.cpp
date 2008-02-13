@@ -184,7 +184,7 @@ static void write_barrelshift (char **retp, int bsh)
     *retp = p;
 }
 
-static void write_addr (Trace *t, char **retp, int Pre, int Up, int Writeback, int Immed, int offset, int base, u32 pc)
+static void write_addr (const Trace *t, char **retp, int Pre, int Up, int Writeback, int Immed, int offset, int base, u32 pc)
 {
     char *p = *retp;
     if (base == 15 && !Writeback && Immed) {
@@ -254,7 +254,7 @@ static char * comment_resolve(u32 a, u32 b)
 {
 	return NULL;
 }
-static void write_jump (Trace * m_ctx, char **retp, u32 jumpfield, u32 pc) 
+static void write_jump (const Trace * m_ctx, char **retp, u32 jumpfield, u32 pc) 
 {
     u32 jumpbytes = jumpfield << 2;
     if (jumpbytes & (1 << 25))

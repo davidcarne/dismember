@@ -21,9 +21,53 @@ protected:
 		 * @param addr The start address
 		 * @return the instantiated object, NULL on error
 		 */
-		virtual MemlocData * instantiateForTraceAndAddress(address_t addr) const
+		virtual MemlocData * instantiate(address_t addr) const
 	{
-		return new StringConstant(this, m_ctx, addr);
+		address_t len = 0;
+		std::string contents;
+		
+		uint8_t unitchar;
+		bool done = false;
+		
+		while (!done)
+		{
+			if (!getTraceContext()->readByte(addr, &unitchar))
+			{
+				break;
+			}
+			
+			if (unitchar == 0)
+				done = true;
+			
+			if (isprint(unitchar))
+				contents += unitchar;
+			else{
+				switch (unitchar)
+				{
+					case '\n':
+						contents += "\\n";
+						break;
+						
+					case '\r':
+						contents += "\\r";
+						break;
+						
+					case '\t':
+						contents += "\\t";
+						break;
+					case 0:
+						break;
+					default:
+						char buf[8];
+						snprintf(buf,7,"\\x%02x",unitchar); 
+						contents += buf;
+				}
+			}
+			addr++;
+			len++;
+		}
+		
+		return new StringConstant(this, getTraceContext(), addr, len, contents);
 	}
 	
 private:
@@ -53,49 +97,9 @@ public:
 			}
 			
 protected:
-			StringConstant(const DataType * creator, Trace * ctx, address_t address) : MemlocData(creator, ctx, address)
-			{
-				m_len = 0;
-				uint8_t data;
-				bool done = false;
-				while (!done)
-				{
-					if (!ctx->readByte(address, &data))
-					{
-						break;
-					}
-					
-					if (data == 0)
-						done = true;
-					
-					if (isprint(data))
-						m_data += data;
-					else{
-						switch (data)
-						{
-							case '\n':
-								m_data += "\\n";
-								break;
-								
-							case '\r':
-								m_data += "\\r";
-								break;
-								
-							case '\t':
-								m_data += "\\t";
-								break;
-							case 0:
-								break;
-							default:
-								char buf[8];
-								snprintf(buf,7,"\\x%02x",data); 
-								m_data += buf;
-						}
-					}
-					address++;
-					m_len++;
-				}
-			}
+			StringConstant(const DataType * creator, const Trace * ctx, address_t address, address_t len, std::string data) : MemlocData(creator, ctx, address, m_len), m_len(len), m_data(data)
+			{}
+			
 			address_t m_len;
 			std::string m_data;
 			friend class StringConstantDataType;	

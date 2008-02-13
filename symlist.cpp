@@ -82,32 +82,32 @@ const Symbol * SymbolList::get_symbol(const std::string & name) const
 }
 
 
-SymbolList::symname_ci SymbolList::begin_name()
+SymbolList::symname_ci SymbolList::begin_name() const
 {
 	updateDirtyVectors();
 	return m_name_order.begin();
 }
 
-SymbolList::symname_ci SymbolList::end_name()
+SymbolList::symname_ci SymbolList::end_name() const
 {
 	updateDirtyVectors();
 	return m_name_order.end();
 }
 
-SymbolList::symaddr_ci SymbolList::begin_addr()
+SymbolList::symaddr_ci SymbolList::begin_addr() const
 {
 	updateDirtyVectors();
 	return m_addr_order.begin();
 }
 
-SymbolList::symaddr_ci SymbolList::end_addr()
+SymbolList::symaddr_ci SymbolList::end_addr() const
 {
 	updateDirtyVectors();
 	return m_addr_order.end();
 }
 
 
-Symbol * SymbolList::find_ordered_symbol(uint32_t index, symsortorder_e order)
+Symbol * SymbolList::find_ordered_symbol(uint32_t index, symsortorder_e order) const
 {
 	updateDirtyVectors();
 	//printf("Looking up index %d, maxsize %d\n", index, m_name_order.size());
@@ -127,7 +127,6 @@ uint32_t SymbolList::get_symbol_count(void) const
 	return m_name_lookup.size();
 }
 
-
 struct nameSort
 {
 	bool operator()(Symbol *  const  & a, Symbol*  const & b)
@@ -144,7 +143,7 @@ struct addrSort
 	}
 };
 
-void SymbolList::updateDirtyVectors()
+void SymbolList::updateDirtyVectors() const
 {
 	if (!m_vectors_dirty)
 		return;

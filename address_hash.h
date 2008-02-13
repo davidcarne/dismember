@@ -9,9 +9,10 @@
 #include "types.h"
 
 namespace __gnu_cxx {
-	
+	/** hash functor for hashing an address_t */
 	template<> struct hash<address_t>
 { 
+	/** Stupidly simple hash functor */
 	size_t operator()(const address_t & __x) const
 {
 	return __x ^ (__x >> 32);

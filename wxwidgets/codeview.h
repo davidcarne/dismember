@@ -29,7 +29,7 @@ typedef wxFrameManager wxAuiManager;
 class DataTypeList;
 class CodeViewCanvas;
 class ToolBar;
-class RoutineList;
+class RoutineListView;
 class DataView;
 class DataTypeList;
 
@@ -45,7 +45,7 @@ public:
 	void OnSave(wxCommandEvent& event);
 	void OnLoad(wxCommandEvent & event);
 	void OnLoadAuto(wxCommandEvent & event);
-	RoutineList *m_routines;
+	RoutineListView *m_routines;
 	CodeViewCanvas *m_canvas;
 	DataView *m_dataview;
 	DataTypeList *m_datatypelist;

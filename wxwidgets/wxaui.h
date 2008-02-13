@@ -9,6 +9,8 @@
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
 
+/** @cond NEVER_DO */
+
 #ifndef __WXAUI_WXAUI_H
 #define __WXAUI_WXAUI_H
 
@@ -768,3 +770,6 @@ typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
 
 
 #endif
+
+/** @endcond */
+

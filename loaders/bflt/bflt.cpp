@@ -47,7 +47,6 @@ int FlatLoader::matchToFile(FILE * f) const
 
 bool FlatLoader::loadFromFile(FILE * loadimg, Trace * ctx)
 {
-	u32 len;
 
 	/* Load the image */
 	if (readHeader(loadimg) < 0)

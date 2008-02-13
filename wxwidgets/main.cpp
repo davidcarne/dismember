@@ -8,7 +8,7 @@
 #include "ids.h"
 
 // TODO: remove this
-#include "arch/arm/arm.h"
+#include "../arch/arm/arm.h"
 
 IMPLEMENT_APP(ArmTraceApp)
 

@@ -6,7 +6,22 @@
 	objectVersion = 42;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		6744A1D80D62EFCE00311E95 /* doxygen */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 6744A1DC0D62EFED00311E95 /* Build configuration list for PBXAggregateTarget "doxygen" */;
+			buildPhases = (
+				6744A1D70D62EFCE00311E95 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = doxygen;
+			productName = doxygen;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
+		67449EB90D62BACF00311E95 /* codeblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67449EB80D62BACF00311E95 /* codeblock.cpp */; };
 		67CD5BB20D284E1F003B72E8 /* memlocdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674D3CA80D244E2E0074B172 /* memlocdata.cpp */; };
 		67CD5BB30D284E1F003B72E8 /* datatypelist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674D3D360D2452890074B172 /* datatypelist.cpp */; };
 		67CD5BB50D284E1F003B72E8 /* dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674D3CC60D244E730074B172 /* dialog.cpp */; };
@@ -43,7 +58,23 @@
 		67CD5EDB0D287A52003B72E8 /* hint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CD5EDA0D287A51003B72E8 /* hint.cpp */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		670E59520D62F33F00A30E5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6744A1D80D62EFCE00311E95 /* doxygen */;
+			remoteInfo = doxygen;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		670E59C30D62F7DC00A30E5E /* string_hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string_hash.h; sourceTree = "<group>"; };
+		67449EB70D62BACF00311E95 /* codeblock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = codeblock.h; sourceTree = "<group>"; };
+		67449EB80D62BACF00311E95 /* codeblock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = codeblock.cpp; sourceTree = "<group>"; };
+		6744A0F00D62E7A100311E95 /* instruction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = instruction.h; sourceTree = "<group>"; };
+		6744A1E20D62F03600311E95 /* architecture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = architecture.h; sourceTree = "<group>"; };
+		6744A1E30D62F07D00311E95 /* xref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xref.h; sourceTree = "<group>"; };
 		674D3C990D244E2E0074B172 /* abstractdata.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = abstractdata.cpp; sourceTree = "<group>"; };
 		674D3C9A0D244E2E0074B172 /* abstractdata.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = abstractdata.h; sourceTree = "<group>"; };
 		674D3C9B0D244E2E0074B172 /* binaryconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = binaryconstant.cpp; sourceTree = "<group>"; };
@@ -154,6 +185,7 @@
 				674D3D010D244EFE0074B172 /* global trace */,
 				674D3CFE0D244EE80074B172 /* datatypes */,
 				67CD5D780D286328003B72E8 /* address_hash.h */,
+				670E59C30D62F7DC00A30E5E /* string_hash.h */,
 			);
 			name = "main src";
 			sourceTree = "<group>";
@@ -294,6 +326,9 @@
 				674D3C9D0D244E2E0074B172 /* callback.cpp */,
 				67CD5ED90D287A51003B72E8 /* hint.h */,
 				67CD5EDA0D287A51003B72E8 /* hint.cpp */,
+				6744A0F00D62E7A100311E95 /* instruction.h */,
+				6744A1E20D62F03600311E95 /* architecture.h */,
+				6744A1E30D62F07D00311E95 /* xref.h */,
 			);
 			name = "global trace";
 			sourceTree = "<group>";
@@ -313,6 +348,8 @@
 				674D3CB40D244E2E0074B172 /* traceloadsave.cpp */,
 				674D3CB70D244E2E0074B172 /* xmlbzip2_fileio.cpp */,
 				674D3CB80D244E2E0074B172 /* xmlbzip2_fileio.h */,
+				67449EB70D62BACF00311E95 /* codeblock.h */,
+				67449EB80D62BACF00311E95 /* codeblock.cpp */,
 			);
 			name = ser;
 			sourceTree = "<group>";
@@ -336,22 +373,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXLegacyTarget section */
-		D28A88AD04BDD90700651E21 /* dismember */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 1DEB918F08733D9F0010E9CD /* Build configuration list for PBXLegacyTarget "dismember" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			dependencies = (
-			);
-			name = dismember;
-			passBuildSettingsInEnvironment = 1;
-			productName = armtrace;
-		};
-/* End PBXLegacyTarget section */
-
 /* Begin PBXNativeTarget section */
 		67CD5B9C0D284D00003B72E8 /* dismember.app */ = {
 			isa = PBXNativeTarget;
@@ -364,6 +385,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				670E59530D62F33F00A30E5E /* PBXTargetDependency */,
 			);
 			name = dismember.app;
 			productName = dismember.app;
@@ -383,8 +405,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D28A88AD04BDD90700651E21 /* dismember */,
 				67CD5B9C0D284D00003B72E8 /* dismember.app */,
+				6744A1D80D62EFCE00311E95 /* doxygen */,
 			);
 		};
 /* End PBXProject section */
@@ -398,6 +420,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6744A1D70D62EFCE00311E95 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "doxygen\nexit 0";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		67CD5B9A0D284D00003B72E8 /* Sources */ = {
@@ -438,49 +476,21 @@
 				67CD5BD50D284E1F003B72E8 /* arm_arch.cpp in Sources */,
 				67CD5BD60D284E1F003B72E8 /* code_follow.cpp in Sources */,
 				67CD5EDB0D287A52003B72E8 /* hint.cpp in Sources */,
+				67449EB90D62BACF00311E95 /* codeblock.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		670E59530D62F33F00A30E5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6744A1D80D62EFCE00311E95 /* doxygen */;
+			targetProxy = 670E59520D62F33F00A30E5E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		1DEB919008733D9F0010E9CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARMPREFIX = "arm-9tdmi-linux-gnu";
-				COPY_PHASE_STRIP = NO;
-				CXXFLAGS = "-D_GLIBCXX_DEBUG -I/opt/include";
-				DEBUGGING_SYMBOLS = YES;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				LDFLAGS = "-L/opt/lib";
-				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PATH = "/opt/cross-arm9tdmi/bin:/opt/bin:/sw/bin:${PATH}";
-				PRODUCT_NAME = armtrace;
-				ZERO_LINK = YES;
-			};
-			name = Debug;
-		};
-		1DEB919108733D9F0010E9CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = armtrace;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		1DEB919408733D9F0010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -498,6 +508,27 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Release;
+		};
+		6744A1D90D62EFCF00311E95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = doxygen;
+			};
+			name = Debug;
+		};
+		6744A1DA0D62EFCF00311E95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = doxygen;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -552,6 +583,7 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = dismember;
 				SHARED_PRECOMPS_DIR = "";
+				SYMROOT = "$(PROJECT_DIR)/build";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -574,6 +606,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = dismember.app;
+				SYMROOT = "$(PROJECT_DIR)/build";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -582,20 +615,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB918F08733D9F0010E9CD /* Build configuration list for PBXLegacyTarget "dismember" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1DEB919008733D9F0010E9CD /* Debug */,
-				1DEB919108733D9F0010E9CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		1DEB919308733D9F0010E9CD /* Build configuration list for PBXProject "dismember" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB919408733D9F0010E9CD /* Debug */,
 				1DEB919508733D9F0010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6744A1DC0D62EFED00311E95 /* Build configuration list for PBXAggregateTarget "doxygen" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6744A1D90D62EFCF00311E95 /* Debug */,
+				6744A1DA0D62EFCF00311E95 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -14,27 +14,38 @@
 // Hybrid datatype allowing for fast lookups, but also maintains sorted
 class SymbolList;
 
-/* Hack hack hack.. stupid stl */
-namespace __gnu_cxx
-{
-	template<> struct hash< std::string >
-	{
-		size_t operator()( const std::string& x ) const
-	{
-		return __stl_hash_string( x.c_str() );
-	}
-	};
-}
+#include "string_hash.h"
 
-
+/**
+ * \brief representation of a Symbol
+ */
 class Symbol {
 public:
+	/**
+	 * @return the name of the symbol
+	 */
 	const std::string & get_name() const;
+	
+	/**
+	 * @return the address of the symbol
+	 */
 	const address_t get_addr() const;
 
+	/**
+	 * \brief set a property of the symbol.
+	 * \todo add this to another class that this can inherit from
+	 */
 	void set_property(std::string key, GenericAbstractData *value);
+	
+	/**
+	 * \brief get a property of the symbol. This may be reworked
+	 * \todo add this to another class that this can inherit from
+	 */
 	GenericAbstractData *get_property(std::string key) const;
 protected:
+	/**
+	 * \brief allocate a new symbol. protected as trace owns
+	 */
 	Symbol(address_t addr, std::string name);
 private:
 	friend class SymbolList;
@@ -47,7 +58,9 @@ private:
 	propertymap_t properties;
 };
 
-
+/** 
+ * Sortable caching list of symbols
+ */
 class SymbolList
 {
 private:
@@ -83,9 +96,12 @@ private:
 	
 
 public:
+	/// Symbol order const-iterator by name
 	typedef symordering_t::const_iterator symname_ci;
+	/// Symbol order const-iterator by addr
 	typedef symordering_t::const_iterator symaddr_ci;
 	
+	/// Symbol order specifier
 	typedef enum  {
 		SYMORDER_NAME,
 		SYMORDER_ADDR
@@ -93,33 +109,67 @@ public:
 	
 	SymbolList();
 		
-	// all purpose tool for manipulating symbols
-	// creates a symbol at address. If symbol at address already exists
-	// nukes that symbol, creates new
-	// Call with empty name to delete symbol
+	/** all purpose tool for manipulating symbols
+	 *
+	 * creates a symbol at address. If symbol at address already exists
+	 * nukes that symbol, creates new
+	 * Call with empty name to delete symbol
+	 *
+	 * @param addr Address to set symbol at
+	 * @param name string to set symbol to. "" to erase symbol
+	 * @return pointer to created symbol. NULL if symbol was deleted
+	 */
 	Symbol * set_symbol(address_t addr, std::string name);
 	
+	/** 
+	 * Lookup a symbol by address
+	 * @param addr address to lookup
+	 * @return pointer to found symbol, or NULL if no symbol found.
+	 */
 	const Symbol * get_symbol(address_t addr) const;
+	
+	/** 
+	 * Lookup a symbol by name
+	 * @param name name to lookup
+	 * @return pointer to found symbol, or NULL if no symbol found.
+	 */
 	const Symbol * get_symbol(const std::string & name) const;
 	
-	Symbol * find_ordered_symbol(uint32_t index, symsortorder_e order);
+	
+	/** 
+	 * Lookup a symbol by index into an ordering
+	 * @param index to lookup
+	 * @param order ordering to use
+	 * @return pointer to found symbol, or NULL if no symbol found.
+	 */
+	Symbol * find_ordered_symbol(uint32_t index, symsortorder_e order) const;
+	
+	/** @return count of symbols in list */
 	uint32_t get_symbol_count(void) const;
 	
-	symname_ci begin_name();
-	symname_ci end_name();
-	symaddr_ci begin_addr();
-	symaddr_ci end_addr();
+	/** @return begin const iterator across name-ordered symbols */
+	symname_ci begin_name() const;
+	
+	/** @return end const iterator across name-ordered symbols */
+	symname_ci end_name() const;
+	
+	/** @return begin const iterator across addr-ordered symbols */
+	symaddr_ci begin_addr() const;
+	
+	/** @return end const iterator across addr-ordered symbols */
+	symaddr_ci end_addr() const;
 	
 private:
 	symnamemap_t m_name_lookup;
 	symaddrmap_t m_addr_lookup;
 
-	bool m_vectors_dirty;
+	// These are caches, and therefore mutable
+	mutable bool m_vectors_dirty;
+	mutable symordering_t m_name_order;
+	mutable symordering_t m_addr_order;
 	
-	symordering_t m_name_order;
-	symordering_t m_addr_order;
-	
-	void updateDirtyVectors();
+	// Only touches caches, therefore const
+	void updateDirtyVectors() const;
 };
 
 

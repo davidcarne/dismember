@@ -9,6 +9,8 @@
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef DOXY_IGNORE
+
 #include <wx/wx.h>
 #include <wx/minifram.h>
 #include <wx/image.h>
@@ -4158,3 +4160,5 @@ void wxFrameManager::OnPaneButton(wxFrameManagerEvent& event)
         Update();
     }
 }
+
+#endif

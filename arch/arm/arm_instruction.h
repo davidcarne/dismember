@@ -2,9 +2,19 @@
 #define _ARM_INSTRUCTION_H_
 #include "../../trace.h"
 
+#include "../../instruction.h"
+
+/**
+ * \brief Arm specific subclass of Instruction memory type
+ */
 class ARMInstruction : public Instruction {
 public:
 	virtual ~ARMInstruction() {};
+	/**
+	 * Create a new arm instruction.
+	 * \deprecated - should only be created through the appropriate datatype that doesn't exist yet
+	 * \todo protect me
+	 */
 	ARMInstruction(Trace * ctx, address_t address, u32 opcode);
 	
 	virtual u32			get_length() const;
