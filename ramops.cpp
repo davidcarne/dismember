@@ -2,7 +2,7 @@
 #include "memsegment.h"
 
 #include <stdexcept>
-
+#include <assert.h>
 
 bool Trace::resolve(address_t addr,u8 bytes, u8 * buf) const
 {
