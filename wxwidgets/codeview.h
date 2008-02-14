@@ -26,12 +26,12 @@ typedef wxFrameManager wxAuiManager;
 #define _U(x) (x)
 #endif
 
-class DataTypeList;
+class DataTypeListView;
 class CodeViewCanvas;
 class ToolBar;
 class RoutineListView;
 class DataView;
-class DataTypeList;
+class DataTypeListView;
 
 class CodeView : public wxFrame
 {
@@ -48,7 +48,7 @@ public:
 	RoutineListView *m_routines;
 	CodeViewCanvas *m_canvas;
 	DataView *m_dataview;
-	DataTypeList *m_datatypelist;
+	DataTypeListView *m_datatypelist;
 	
 	DECLARE_EVENT_TABLE()
 private:

@@ -1,10 +1,10 @@
 #ifndef _WX_DATATYPELIST_H_
 #define _WX_DATATYPELIST_H_
-class DataTypeList: public wxListBox
+class DataTypeListView: public wxListBox
 {
 public:
-	DataTypeList(CodeView *parent, Trace &ctx);
-	virtual ~DataTypeList();
+	DataTypeListView(CodeView *parent, Trace &ctx);
+	virtual ~DataTypeListView();
 
 	void createSelectedDataType(void);
 

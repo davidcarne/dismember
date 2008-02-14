@@ -115,13 +115,7 @@ public:
 	
 	static Trace * load_project_file(const char * filename)__attribute((deprecated));
 	
-	xref_map_ci xref_from_lower_bound(address_t addr) const;
-	xref_map_ci xref_from_upper_bound(address_t addr) const;
-	u32 xref_from_count(address_t addr) const;
-	
-	xref_map_ci xref_to_lower_bound(address_t addr) const;
-	xref_map_ci xref_to_upper_bound(address_t addr) const;
-	u32 xref_to_count(address_t addr) const;
+
 	
 	memseglist_ci memsegs_begin() const;
 	memseglist_ci memsegs_end() const;
@@ -131,7 +125,20 @@ public:
 	
 	DataType * lookupDataType(std::string name) const;
 	void insertDataType(std::string name, DataType * d);
+	
+	
+protected:
+	xref_map_ci xref_from_lower_bound(address_t addr) const;
+	xref_map_ci xref_from_upper_bound(address_t addr) const;
+	u32 xref_from_count(address_t addr) const;
+	
+	xref_map_ci xref_to_lower_bound(address_t addr) const;
+	xref_map_ci xref_to_upper_bound(address_t addr) const;
+	u32 xref_to_count(address_t addr) const;
+	
 private:
+	friend class MemlocData;
+	
 	/* Private xref types */
 	typedef std::list<Xref *> xref_list;
 	typedef xref_list::iterator xref_list_i;

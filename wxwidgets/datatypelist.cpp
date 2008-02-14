@@ -6,7 +6,7 @@
 #include "datatypelist.h"
 #include "codeviewcanvas.h"
 
-DataTypeList::DataTypeList(CodeView *parent, Trace &ctx)  : wxListBox(parent,wxID_ANY, wxDefaultPosition, wxSize(140,-1), 0, wxLB_SORT), m_ctx(ctx), m_parent(parent)
+DataTypeListView::DataTypeListView(CodeView *parent, Trace &ctx)  : wxListBox(parent,wxID_ANY, wxDefaultPosition, wxSize(140,-1), 0, wxLB_SORT), m_ctx(ctx), m_parent(parent)
 {
 	DataTypeReg::datatypereg_ci dt_i = m_ctx.getDataTypeBegin();
 	DataTypeReg::datatypereg_ci dt_end = m_ctx.getDataTypeEnd();
@@ -20,12 +20,12 @@ DataTypeList::DataTypeList(CodeView *parent, Trace &ctx)  : wxListBox(parent,wxI
 	}
 }
 
-DataTypeList::~DataTypeList()
+DataTypeListView::~DataTypeListView()
 {
 	
 }
 
-void DataTypeList::createSelectedDataType(void)
+void DataTypeListView::createSelectedDataType(void)
 {
 	address_t seladdr;
 	if (m_parent->m_canvas->getSelection(&seladdr))
@@ -46,11 +46,11 @@ void DataTypeList::createSelectedDataType(void)
 	}
 }
 
-void DataTypeList::OnDblClick(wxMouseEvent& m)
+void DataTypeListView::OnDblClick(wxMouseEvent& m)
 {	
 	createSelectedDataType();
 }
 
-BEGIN_EVENT_TABLE(DataTypeList, wxWindow)
-EVT_LEFT_DCLICK(DataTypeList::OnDblClick)
+BEGIN_EVENT_TABLE(DataTypeListView, wxWindow)
+EVT_LEFT_DCLICK(DataTypeListView::OnDblClick)
 END_EVENT_TABLE()

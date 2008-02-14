@@ -76,7 +76,7 @@ CodeView::CodeView(const wxString& title, Trace & ctx) :
 	m_routines = new RoutineListView(this, ctx);
 	TopToolBar *tb = new TopToolBar(this);
 	m_dataview = new DataView(this, ctx);
-	m_datatypelist = new DataTypeList(this, ctx);
+	m_datatypelist = new DataTypeListView(this, ctx);
 	
 	m_winmanager.AddPane(m_routines, wxLEFT, _T("Routines"));
 	m_winmanager.AddPane(m_datatypelist, wxRIGHT, _T("Data Types"));
