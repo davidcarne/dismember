@@ -1,10 +1,11 @@
-#include "codeview.h"
+#include "documentwindow.h"
 #include "ids.h"
 #include "codeviewcanvas.h"
 #include "routinelist.h"
+#include "document.h"
 
-RoutineListView::RoutineListView(wxFrame *frame, Trace &ctx)
- : wxListView(frame, wxID_ANY, wxDefaultPosition, wxSize(180, 475), wxLC_REPORT | wxLC_VIRTUAL), m_trace(ctx)
+SymbolListView::SymbolListView(wxFrame *frame, Document &doc)
+ : wxListView(frame, wxID_ANY, wxDefaultPosition, wxSize(180, 475), wxLC_REPORT | wxLC_VIRTUAL), m_doc(doc), m_trace(*doc.getTrace())
 {
 	m_parent = frame;
 	m_sort_by = ADDRESS;
@@ -15,9 +16,9 @@ RoutineListView::RoutineListView(wxFrame *frame, Trace &ctx)
 	m_locs->Check(true);
 	m_subs->Check(true);
 
-	Callback<Symbol*, RoutineListView> *cb = new Callback<Symbol*, RoutineListView>;
+	Callback<Symbol*, SymbolListView> *cb = new Callback<Symbol*, SymbolListView>;
 	cb->setClass(this);
-	cb->setCallback(&RoutineListView::UpdateSymbol);
+	cb->setCallback(&SymbolListView::UpdateSymbol);
 	m_trace.registerSymbolHook(cb);
 	
 	SetWindowStyleFlag(wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_VIRTUAL);
@@ -27,7 +28,7 @@ RoutineListView::RoutineListView(wxFrame *frame, Trace &ctx)
 	SetItemCount(0);
 }
 
-inline bool RoutineListView::isAllowed(const Symbol *sym) const
+inline bool SymbolListView::isAllowed(const Symbol *sym) const
 {
 // apparently way too slow
 	return true;
@@ -45,7 +46,7 @@ inline bool RoutineListView::isAllowed(const Symbol *sym) const
 	return true;
 }
 
-void RoutineListView::UpdateSymbol(Symbol *s, HookChange hc)
+void SymbolListView::UpdateSymbol(Symbol *s, HookChange hc)
 {
 	switch (hc) {
 	case HOOK_DELETE:
@@ -63,9 +64,9 @@ void RoutineListView::UpdateSymbol(Symbol *s, HookChange hc)
 	//Update();
 }
 
-void RoutineListView::Update()
+void SymbolListView::Update()
 {
-	int n, max = m_trace.get_symbol_count();
+	int max = m_trace.get_symbol_count();
 #if 0
 	SymbolList::symsortorder_e order = SymbolList::SYMORDER_ADDR;
 	if (m_sort_by == SYMBOL)
@@ -83,7 +84,7 @@ void RoutineListView::Update()
 	Refresh();
 }
 
-wxString RoutineListView::OnGetItemText(long item, long column) const
+wxString SymbolListView::OnGetItemText(long item, long column) const
 {
 	SymbolList::symsortorder_e order = SymbolList::SYMORDER_ADDR;
 	if (m_sort_by == SYMBOL)
@@ -109,7 +110,7 @@ wxString RoutineListView::OnGetItemText(long item, long column) const
 	return _("");
 }
 
-void RoutineListView::OnSort(wxListEvent& event)
+void SymbolListView::OnSort(wxListEvent& event)
 {
 	switch (event.GetColumn()) {
 	case 0:	m_sort_by = SYMBOL; Update(); break;
@@ -119,7 +120,7 @@ void RoutineListView::OnSort(wxListEvent& event)
 	Update();
 }
 
-void RoutineListView::OnSelect(wxListEvent& WXUNUSED(event))
+void SymbolListView::OnSelect(wxListEvent& WXUNUSED(event))
 {
 	SymbolList::symsortorder_e order = SymbolList::SYMORDER_ADDR;
 	if (m_sort_by == SYMBOL)
@@ -129,24 +130,24 @@ void RoutineListView::OnSelect(wxListEvent& WXUNUSED(event))
 	const Symbol *sym = m_trace.find_ordered_symbol(GetFirstSelected(), order);
 	
 	if (sym)
-		((CodeView *)m_parent)->m_canvas->jumpToAddr(sym->get_addr());
+		((DocumentWindow *)m_parent)->m_canvas->jumpToAddr(sym->get_addr());
 }
 
 
-void RoutineListView::OnShow(wxCommandEvent& event)
+void SymbolListView::OnShow(wxCommandEvent& event)
 {
 	Update();
 }
 
-void RoutineListView::OnRightDown(wxMouseEvent& m)
+void SymbolListView::OnRightDown(wxMouseEvent& m)
 {
 	PopupMenu(&m_menu, m.GetPosition());
 	m.Skip();
 }
 
-BEGIN_EVENT_TABLE(RoutineListView, wxListView)
-EVT_RIGHT_DOWN(RoutineListView::OnRightDown)
-EVT_LIST_ITEM_ACTIVATED(wxID_ANY, RoutineListView::OnSelect)
-EVT_LIST_COL_CLICK(wxID_ANY, RoutineListView::OnSort)
-EVT_MENU(wxID_ANY, RoutineListView::OnShow)
+BEGIN_EVENT_TABLE(SymbolListView, wxListView)
+EVT_RIGHT_DOWN(SymbolListView::OnRightDown)
+EVT_LIST_ITEM_ACTIVATED(wxID_ANY, SymbolListView::OnSelect)
+EVT_LIST_COL_CLICK(wxID_ANY, SymbolListView::OnSort)
+EVT_MENU(wxID_ANY, SymbolListView::OnShow)
 END_EVENT_TABLE()

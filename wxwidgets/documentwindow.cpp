@@ -1,5 +1,10 @@
-#include "codeview.h"
 #include <math.h>
+#include <stdexcept>
+#include <wx/utils.h>
+#include <wx/aui/aui.h>
+
+#include "documentwindow.h"
+
 #include "ids.h"
 #include "../loaders/loaderfactory.h"
 #include "datatypelist.h"
@@ -7,13 +12,12 @@
 #include "toolbar.h"
 #include "routinelist.h"
 #include "dataview.h"
-
+#include "document.h"
 #include "memsegment.h"
+#include "pythonterminalview.h"
 
-#include <wx/utils.h>
-
-CodeView::CodeView(const wxString& title, Trace & ctx) : 
-	wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(800, 600)), m_ctx(ctx)
+DocumentWindow::DocumentWindow(const wxString& title, Document & doc) : 
+	wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(800, 600)), m_doc(doc)
 {	 
 	wxCommandEvent dummy;
 	wxMenu *menufile = new wxMenu;
@@ -40,12 +44,12 @@ CodeView::CodeView(const wxString& title, Trace & ctx) :
 		m_loaders_map[i] = (*loaders_ind).first;
 		menuLoadTypes->Append(i, _U((*loaders_ind).first.c_str()));
 		Connect(i,wxEVT_COMMAND_MENU_SELECTED,
-				wxCommandEventHandler(CodeView::OnLoad));
+				wxCommandEventHandler(DocumentWindow::OnLoad));
 	}
 	
 	menuedit->Append(wxID_ANY, _T("Load"), menuLoadTypes);
 	
-	wxMenu *menuview = new wxMenu;
+	//wxMenu *menuview = new wxMenu;
 	wxMenu * menuview_defcons = new wxMenu;
 	menuedit->Append(wxID_ANY, _T("Default constant type"), menuview_defcons);
 	
@@ -72,17 +76,21 @@ CodeView::CodeView(const wxString& title, Trace & ctx) :
 	}
 	m_windows.empty();
 	
-	m_canvas = new CodeViewCanvas(this, ctx);
-	m_routines = new RoutineListView(this, ctx);
+	m_canvas = new CodeViewCanvas(this, doc);
+	m_routines = new SymbolListView(this, doc);
 	TopToolBar *tb = new TopToolBar(this);
-	m_dataview = new DataView(this, ctx);
-	m_datatypelist = new DataTypeListView(this, ctx);
+	m_dataview = new MemoryLayoutView(this, doc);
+	m_datatypelist = new DataTypeListView(this, doc);
+	
+	// TODO: save me
+	m_pythonTerminal = new PythonTerminalView(this, doc.getPythonInterpreter());
 	
 	m_winmanager.AddPane(m_routines, wxLEFT, _T("Routines"));
 	m_winmanager.AddPane(m_datatypelist, wxRIGHT, _T("Data Types"));
 	m_winmanager.AddPane(tb, wxTOP);
 	m_winmanager.GetPane(tb).ToolbarPane();
-	m_winmanager.AddPane(m_dataview, wxBOTTOM);
+	m_winmanager.AddPane(m_dataview, wxAuiPaneInfo().Bottom().Row(2));
+	m_winmanager.AddPane(m_pythonTerminal, wxAuiPaneInfo().Bottom().Row(1).Name(_T("Python Terminal")).MinSize(wxSize(-1,200)));
 	m_winmanager.GetPane(m_dataview).CaptionVisible(0).Gripper(1);
 	m_winmanager.AddPane(m_canvas, wxCENTER);
 	
@@ -100,36 +108,38 @@ CodeView::CodeView(const wxString& title, Trace & ctx) :
 	Centre();
 }
 
-CodeView::~CodeView()
+DocumentWindow::~DocumentWindow()
 {
 	m_winmanager.UnInit();
 }
 
-void CodeView::OnQuit(wxCommandEvent& WXUNUSED(event))
+void DocumentWindow::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
 	this->Destroy();
 }
 
-void CodeView::OnGoto(wxCommandEvent& event)
+void DocumentWindow::OnGoto(wxCommandEvent& event)
 {
 	m_canvas->OnGoto(event);
 }
 
-void CodeView::OnFont(wxCommandEvent& event)
+void DocumentWindow::OnFont(wxCommandEvent& event)
 {
 	m_canvas->OnFont(event);
 }
 
-void CodeView::OnSave(wxCommandEvent& event)
+void DocumentWindow::OnSave(wxCommandEvent& event)
 {
+	throw new std::runtime_error("Open not yet implemented");
+	/*
 	wxFileDialog* saveFileDialog = new wxFileDialog( this, _("Save File.."), _T(""), _T(""), ARMTRACE_FILETYPES, wxSAVE, wxDefaultPosition);
 	
 	if (saveFileDialog->ShowModal() == wxID_OK) {
 		m_ctx.write_file(saveFileDialog->GetPath().fn_str());
-	}
+	}*/
 }
 
-void CodeView::OnLoadAuto(wxCommandEvent & event)
+void DocumentWindow::OnLoadAuto(wxCommandEvent & event)
 {	
 	wxFileDialog* openFileDialog = new wxFileDialog( NULL, _("Load file"), _T(""), _T(""), ALL_FILETYPES, wxOPEN, wxDefaultPosition);
 	if (openFileDialog->ShowModal() == wxID_OK) {
@@ -138,7 +148,7 @@ void CodeView::OnLoadAuto(wxCommandEvent & event)
 		if (!(loadimg = fopen(openFileDialog->GetPath().fn_str(), "r")))
 			return;
 		
-		if (!FileLoaderMaker::autoLoadFromFile(loadimg, &m_ctx))
+		if (!FileLoaderMaker::autoLoadFromFile(loadimg, m_doc.getTrace()))
 		{
 			wxMessageBox(_T("Automatic File load Failed!"),
 					_T("File load Failed!"));
@@ -148,14 +158,10 @@ void CodeView::OnLoadAuto(wxCommandEvent & event)
 	} 
 	
 	// This should be encapsulated in the Update/refresh method for codeview
-	m_canvas->updateLines();
-	m_canvas->RefreshAll();
-	
-	m_routines->Update();
-	m_dataview->Refresh();
+	UpdateAll();
 }
 
-void CodeView::OnLoad(wxCommandEvent & event)
+void DocumentWindow::OnLoad(wxCommandEvent & event)
 {
 	int id = event.GetId();
 	std::map<int, std::string>::const_iterator l = m_loaders_map.find(id);
@@ -171,7 +177,7 @@ void CodeView::OnLoad(wxCommandEvent & event)
 		if (!(loadimg = fopen(fstr, "r")))
 			return;
 		
-		if (!FileLoaderMaker::loadFromFile(loader_name, loadimg, &m_ctx))
+		if (!FileLoaderMaker::loadFromFile(loader_name, loadimg, m_doc.getTrace()))
 		{
 			wxMessageBox(_T("File load Failed!"), _T("File load Failed!"));
 		}
@@ -180,18 +186,23 @@ void CodeView::OnLoad(wxCommandEvent & event)
 	} 
 	
 	// This should be encapsulated in the Update/refresh method for codeview
+	UpdateAll();
+}
+
+void DocumentWindow::UpdateAll()
+{
 	m_canvas->updateLines();
 	m_canvas->RefreshAll();
 	m_routines->Update();
 	m_dataview->Refresh();
 }
 
-BEGIN_EVENT_TABLE(CodeView, wxFrame)
-EVT_MENU(ID_Save, CodeView::OnSave)
-EVT_MENU(ID_Close, CodeView::OnQuit)
-EVT_MENU(ID_GotoAddress, CodeView::OnGoto)
-EVT_MENU(ID_Font, CodeView::OnFont)
-EVT_MENU(ID_LoadAuto, CodeView::OnLoadAuto)
-EVT_BUTTON(ID_ToolClose, CodeView::OnQuit)
+BEGIN_EVENT_TABLE(DocumentWindow, wxFrame)
+EVT_MENU(ID_Save, DocumentWindow::OnSave)
+EVT_MENU(ID_Close, DocumentWindow::OnQuit)
+EVT_MENU(ID_GotoAddress, DocumentWindow::OnGoto)
+EVT_MENU(ID_Font, DocumentWindow::OnFont)
+EVT_MENU(ID_LoadAuto, DocumentWindow::OnLoadAuto)
+EVT_BUTTON(ID_ToolClose, DocumentWindow::OnQuit)
 END_EVENT_TABLE()
 

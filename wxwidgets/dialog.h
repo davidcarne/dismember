@@ -4,12 +4,7 @@
 #include <wx/wx.h>
 #include "guidialog.h"
 #include <map>
-
-#if defined(wxUSE_UNICODE) && !defined(_U)
-#define _U(x) wxString((x),wxConvUTF8)
-#elif !defined(_U)
-#define _U(x) (x)
-#endif
+#include "wxguiutils.h"
 
 class wxguiWidget : public guiWidget
 {

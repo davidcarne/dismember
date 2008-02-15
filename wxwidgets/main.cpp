@@ -2,13 +2,14 @@
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
 #endif
+#include <stdexcept>
 
 #include "main.h"
-#include "codeview.h"
+#include "documentwindow.h"
+#include "document.h"
 #include "ids.h"
 
-// TODO: remove this
-#include "../arch/arm/arm.h"
+#include "../app_main.h"
 
 IMPLEMENT_APP(ArmTraceApp)
 
@@ -26,23 +27,26 @@ const wxChar *ARMTRACE_FILETYPES = _T(
 								 );
 void ArmTraceApp::OnOpen(wxCommandEvent & WXUNUSED(event))
 {
+	
+	throw new std::runtime_error("Open not yet implemented");
+	/*
 	wxFileDialog* openFileDialog = new wxFileDialog( NULL, _("Open file"), _T(""), _T(""), ARMTRACE_FILETYPES, wxOPEN, wxDefaultPosition);
+	
 	
 	if (openFileDialog->ShowModal() == wxID_OK) {
 		Trace *trace = Trace::load_project_file(openFileDialog->GetPath().fn_str());
 		if (trace)
 		{
-			CodeView *codeview_frame = new CodeView(openFileDialog->GetPath(), *trace);
+			DocumentWindow *codeview_frame = new DocumentWindow(openFileDialog->GetPath(), *trace);
 			codeview_frame->Show(true);
 		}
-	} 
+	} */
+	
 }
 
 void ArmTraceApp::OnNew(wxCommandEvent & WXUNUSED(event))
 {
-	Trace * trace = new Trace(new ARMArchitecture());
-	CodeView *codeview_frame = new CodeView(_T("Untitled"), *trace);
-	codeview_frame->Show(true);
+	Document * d = new Document();
 }
 
 bool ArmTraceApp::OnInit()
@@ -50,9 +54,10 @@ bool ArmTraceApp::OnInit()
 	if (!wxApp::OnInit())
 		return false;
 	
-	Trace * trace = new Trace(new ARMArchitecture());
-	CodeView *codeview_frame = new CodeView(_T("Untitled"), *trace);
-	codeview_frame->Show(true);
+	app_main();
+
+	wxCommandEvent dummy;
+	OnNew(dummy);
 	
 	return true;
 }

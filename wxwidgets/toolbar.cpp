@@ -1,4 +1,4 @@
-#include "codeview.h"
+#include "documentwindow.h"
 #include "ids.h"
 #include "toolbar.h"
 

@@ -1,8 +1,8 @@
-#include "codeview.h"
+#include "documentwindow.h"
 #include "ids.h"
 #include "../memlocdata.h"
 #include "memsegment.h"
-
+#include "document.h"
 #include "codeviewcanvas.h"
 #include "dataview.h"
 
@@ -11,8 +11,8 @@
 #define UNKCOLOR  wxColour(0xbc,0xb3,0x2d)
 #define SEGCOLOR  wxColour(0x22,0x66,0x22)
 
-DataView::DataView(wxFrame *frame, Trace &ctx)
- : wxWindow(frame, wxID_ANY, wxDefaultPosition, wxSize(-1, 15)), m_trace(ctx)
+MemoryLayoutView::MemoryLayoutView(wxFrame *frame, Document & doc)
+ : wxWindow(frame, wxID_ANY, wxDefaultPosition, wxSize(-1, 15)), m_doc(doc), m_trace(*doc.getTrace())
 {
 	m_parent = frame;
 	Update();
@@ -20,13 +20,13 @@ DataView::DataView(wxFrame *frame, Trace &ctx)
 
 #define ROUND(x) ((int)((x)+0.5f))
 
-void DataView::Update()
+void MemoryLayoutView::Update()
 {
 	wxPaintEvent dummy;
 	OnPaint(dummy);
 }
 
-void DataView::OnPaint(wxPaintEvent& WXUNUSED(event))
+void MemoryLayoutView::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
 	float bytesperpix;
 	wxPaintDC dc(this);
@@ -88,16 +88,16 @@ void DataView::OnPaint(wxPaintEvent& WXUNUSED(event))
 	}
 }
 
-void DataView::OnClick(wxMouseEvent& m)
+void MemoryLayoutView::OnClick(wxMouseEvent& m)
 {
 	if (m_pixel_addr_map.size() == 0)
 		return;
 	
-	((CodeView *)m_parent)->m_canvas->jumpToAddr(m_pixel_addr_map[m.GetX()]);
+	((DocumentWindow *)m_parent)->m_canvas->jumpToAddr(m_pixel_addr_map[m.GetX()]);
 	m.Skip();
 }
 
-BEGIN_EVENT_TABLE(DataView, wxWindow)
-EVT_PAINT(DataView::OnPaint)
-EVT_LEFT_DOWN(DataView::OnClick)
+BEGIN_EVENT_TABLE(MemoryLayoutView, wxWindow)
+EVT_PAINT(MemoryLayoutView::OnPaint)
+EVT_LEFT_DOWN(MemoryLayoutView::OnClick)
 END_EVENT_TABLE()

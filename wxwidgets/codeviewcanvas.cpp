@@ -1,11 +1,13 @@
-#include "codeview.h"
+#include <stdexcept>
+
+#include "documentwindow.h"
 #include "ids.h"
 #include "codeviewcanvas.h"
 #include "dataview.h"
 #include "datatypelist.h"
 #include "../memlocdata.h"
-#include <stdexcept>
 #include "../xref.h"
+#include "document.h"
 
 static wxFont G_font;
 static int G_font_height;
@@ -13,11 +15,11 @@ static int G_font_height;
 void CodeViewCanvas::OnSymbolChange(wxCommandEvent& WXUNUSED(event))
 {
 	if (!m_is_sel) return;
-	const Symbol * s= trace.lookup_symbol(m_sel_addr);
+	const Symbol * s= m_trace.lookup_symbol(m_sel_addr);
 	wxString newsymname = wxGetTextFromUser(_T("enter a new symbol name"),
 			_T("edit symbol"), s ? _U(s->get_name().c_str()) : _T(""));
 	if (newsymname.Length() > 0)
-		trace.create_sym((const char *)newsymname.fn_str(), m_sel_addr);
+		m_trace.create_sym((const char *)newsymname.fn_str(), m_sel_addr);
 	Refresh();
 }
 
@@ -62,14 +64,14 @@ static wxString wxGetMultilineTextFromUser(const wxString& message,
 void CodeViewCanvas::OnComment(wxCommandEvent& WXUNUSED(event))
 {
 	if (!m_is_sel) return;
-	Comment *cmt = trace.lookup_comment(m_sel_addr);
+	Comment *cmt = m_trace.lookup_comment(m_sel_addr);
 
 	wxString comment = wxGetMultilineTextFromUser(_T("Edit comment"),
 		_T("Edit comment"),
 		cmt ? _U(cmt->get_comment().c_str()) : _T(""));
 
 	if (comment.Length() > 0)
-		trace.create_comment((char *)comment.c_str(),
+		m_trace.create_comment((char *)comment.c_str(),
 				m_sel_addr);
 	Refresh();
 }
@@ -77,16 +79,16 @@ void CodeViewCanvas::OnComment(wxCommandEvent& WXUNUSED(event))
 void CodeViewCanvas::OnAnalyze(wxCommandEvent& WXUNUSED(event))
 {
 	if (!m_is_sel) return;
-	trace.analyze(m_sel_addr);
-	((CodeView *)m_parent)->m_dataview->Update();
+	m_trace.analyze(m_sel_addr);
+	((DocumentWindow *)m_parent)->m_dataview->Update();
 	updateLines();
 }
 
 void CodeViewCanvas::OnUndefine(wxCommandEvent& WXUNUSED(event))
 {
 	if (!m_is_sel) return;
-	trace.undefine(m_sel_addr);
-	((CodeView *)m_parent)->m_dataview->Update();
+	m_trace.undefine(m_sel_addr);
+	((DocumentWindow *)m_parent)->m_dataview->Update();
 	updateLines();
 }
 
@@ -148,7 +150,7 @@ void CodeViewCanvas::OnGotoBranch(wxCommandEvent& WXUNUSED(event))
 {
 	if (!m_is_sel) return;
 	u32 addr = m_sel_addr;
-	MemlocData * i = trace.lookup_memloc(addr);
+	MemlocData * i = m_trace.lookup_memloc(addr);
 
 	if (i && i->has_xrefs_from()) {
 		Xref * x = (*(i->begin_xref_from())).second;
@@ -167,7 +169,7 @@ void CodeViewCanvas::OnXREFs(wxCommandEvent & WXUNUSED(event))
 {
 	if (!m_is_sel) return;
 	u32 addr = m_sel_addr;
-	MemlocData *i = trace.lookup_memloc(addr);
+	MemlocData *i = m_trace.lookup_memloc(addr);
 	
 	if (!i || !i->has_xrefs_to())
 		return;
@@ -246,7 +248,7 @@ void CodeViewCanvas::OnRightDown(wxMouseEvent& m)
 	m_sel_addr = sel_addr;
 	m_is_sel = true;
 	
-	MemlocData *i = trace.lookup_memloc(m_sel_addr);
+	MemlocData *i = m_trace.lookup_memloc(m_sel_addr);
 		
 
 	wxMenu *popup = new wxMenu;
@@ -450,20 +452,20 @@ void CodeViewCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 		dc.DrawText(wxString::Format(_T("%08x"), addr), 0, y + hLine - hText);
 		
 
-		const Symbol * sym = trace.lookup_symbol(addr);
+		const Symbol * sym = m_trace.lookup_symbol(addr);
 		if (sym)
 		{
 			std::string symname = sym->get_name();
 			dc.DrawText(_U(symname.c_str()), m_sym_offs, y + hLine - hText);
 		}
 
-		Comment *cmt = trace.lookup_comment(addr);
+		Comment *cmt = m_trace.lookup_comment(addr);
 		if (cmt) {
 			comments.push_back(cmt);
 			lines.push_back(y);
 		}
 		
-		MemlocData * id = trace.lookup_memloc(addr);
+		MemlocData * id = m_trace.lookup_memloc(addr);
 		if (id)
 		{
 			dc.SetTextForeground(*wxBLACK);
@@ -499,7 +501,7 @@ void CodeViewCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 			u32 pos = y + hLine - hText;
 			dc.SetTextForeground(*wxLIGHT_GREY);
 			u8 ch;
-			if (!trace.readByte(addr, &ch))
+			if (!m_trace.readByte(addr, &ch))
 				fprintf(stderr, "Can't read address 0x%08x\n",
 						addr);
 			else {
@@ -567,7 +569,7 @@ wxCoord CodeViewCanvas::OnGetLineHeight(size_t n) const
 		return 0;
 	
 	address_t addr = m_gprox->get_addr_for_line(n);
-	MemlocData * id = trace.lookup_memloc(addr);
+	MemlocData * id = m_trace.lookup_memloc(addr);
 
 	u32 ch = G_font_height; 
 
@@ -588,8 +590,8 @@ bool CodeViewCanvas::getSelection(address_t * addr)
 	return m_is_sel;
 }
 
-CodeViewCanvas::CodeViewCanvas(CodeView * parent, Trace &ctx)
-: wxVScrolledWindow(parent, wxID_ANY), trace(ctx)
+CodeViewCanvas::CodeViewCanvas(DocumentWindow * parent, Document &doc)
+: wxVScrolledWindow(parent, wxID_ANY), m_doc(doc), m_trace(*doc.getTrace())
 {
 	if (!G_font.Ok())
 	{
@@ -601,7 +603,7 @@ CodeViewCanvas::CodeViewCanvas(CodeView * parent, Trace &ctx)
 	
 	m_parent = parent;
 
-	m_gprox = new GuiProxy(&trace, parent);
+	m_gprox = new GuiProxy(&m_trace, parent);
 	
 	SetLineCount(m_gprox->get_line_count());
 	m_disas_offs = 250;

@@ -9,6 +9,10 @@
 
 typedef uint32_t line_ind_t;
 
+
+
+class DocumentWindow;
+
 /**
  * \brief Generalized caching layer for line->address mapping.
  *		Eventually will proxy all interface to trace object.
@@ -16,12 +20,12 @@ typedef uint32_t line_ind_t;
  *
  * Theory of Operation: todo
  */
-
-class CodeView;
-
 class GuiProxy {
 	public:
-	GuiProxy(Trace * ctx, CodeView * gui );
+	/**
+	 * \brief Instantiate a new gui proxy for the given trace/document
+	 */
+	GuiProxy(Trace * ctx, DocumentWindow * gui );
 	
 	/**
 	 * \brief Get the number of lines in the display
@@ -52,7 +56,7 @@ class GuiProxy {
 private:
 	
 	Trace * m_ctx;
-	CodeView * m_gui;
+	DocumentWindow * m_gui;
 	
 	struct addrblock {
 		address_t start;

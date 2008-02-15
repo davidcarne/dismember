@@ -3,7 +3,7 @@
 class DataTypeListView: public wxListBox
 {
 public:
-	DataTypeListView(CodeView *parent, Trace &ctx);
+	DataTypeListView(DocumentWindow *parent, Document &ctx);
 	virtual ~DataTypeListView();
 
 	void createSelectedDataType(void);
@@ -13,8 +13,9 @@ public:
 private:
 		
 		void OnDblClick(wxMouseEvent& m);
+		Document &m_doc;
 		Trace &m_ctx;
-		CodeView * m_parent;
+		DocumentWindow * m_parent;
 };
 
 #endif

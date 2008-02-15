@@ -1,5 +1,5 @@
-#ifndef codeview_h
-#define codeview_h
+#ifndef _documentwindow_h_
+#define _documentwindow_h_
 
 #include <wx/wx.h>
 #include <wx/laywin.h>
@@ -13,31 +13,31 @@ typedef wxFrameManager wxAuiManager;
 #include <wx/aui/aui.h>
 #endif
 
-#include "trace.h"
-#include "guiproxy.h"
-
 #include <stack>
 #include <vector>
 #include <map>
 
-#if defined(wxUSE_UNICODE) && !defined(_U)
-#define _U(x) wxString((x),wxConvUTF8)
-#elif !defined(_U)
-#define _U(x) (x)
-#endif
+#include "guiproxy.h"
+#include "guiglue.h"
+#include "wxguiutils.h"
 
 class DataTypeListView;
 class CodeViewCanvas;
 class ToolBar;
-class RoutineListView;
-class DataView;
+class SymbolListView;
+class MemoryLayoutView;
 class DataTypeListView;
+class PythonTerminalView;
 
-class CodeView : public wxFrame
+class Document;
+
+/**
+ * Class that represents the root window for a document
+ */
+class DocumentWindow : public wxFrame, public DocumentGui
 {
 public:
-	CodeView(const wxString& title, Trace &ctx);
-	~CodeView();
+	~DocumentWindow();
 	
 	void OnQuit(wxCommandEvent& event);
 	void OnGoto(wxCommandEvent& event);
@@ -45,14 +45,25 @@ public:
 	void OnSave(wxCommandEvent& event);
 	void OnLoad(wxCommandEvent & event);
 	void OnLoadAuto(wxCommandEvent & event);
-	RoutineListView *m_routines;
+		
+	void UpdateAll();
+	
+	SymbolListView *m_routines;
 	CodeViewCanvas *m_canvas;
-	DataView *m_dataview;
+	MemoryLayoutView *m_dataview;
 	DataTypeListView *m_datatypelist;
+	PythonTerminalView * m_pythonTerminal;
+	
 	
 	DECLARE_EVENT_TABLE()
 private:
-	Trace & m_ctx;
+	
+
+	DocumentWindow(const wxString& title, Document & doc);
+	
+	friend DocumentGui * setupDocumentGui(Document & doc);
+
+	Document & m_doc;
 	std::map <int, std::string> m_loaders_map;
 	
 	wxAuiManager m_winmanager;

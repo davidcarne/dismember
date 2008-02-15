@@ -1,13 +1,13 @@
 #include "guiproxy.h"
 #include <stdexcept>
 #include <assert.h>
-#include "codeview.h"
+#include "documentwindow.h"
 #include "codeviewcanvas.h"
 
 #include "memsegment.h"
 #include "memlocdata.h"
 
-GuiProxy::GuiProxy(Trace * ctx, CodeView * gui) : m_ctx(ctx), m_gui(gui), m_dirty(true), m_lc(0), m_last_look_set(false)
+GuiProxy::GuiProxy(Trace * ctx, DocumentWindow * gui) : m_ctx(ctx), m_gui(gui), m_dirty(true), m_lc(0), m_last_look_set(false)
 {
 	Callback<MemlocData*, GuiProxy> *cb = new Callback<MemlocData*, GuiProxy>;
 	cb->setClass(this);

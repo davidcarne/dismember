@@ -1,12 +1,16 @@
-#include "codeview.h"
+
+#include <assert.h>
+
+#include "documentwindow.h"
 #include "ids.h"
 #include "../memlocdata.h"
 #include "../datatype.h"
-#include <assert.h>
 #include "datatypelist.h"
 #include "codeviewcanvas.h"
+#include "document.h"
 
-DataTypeListView::DataTypeListView(CodeView *parent, Trace &ctx)  : wxListBox(parent,wxID_ANY, wxDefaultPosition, wxSize(140,-1), 0, wxLB_SORT), m_ctx(ctx), m_parent(parent)
+
+DataTypeListView::DataTypeListView(DocumentWindow *parent, Document &doc)  : wxListBox(parent,wxID_ANY, wxDefaultPosition, wxSize(140,-1), 0, wxLB_SORT),  m_doc(doc), m_ctx(*doc.getTrace()), m_parent(parent)
 {
 	DataTypeReg::datatypereg_ci dt_i = m_ctx.getDataTypeBegin();
 	DataTypeReg::datatypereg_ci dt_end = m_ctx.getDataTypeEnd();

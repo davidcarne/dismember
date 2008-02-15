@@ -4,9 +4,9 @@
 class CodeViewCanvas: public wxVScrolledWindow
 {
 public:
-   	CodeViewCanvas(CodeView *parent, Trace & ctx);
+   	CodeViewCanvas(DocumentWindow *parent, Document & doc);
 	
-	CodeView *m_parent;
+	DocumentWindow *m_parent;
 	void OnPaint(wxPaintEvent& event);
 	void OnScroll(wxScrollWinEvent& event);
 	void OnSize(wxSizeEvent& event);
@@ -38,7 +38,9 @@ public:
 	
 	DECLARE_EVENT_TABLE()
 private:
-		Trace &trace;
+	Document &m_doc;
+	
+	Trace &m_trace;
 	u32 m_disas_offs;
 	u32 m_sym_offs;
 	u32 m_comment_offs;

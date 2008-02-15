@@ -30,14 +30,14 @@ ifeq ($(ARCH),Darwin)
 	#/Developer/Tools/Rez -d __DARWIN__ -t APPL -d __WXMAC__  -d WXUSINGDLL -o $@ Carbon.r
 endif
 
-$(OBJS): %.o: %.cpp ../trace.h ../symlist.h codeview.h
+$(OBJS): %.o: %.cpp ../trace.h ../symlist.h documentwindow.h
 
 clean:
 	$(RM) $(OO) $(OBJS)
 
 datatypelist.o: datatypelist.h
 codeviewcanvas.o: codeviewcanvas.h
-codeview.o: codeview.h
+codeview.o: documentwindow.h
 routinelist.o: routinelist.h
 dataview.o: dataview.h
 toolbar.o: toolbar.h

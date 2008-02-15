@@ -56,9 +56,14 @@ static void buildCodeBlockAt(const Trace * t, MemlocData * growFrom)
 		   !hasCodeXref(t, current_start_prev->begin_xref_from(), current_start->begin_xref_from())
 		   )
 		current_start = current_start_prev;
+	current_end = current_start;
 }
 
-void codeBlockAnalysisPass(const Trace * t, address_t growFrom)
+void codeBlockAnalysisPass(Trace * t, address_t growFrom)
 {
-		   
+	if (growFrom == (address_t)-1)
+	{
+		return;
+	}
+	buildCodeBlockAt(t, t->lookup_memloc(growFrom,false));
 }
