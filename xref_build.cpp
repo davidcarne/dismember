@@ -77,11 +77,11 @@ void Trace::build_xrefs()
 					switch (size) {
 						// HACK HACK HACK - changeme
 						case 1:
-							insert_memlocd(datatype_u8_le->instantiate(daddr));
+						//	insert_memlocd(datatype_u8_le->instantiate(daddr));
 							break;
 							
 						case 4:
-							insert_memlocd(datatype_u32_le->instantiate(daddr));
+						//	insert_memlocd(datatype_u32_le->instantiate(daddr));
 							break;
 					}
 				}

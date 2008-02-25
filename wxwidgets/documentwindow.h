@@ -47,6 +47,7 @@ public:
 	void OnLoadAuto(wxCommandEvent & event);
 		
 	void UpdateAll();
+	virtual void postUpdate();
 	
 	SymbolListView *m_routines;
 	CodeViewCanvas *m_canvas;

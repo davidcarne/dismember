@@ -23,14 +23,13 @@ Trace::Trace(Architecture * arch) : m_arch(arch)
 {
 	m_last_segment = NULL;
 	/** \todo Creating and binding binary constants needs to be done much more gracefully */
-	createBinaryConstantDataTypes(this);
 	createStringConstantDataTypes(this);
 }
 
 void Trace::analyze(address_t start)
 {
 	ASSERT_RESOLVE(start);
-	follow_code_build_insns(start);
+	//follow_code_build_insns(start);
 	build_xrefs();
 	build_xref_syms();
 	
@@ -265,14 +264,14 @@ DataTypeReg::datatypereg_ci Trace::getDataTypeEnd() const
 	return m_datatypelist.getEnd();
 }
 	
-DataType * Trace::lookupDataType(std::string name) const
+sp_DataType Trace::lookupDataType(std::string name) const
 {
 	return m_datatypelist.lookupDataType(name);
 }
 
-void Trace::insertDataType(std::string name, DataType * d)
+void Trace::addDataType(sp_DataType d)
 {
 	assert(d);
-	assert(name.size() > 0);
-	return m_datatypelist.insertDataType(name, d);
+	assert(d->getName().size() > 0);
+	return m_datatypelist.insertDataType(d->getName(), d);
 }

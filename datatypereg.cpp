@@ -15,15 +15,15 @@ DataTypeReg::datatypereg_ci DataTypeReg::getEnd() const
 	return m_datatypes.end();
 }
 	
-DataType * DataTypeReg::lookupDataType(std::string name) const
+sp_DataType DataTypeReg::lookupDataType(std::string name) const
 {
 	datatypereg_ci i = m_datatypes.find(name);
 	if (i != m_datatypes.end())
 		return (*i).second;
-	return NULL;
+	return sp_DataType();
 }
 
-void DataTypeReg::insertDataType(std::string name, DataType * d)
+void DataTypeReg::insertDataType(std::string name, sp_DataType d)
 {
 	m_datatypes[name] = d;
 }

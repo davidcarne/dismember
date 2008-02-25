@@ -7,9 +7,10 @@ public:
 	virtual ~DataTypeListView();
 
 	void createSelectedDataType(void);
-
-	DECLARE_EVENT_TABLE();
 	
+	virtual void Update();
+	
+	DECLARE_EVENT_TABLE();
 private:
 		
 		void OnDblClick(wxMouseEvent& m);

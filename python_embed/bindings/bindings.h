@@ -13,8 +13,11 @@
 void bind_document();
 void bind_trace();
 void bind_codeblocks();
+void bind_datatype();
+void bind_types();
 
-extern "C" void initdismember();
+extern "C" void init_dismember_core();
+extern "C" void init_dismember_datatype_builtins();
 #endif
 
 

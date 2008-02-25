@@ -12,23 +12,26 @@
 
 DataTypeListView::DataTypeListView(DocumentWindow *parent, Document &doc)  : wxListBox(parent,wxID_ANY, wxDefaultPosition, wxSize(140,-1), 0, wxLB_SORT),  m_doc(doc), m_ctx(*doc.getTrace()), m_parent(parent)
 {
-	DataTypeReg::datatypereg_ci dt_i = m_ctx.getDataTypeBegin();
-	DataTypeReg::datatypereg_ci dt_end = m_ctx.getDataTypeEnd();
-	
-	printf("starting ins data\n");
-	for(; dt_i != dt_end; dt_i ++)
-	{
-		
-		printf("app datatype %s\n", (*dt_i).second->getName().c_str());
-		Append(_U((*dt_i).second->getName().c_str()));
-	}
 }
+
 
 DataTypeListView::~DataTypeListView()
 {
 	
 }
 
+void DataTypeListView::Update()
+{
+	DataTypeReg::datatypereg_ci dt_i = m_ctx.getDataTypeBegin();
+	DataTypeReg::datatypereg_ci dt_end = m_ctx.getDataTypeEnd();
+	Clear();
+	for(; dt_i != dt_end; dt_i ++)
+	{
+		sp_DataType dt = (*dt_i).second;
+		std::string name = dt->getName();
+		Append(_U(name.c_str()));
+	}
+}
 void DataTypeListView::createSelectedDataType(void)
 {
 	address_t seladdr;
@@ -41,9 +44,9 @@ void DataTypeListView::createSelectedDataType(void)
 			return;
 		}
 		
-		DataType * dt = m_ctx.lookupDataType((const char *)selname.fn_str());
+		sp_DataType dt = m_ctx.lookupDataType((const char *)selname.fn_str());
 		assert(dt);
-		m_ctx.createMemlocDataAt(dt, seladdr);
+		m_ctx.createMemlocDataAt(dt.get(), seladdr);
 		
 		
 		m_parent->m_canvas->updateLines();

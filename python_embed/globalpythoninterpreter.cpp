@@ -34,6 +34,12 @@ GlobalPythonInterpreter::GlobalPythonInterpreter() : m_is_init(false)
 {}
 
 
+python::object GlobalPythonInterpreter::exec(python::str code)
+{
+	python::object templocal = python::dict();
+	
+	return python::exec(code, m_main_namespace, templocal);
+}
 
 void GlobalPythonInterpreter::addModule(std::string name, moduleInitFunc modinit)
 {
@@ -45,7 +51,7 @@ void GlobalPythonInterpreter::addModule(std::string name, moduleInitFunc modinit
 
 void GlobalPythonInterpreter::import(std::string modname)
 {
-	m_main_namespace[modname] = python::import(modname.c_str());
+	m_main_namespace[modname] = python::import(strdup(modname.c_str()));
 }
 
 python::object GlobalPythonInterpreter::getMainNamespace()

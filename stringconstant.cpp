@@ -1,4 +1,5 @@
 #include "datatype.h"
+#include "memlocdata.h"
 
 class StringConstantDataType : public DataType {
 public:
@@ -109,7 +110,6 @@ private:
 
 StringConstantDataType::StringConstantDataType(Trace * t) : DataType(t)
 {
-	t->insertDataType(this->getName(),this);
 }
 
 const std::string StringConstantDataType::getName() const

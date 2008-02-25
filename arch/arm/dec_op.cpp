@@ -20,7 +20,7 @@ void ARMInstruction::decode_data_refs()
 {
 	if ((m_opcode & 0x0c000000) == 0x04000000) {
 		int regN = (m_opcode >> 16) & 0xf;
-		int regD = (m_opcode >> 12) & 0xf;
+		//int regD = (m_opcode >> 12) & 0xf;
 		u32 offset = 0;
 		int IPUBWL = (m_opcode >> 20) & 0x3f;
 		
@@ -133,9 +133,9 @@ void ARMInstruction::decode_pcflow()
 	// MUL, MLA
 	else if ((instr & 0x0fc000f0) == 0x00000090) {
 		int regD   = (instr >> 16) & 0xf;
-		int regN   = (instr >> 12) & 0xf;
-		int regS   = (instr >>  8) & 0xf;
-		int regM   = (instr >>  0) & 0xf;
+		//int regN   = (instr >> 12) & 0xf;
+		//int regS   = (instr >>  8) & 0xf;
+		//int regM   = (instr >>  0) & 0xf;
 
 		if (regD == 15)
 		{
@@ -153,8 +153,8 @@ void ARMInstruction::decode_pcflow()
 	else if ((instr & 0x0f8000f0) == 0x00800090) {
 		int regDhi = (instr >> 16) & 0xf;
 		int regDlo = (instr >> 12) & 0xf;
-		int regS   = (instr >>  8) & 0xf;
-		int regM   = (instr >>  0) & 0xf;
+		//int regS   = (instr >>  8) & 0xf;
+		//int regM   = (instr >>  0) & 0xf;
 
 		if (regDhi == 15 || regDlo == 15)
 		{
@@ -170,9 +170,9 @@ void ARMInstruction::decode_pcflow()
 
 	// LDR, STR, LDRB, STRB
 	else if ((instr & 0x0c000000) == 0x04000000) {
-		int regN = (instr >> 16) & 0xf;
+		//int regN = (instr >> 16) & 0xf;
 		int regD = (instr >> 12) & 0xf;
-		u32 offset = 0;
+		//u32 offset = 0;
 		int IPUBWL = (instr >> 20) & 0x3f;
 
 
@@ -195,10 +195,10 @@ void ARMInstruction::decode_pcflow()
 
 	// SWP
 	else if ((instr & 0x0fb00ff0) == 0x01000090) {
-		int regN   = (instr >> 16) & 0xf;
+		//int regN   = (instr >> 16) & 0xf;
 		int regD   = (instr >> 12) & 0xf;
-		int regM   =  instr	& 0xf;
-		int byte   =  instr	& (1 << 22);
+		//int regM   =  instr	& 0xf;
+		//int byte   =  instr	& (1 << 22);
 		
 		if (regD == 15)
 		{
@@ -214,9 +214,9 @@ void ARMInstruction::decode_pcflow()
 
 	// LDRH, STRH, LDRSB, LDRSH
 	else if ((instr & 0x0e000090) == 0x00000090) {
-		int regN = (instr >> 16) & 0xf;
+		//int regN = (instr >> 16) & 0xf;
 		int regD = (instr >> 12) & 0xf;
-		u32 offset = 0;
+		//u32 offset = 0;
 		int PUIWL = (instr >> 20) & 0x1f;
 		int SH = (instr >> 5) & 3;
 
@@ -254,7 +254,7 @@ void ARMInstruction::decode_pcflow()
 
 	// LDM, STM
 	else if ((instr & 0x0e000000) == 0x08000000) {
-		int regN   = (instr >> 16) & 0xf;
+		//int regN   = (instr >> 16) & 0xf;
 		int PUSWL  = (instr >> 20) & 0x1f;
 		int reglist = instr & 0xffff;
 		int r_inc;

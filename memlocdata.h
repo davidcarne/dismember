@@ -21,19 +21,19 @@ public:
 	 * \brief Get the address of the start of this memory location information
 	 * @return the start address of this data
 	 */
-	virtual address_t	get_addr() const;
+	address_t	get_addr() const;
 	
 	/**
 	 * \brief get a pointer to the previous contiguous MemlocData
 	 * @return a pointer to the previous MemlocData, or NULL if none could be found
 	 */
-	virtual MemlocData *  getPreviousContiguous();
+	MemlocData *  getPreviousContiguous();
 	
 	/**
 	 * \brief get a pointer to the next contiguous MemlocData
 	 * @return a pointer to the next MemlocData, or NULL if none could be found
 	 */
-	virtual MemlocData *  getNextContiguous();
+	MemlocData *  getNextContiguous();
 	
 	/** 
 	 * \brief Get the length of this memory location datablock
@@ -54,47 +54,47 @@ public:
 	/**
 	 * @return begin iterator of the xrefs to this memory location
 	 */
-	virtual xref_map_ci begin_xref_to() const;
+	xref_map_ci begin_xref_to() const;
 	
 	/**
 	 * @return end iterator of the xrefs to this memory location
 	 */
-	virtual xref_map_ci end_xref_to() const;
+	xref_map_ci end_xref_to() const;
 	
 	/**
 	 * @return count of the xrefs to this memory location
 	 */
-	virtual u32			 count_xrefs_to() const;
+	u32			 count_xrefs_to() const;
 	
 	/**
 	 * @return if there are any xrefs to this memory location [may be faster than count_ ]
 	 */
-	virtual bool		 has_xrefs_to() const;
+	bool		 has_xrefs_to() const;
 	
 	/**
 	 * @return begin iterator of the xrefs from this memory location
 	 */
-	virtual xref_map_ci begin_xref_from() const;
+	xref_map_ci begin_xref_from() const;
 
 	/**
 	 * @return end iterator of the xrefs from this memory location
 	 */
-	virtual xref_map_ci end_xref_from() const;
+	xref_map_ci end_xref_from() const;
 	
 	/**
 	 * @return count of the xrefs from this memory location
 	 */
-	virtual u32			 count_xrefs_from() const;
+	u32			 count_xrefs_from() const;
 	
 	/**
 	 * @return if there are any xrefs from this memory location [may be faster than count_ ]
 	 */
-	virtual bool		 has_xrefs_from() const;
+	bool		 has_xrefs_from() const;
 	
 	/**
 	 * @return Pointer to the symbol of this memory location, NULL if none
 	 */
-	virtual const Symbol * get_symbol() const;
+	const Symbol * get_symbol() const;
 	
 	/**
 	 *	@return a textual representation of this memory data

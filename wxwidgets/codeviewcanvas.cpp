@@ -87,7 +87,7 @@ void CodeViewCanvas::OnAnalyze(wxCommandEvent& WXUNUSED(event))
 void CodeViewCanvas::OnUndefine(wxCommandEvent& WXUNUSED(event))
 {
 	if (!m_is_sel) return;
-	m_trace.undefine(m_sel_addr);
+	//TODO: re-enable m_trace.undefine(m_sel_addr);
 	((DocumentWindow *)m_parent)->m_dataview->Update();
 	updateLines();
 }
@@ -243,6 +243,8 @@ void CodeViewCanvas::OnMouseDown(wxMouseEvent& m)
 void CodeViewCanvas::OnRightDown(wxMouseEvent& m)
 {
 	u32 sel_line = HitTest(m.GetPosition());
+	if (sel_line == -1)
+		return;
 	
 	u32 sel_addr = m_gprox->get_addr_for_line(sel_line);
 	m_sel_addr = sel_addr;

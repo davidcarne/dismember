@@ -20,7 +20,7 @@ public:
 	virtual std::string get_short_name() const = 0; 
 	
 	/** Create an instruction for the architecture at address addr */
-	virtual Instruction * create_instruction(Trace * ctx, address_t addr) = 0;
+	//virtual Instruction * create_instruction(Trace * ctx, address_t addr) = 0;
 	
 	//virtual endian_e getArchEndian(void) = 0;
 	// also here we have the create from serializer factory method

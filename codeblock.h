@@ -24,13 +24,13 @@ private:
 	typedef std::set< CodeBlock * > codeblockset_t;
 	codeblockset_t m_pre;
 	codeblockset_t m_post;
-	Trace * t;
+	Trace * m_trace;
+	
+	
+	CodeBlock(Trace * t, address_t start, address_t end);
+	friend class CodeBlockManager;
 	
 public:
-	CodeBlock(Trace * t, address_t m_start, address_t m_end);
-	friend void linkCodeBlocks(CodeBlock * pre, CodeBlock * post);
-	friend void unlinkCodeBlocks(CodeBlock * pre, CodeBlock * post);
-	
 	address_t getStart() {
 		return m_start;
 	};
@@ -40,8 +40,21 @@ public:
 	};
 };
 
-void linkCodeBlocks(CodeBlock * pre, CodeBlock * post);
-void unlinkCodeBlocks(CodeBlock * pre, CodeBlock * post);
+class CodeBlockManager {
+private:
+	void linkCodeBlocks(CodeBlock * pre, CodeBlock * post);
+	void unlinkCodeBlocks(CodeBlock * pre, CodeBlock * post);
+	typedef std::map<address_t, CodeBlock *>::iterator blockiterator;
+	std::map<address_t, CodeBlock *> m_blocks;
+	
+	CodeBlock * buildCodeBlockAt(MemlocData * growFrom);
+	Trace * m_trace;
+	
+	// Hooks for change notifications
+public:
+	void codeBlockAnalysisPassAt(address_t growFrom = -1);
+	CodeBlock * codeBlockAt(address_t codeBlock);
+};
 
-void codeBlockAnalysisPass(Trace * t, address_t growFrom = -1);
+
 #endif

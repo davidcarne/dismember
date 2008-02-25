@@ -14,7 +14,8 @@
  * Empty class that is the interface between the core logic and the gui
  */
 class DocumentGui {
-	
+public:
+	virtual void postUpdate() = 0;
 };
 
 class Document;

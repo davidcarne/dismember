@@ -68,6 +68,11 @@ public:
 	 */
 	static GlobalPythonInterpreter * getGlobalInterpreter();
 	
+	/**
+	 * Execute something in the global namespace
+	 */
+	python::object exec(python::str code);
+	
 private:
 	python::object getMainNamespace();
 	

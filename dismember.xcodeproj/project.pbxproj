@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		6719E2D50D7275D800D8AC6C /* bind_datatype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6719E1A40D72746300D8AC6C /* bind_datatype.cpp */; };
+		6736EAC90D7281E300149F2D /* bind_types.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6736EABE0D72805D00149F2D /* bind_types.cpp */; };
 		674260F00D639EE900B7A6E0 /* dsmem_trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674260EF0D639EE900B7A6E0 /* dsmem_trace.cpp */; };
 		674263FA0D650D2A00B7A6E0 /* globalpythoninterpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674263F60D650D2A00B7A6E0 /* globalpythoninterpreter.cpp */; };
 		674263FB0D650D2A00B7A6E0 /* localpythoninterpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674263F80D650D2A00B7A6E0 /* localpythoninterpreter.cpp */; };
@@ -37,13 +39,14 @@
 		674AF8230D6591FD005B012D /* documentwindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AF8110D6591FD005B012D /* documentwindow.cpp */; };
 		674AF8240D6591FD005B012D /* guiproxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AF8130D6591FD005B012D /* guiproxy.cpp */; };
 		674AF8250D6591FD005B012D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AF8160D6591FD005B012D /* main.cpp */; };
-		674AF8260D6591FD005B012D /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 674AF8180D6591FD005B012D /* Makefile */; };
 		674AF8270D6591FD005B012D /* routinelist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AF8190D6591FD005B012D /* routinelist.cpp */; };
 		674AF8280D6591FD005B012D /* toolbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AF81B0D6591FD005B012D /* toolbar.cpp */; };
-		674AF8290D6591FD005B012D /* wxaui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AF81D0D6591FD005B012D /* wxaui.cpp */; };
-		674AF82F0D659212005B012D /* guiglue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AF82A0D659212005B012D /* guiglue.cpp */; };
-		674AF8300D659212005B012D /* pythonterminalview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AF82C0D659212005B012D /* pythonterminalview.cpp */; };
 		674AF85E0D65934C005B012D /* bind_codeblocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AF85D0D65934C005B012D /* bind_codeblocks.cpp */; };
+		674AFAA10D66170A005B012D /* guiglue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AFA9C0D66170A005B012D /* guiglue.cpp */; };
+		674AFAA20D66170A005B012D /* pythonterminalview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AFA9E0D66170A005B012D /* pythonterminalview.cpp */; };
+		67CACBCF0D708B0300DF9AD4 /* analysis_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CACBCE0D708B0300DF9AD4 /* analysis_queue.cpp */; };
+		67CACC1C0D7235C300DF9AD4 /* run_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CACC1B0D7235C300DF9AD4 /* run_queue.cpp */; };
+		67CAD2570D7254DD00DF9AD4 /* program_flow_analysis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CAD2560D7254DD00DF9AD4 /* program_flow_analysis.cpp */; };
 		67CD5BB20D284E1F003B72E8 /* memlocdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674D3CA80D244E2E0074B172 /* memlocdata.cpp */; };
 		67CD5BB70D284E1F003B72E8 /* xmlbzip2_fileio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674D3CB70D244E2E0074B172 /* xmlbzip2_fileio.cpp */; };
 		67CD5BB80D284E1F003B72E8 /* xref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674D3CBC0D244E2E0074B172 /* xref.cpp */; };
@@ -66,7 +69,6 @@
 		67CD5BD20D284E1F003B72E8 /* dec_op.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674D3CDC0D244E8A0074B172 /* dec_op.cpp */; };
 		67CD5BD30D284E1F003B72E8 /* stringconstant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674D46490D248A270074B172 /* stringconstant.cpp */; };
 		67CD5BD50D284E1F003B72E8 /* arm_arch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674D3CD70D244E8A0074B172 /* arm_arch.cpp */; };
-		67CD5BD60D284E1F003B72E8 /* code_follow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674D3C9F0D244E2E0074B172 /* code_follow.cpp */; };
 		67CD5EDB0D287A52003B72E8 /* hint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CD5EDA0D287A51003B72E8 /* hint.cpp */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +84,8 @@
 
 /* Begin PBXFileReference section */
 		670E59C30D62F7DC00A30E5E /* string_hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string_hash.h; sourceTree = "<group>"; };
+		6719E1A40D72746300D8AC6C /* bind_datatype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bind_datatype.cpp; sourceTree = "<group>"; };
+		6736EABE0D72805D00149F2D /* bind_types.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bind_types.cpp; sourceTree = "<group>"; };
 		674260EF0D639EE900B7A6E0 /* dsmem_trace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dsmem_trace.cpp; sourceTree = "<group>"; };
 		674263F60D650D2A00B7A6E0 /* globalpythoninterpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globalpythoninterpreter.cpp; sourceTree = "<group>"; };
 		674263F70D650D2A00B7A6E0 /* globalpythoninterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = globalpythoninterpreter.h; sourceTree = "<group>"; };
@@ -120,21 +124,18 @@
 		674AF81A0D6591FD005B012D /* routinelist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = routinelist.h; sourceTree = "<group>"; };
 		674AF81B0D6591FD005B012D /* toolbar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = toolbar.cpp; sourceTree = "<group>"; };
 		674AF81C0D6591FD005B012D /* toolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = toolbar.h; sourceTree = "<group>"; };
-		674AF81D0D6591FD005B012D /* wxaui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxaui.cpp; sourceTree = "<group>"; };
-		674AF81E0D6591FD005B012D /* wxaui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxaui.h; sourceTree = "<group>"; };
-		674AF82A0D659212005B012D /* guiglue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = guiglue.cpp; sourceTree = SOURCE_ROOT; };
-		674AF82B0D659212005B012D /* guiglue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = guiglue.h; sourceTree = SOURCE_ROOT; };
-		674AF82C0D659212005B012D /* pythonterminalview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pythonterminalview.cpp; sourceTree = SOURCE_ROOT; };
-		674AF82D0D659212005B012D /* pythonterminalview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pythonterminalview.h; sourceTree = SOURCE_ROOT; };
-		674AF82E0D659212005B012D /* wxguiutils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxguiutils.h; sourceTree = SOURCE_ROOT; };
 		674AF85D0D65934C005B012D /* bind_codeblocks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bind_codeblocks.cpp; sourceTree = "<group>"; };
+		674AFA9C0D66170A005B012D /* guiglue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = guiglue.cpp; sourceTree = "<group>"; };
+		674AFA9D0D66170A005B012D /* guiglue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = guiglue.h; sourceTree = "<group>"; };
+		674AFA9E0D66170A005B012D /* pythonterminalview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pythonterminalview.cpp; sourceTree = "<group>"; };
+		674AFA9F0D66170A005B012D /* pythonterminalview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pythonterminalview.h; sourceTree = "<group>"; };
+		674AFAA00D66170A005B012D /* wxguiutils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxguiutils.h; sourceTree = "<group>"; };
 		674D3C990D244E2E0074B172 /* abstractdata.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = abstractdata.cpp; sourceTree = "<group>"; };
 		674D3C9A0D244E2E0074B172 /* abstractdata.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = abstractdata.h; sourceTree = "<group>"; };
 		674D3C9B0D244E2E0074B172 /* binaryconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = binaryconstant.cpp; sourceTree = "<group>"; };
 		674D3C9C0D244E2E0074B172 /* binaryconstant.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = binaryconstant.h; sourceTree = "<group>"; };
 		674D3C9D0D244E2E0074B172 /* callback.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = callback.cpp; sourceTree = "<group>"; };
 		674D3C9E0D244E2E0074B172 /* callback.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = callback.h; sourceTree = "<group>"; };
-		674D3C9F0D244E2E0074B172 /* code_follow.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = code_follow.cpp; sourceTree = "<group>"; };
 		674D3CA00D244E2E0074B172 /* comment.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = comment.cpp; sourceTree = "<group>"; };
 		674D3CA10D244E2E0074B172 /* comment.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = comment.h; sourceTree = "<group>"; };
 		674D3CA20D244E2E0074B172 /* datatype.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = datatype.h; sourceTree = "<group>"; };
@@ -161,8 +162,6 @@
 		674D3CDA0D244E8A0074B172 /* arm_instruction.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = arm_instruction.h; sourceTree = "<group>"; };
 		674D3CDC0D244E8A0074B172 /* dec_op.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = dec_op.cpp; sourceTree = "<group>"; };
 		674D3CDE0D244E8A0074B172 /* disasm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = disasm.cpp; sourceTree = "<group>"; };
-		674D3CE00D244E8A0074B172 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		674D3CE10D244E8A0074B172 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		674D3CE40D244E8A0074B172 /* bflt.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = bflt.cpp; sourceTree = "<group>"; };
 		674D3CE70D244E8A0074B172 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		674D3CE90D244E8A0074B172 /* binary.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = binary.cpp; sourceTree = "<group>"; };
@@ -172,10 +171,17 @@
 		674D3CEF0D244E8A0074B172 /* loaderfactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = loaderfactory.h; sourceTree = "<group>"; };
 		674D3CF40D244E8A0074B172 /* mach-o.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = "mach-o.cpp"; sourceTree = "<group>"; };
 		674D3CF60D244E8A0074B172 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		674D3CF70D244E8A0074B172 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		674D46490D248A270074B172 /* stringconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stringconstant.cpp; sourceTree = "<group>"; };
 		674D464A0D248A270074B172 /* stringconstant.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stringconstant.h; sourceTree = "<group>"; };
-		674D47C40D24BE2E0074B172 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		67CACBCD0D708B0300DF9AD4 /* analysis_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = analysis_queue.h; sourceTree = "<group>"; };
+		67CACBCE0D708B0300DF9AD4 /* analysis_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = analysis_queue.cpp; sourceTree = "<group>"; };
+		67CACC1A0D7235C300DF9AD4 /* run_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = run_queue.h; sourceTree = "<group>"; };
+		67CACC1B0D7235C300DF9AD4 /* run_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = run_queue.cpp; sourceTree = "<group>"; };
+		67CAD2560D7254DD00DF9AD4 /* program_flow_analysis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = program_flow_analysis.cpp; sourceTree = "<group>"; };
+		67CAD2590D7254F800DF9AD4 /* program_flow_analysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = program_flow_analysis.h; sourceTree = "<group>"; };
+		67CAD3180D725B4F00DF9AD4 /* dismemauto.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = dismemauto.py; sourceTree = "<group>"; };
+		67CAD55B0D726E8000DF9AD4 /* __init__.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		67CAD7270D72710C00DF9AD4 /* __init__.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
 		67CD5B9D0D284D00003B72E8 /* dismember.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dismember.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67CD5D780D286328003B72E8 /* address_hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = address_hash.h; sourceTree = "<group>"; };
 		67CD5ED90D287A51003B72E8 /* hint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hint.h; sourceTree = "<group>"; };
@@ -196,7 +202,7 @@
 		08FB7794FE84155DC02AAC07 /* armtrace */ = {
 			isa = PBXGroup;
 			children = (
-				674D47C40D24BE2E0074B172 /* Makefile */,
+				67CAD3170D725B1200DF9AD4 /* pythonsrc */,
 				674D3CFB0D244ECA0074B172 /* gui assist */,
 				674D3CD20D244E8A0074B172 /* arch */,
 				674D3CE20D244E8A0074B172 /* loaders */,
@@ -227,6 +233,8 @@
 				674266CC0D65377800B7A6E0 /* bindings.cpp */,
 				67427A5B0D65877F00B7A6E0 /* bind_trace.cpp */,
 				674AF85D0D65934C005B012D /* bind_codeblocks.cpp */,
+				6719E1A40D72746300D8AC6C /* bind_datatype.cpp */,
+				6736EABE0D72805D00149F2D /* bind_types.cpp */,
 			);
 			path = bindings;
 			sourceTree = "<group>";
@@ -252,11 +260,11 @@
 		674D3CC10D244E5C0074B172 /* wxwidgets */ = {
 			isa = PBXGroup;
 			children = (
-				674AF82A0D659212005B012D /* guiglue.cpp */,
-				674AF82B0D659212005B012D /* guiglue.h */,
-				674AF82C0D659212005B012D /* pythonterminalview.cpp */,
-				674AF82D0D659212005B012D /* pythonterminalview.h */,
-				674AF82E0D659212005B012D /* wxguiutils.h */,
+				674AFA9C0D66170A005B012D /* guiglue.cpp */,
+				674AFA9D0D66170A005B012D /* guiglue.h */,
+				674AFA9E0D66170A005B012D /* pythonterminalview.cpp */,
+				674AFA9F0D66170A005B012D /* pythonterminalview.h */,
+				674AFAA00D66170A005B012D /* wxguiutils.h */,
 				674AF8090D6591FD005B012D /* codeviewcanvas.cpp */,
 				674AF80A0D6591FD005B012D /* codeviewcanvas.h */,
 				674AF80B0D6591FD005B012D /* datatypelist.cpp */,
@@ -277,8 +285,6 @@
 				674AF81A0D6591FD005B012D /* routinelist.h */,
 				674AF81B0D6591FD005B012D /* toolbar.cpp */,
 				674AF81C0D6591FD005B012D /* toolbar.h */,
-				674AF81D0D6591FD005B012D /* wxaui.cpp */,
-				674AF81E0D6591FD005B012D /* wxaui.h */,
 			);
 			path = wxwidgets;
 			sourceTree = SOURCE_ROOT;
@@ -287,7 +293,6 @@
 			isa = PBXGroup;
 			children = (
 				674D3CD40D244E8A0074B172 /* arm */,
-				674D3CE10D244E8A0074B172 /* Makefile */,
 			);
 			path = arch;
 			sourceTree = "<group>";
@@ -301,7 +306,6 @@
 				674D3CDA0D244E8A0074B172 /* arm_instruction.h */,
 				674D3CDC0D244E8A0074B172 /* dec_op.cpp */,
 				674D3CDE0D244E8A0074B172 /* disasm.cpp */,
-				674D3CE00D244E8A0074B172 /* Makefile */,
 			);
 			path = arm;
 			sourceTree = "<group>";
@@ -315,7 +319,6 @@
 				674D3CEE0D244E8A0074B172 /* loaderfactory.cpp */,
 				674D3CEF0D244E8A0074B172 /* loaderfactory.h */,
 				674D3CF20D244E8A0074B172 /* mach-o */,
-				674D3CF70D244E8A0074B172 /* Makefile */,
 			);
 			path = loaders;
 			sourceTree = "<group>";
@@ -401,10 +404,15 @@
 		674D3D020D244F080074B172 /* analysis */ = {
 			isa = PBXGroup;
 			children = (
+				67CAD2560D7254DD00DF9AD4 /* program_flow_analysis.cpp */,
 				67449EB70D62BACF00311E95 /* codeblock.h */,
 				67449EB80D62BACF00311E95 /* codeblock.cpp */,
-				674D3C9F0D244E2E0074B172 /* code_follow.cpp */,
 				674D3CBB0D244E2E0074B172 /* xref_build.cpp */,
+				67CACBCD0D708B0300DF9AD4 /* analysis_queue.h */,
+				67CACBCE0D708B0300DF9AD4 /* analysis_queue.cpp */,
+				67CACC1A0D7235C300DF9AD4 /* run_queue.h */,
+				67CACC1B0D7235C300DF9AD4 /* run_queue.cpp */,
+				67CAD2590D7254F800DF9AD4 /* program_flow_analysis.h */,
 			);
 			name = analysis;
 			sourceTree = "<group>";
@@ -417,6 +425,32 @@
 				674D3CB80D244E2E0074B172 /* xmlbzip2_fileio.h */,
 			);
 			name = ser;
+			sourceTree = "<group>";
+		};
+		67CAD3170D725B1200DF9AD4 /* pythonsrc */ = {
+			isa = PBXGroup;
+			children = (
+				67CAD55A0D726E6C00DF9AD4 /* dismember */,
+				67CAD3180D725B4F00DF9AD4 /* dismemauto.py */,
+			);
+			path = pythonsrc;
+			sourceTree = "<group>";
+		};
+		67CAD55A0D726E6C00DF9AD4 /* dismember */ = {
+			isa = PBXGroup;
+			children = (
+				67CAD7260D7270E200DF9AD4 /* datatype_builtins */,
+				67CAD55B0D726E8000DF9AD4 /* __init__.py */,
+			);
+			path = dismember;
+			sourceTree = "<group>";
+		};
+		67CAD7260D7270E200DF9AD4 /* datatype_builtins */ = {
+			isa = PBXGroup;
+			children = (
+				67CAD7270D72710C00DF9AD4 /* __init__.py */,
+			);
+			path = datatype_builtins;
 			sourceTree = "<group>";
 		};
 		67CD5B9E0D284D00003B72E8 /* Products */ = {
@@ -520,7 +554,6 @@
 				67CD5BD20D284E1F003B72E8 /* dec_op.cpp in Sources */,
 				67CD5BD30D284E1F003B72E8 /* stringconstant.cpp in Sources */,
 				67CD5BD50D284E1F003B72E8 /* arm_arch.cpp in Sources */,
-				67CD5BD60D284E1F003B72E8 /* code_follow.cpp in Sources */,
 				67CD5EDB0D287A52003B72E8 /* hint.cpp in Sources */,
 				67449EB90D62BACF00311E95 /* codeblock.cpp in Sources */,
 				674260F00D639EE900B7A6E0 /* dsmem_trace.cpp in Sources */,
@@ -538,13 +571,16 @@
 				674AF8230D6591FD005B012D /* documentwindow.cpp in Sources */,
 				674AF8240D6591FD005B012D /* guiproxy.cpp in Sources */,
 				674AF8250D6591FD005B012D /* main.cpp in Sources */,
-				674AF8260D6591FD005B012D /* Makefile in Sources */,
 				674AF8270D6591FD005B012D /* routinelist.cpp in Sources */,
 				674AF8280D6591FD005B012D /* toolbar.cpp in Sources */,
-				674AF8290D6591FD005B012D /* wxaui.cpp in Sources */,
-				674AF82F0D659212005B012D /* guiglue.cpp in Sources */,
-				674AF8300D659212005B012D /* pythonterminalview.cpp in Sources */,
 				674AF85E0D65934C005B012D /* bind_codeblocks.cpp in Sources */,
+				674AFAA10D66170A005B012D /* guiglue.cpp in Sources */,
+				674AFAA20D66170A005B012D /* pythonterminalview.cpp in Sources */,
+				67CACBCF0D708B0300DF9AD4 /* analysis_queue.cpp in Sources */,
+				67CACC1C0D7235C300DF9AD4 /* run_queue.cpp in Sources */,
+				67CAD2570D7254DD00DF9AD4 /* program_flow_analysis.cpp in Sources */,
+				6719E2D50D7275D800D8AC6C /* bind_datatype.cpp in Sources */,
+				6736EAC90D7281E300149F2D /* bind_types.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -565,7 +601,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};
@@ -575,7 +611,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Release;
 		};
@@ -663,6 +699,8 @@
 					"-L/usr/local/lib/",
 					"-lboost_python",
 					"-lwx_mac_richtext-2.8",
+					"-lboost_thread-mt",
+					"-lpthread",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = dismember;

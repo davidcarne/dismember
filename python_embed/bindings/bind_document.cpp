@@ -18,5 +18,6 @@ void bind_document()
 {
 	class_<Document>("Document", no_init)
 		.add_property("trace", make_function(&Document::getTrace, return_internal_reference<>() ))
-		.add_property("name", make_function(&Document::getName, return_internal_reference<>() ));
+		.add_property("name", make_function(&Document::getName, return_internal_reference<>() ))
+		.def("postGuiUpdate", &Document::postGuiUpdate);
 }

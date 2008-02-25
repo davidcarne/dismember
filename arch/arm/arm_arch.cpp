@@ -7,11 +7,11 @@ std::string ARMArchitecture::get_short_name() const
 {
 	return "ARM";
 }
-
+/*
 Instruction * ARMArchitecture::create_instruction(Trace * ctx, address_t addr)
 {
 	return new ARMInstruction(ctx, addr, ctx->ldw(addr));
-}
+}*/
 /*
 endian_e ARMArchitecture::getArchEndian(void)
 {

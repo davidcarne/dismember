@@ -13,13 +13,25 @@
 
 void app_main()
 {
-	// Setup the global python interpreters
-	GlobalPythonInterpreter * gblinterp = GlobalPythonInterpreter::getGlobalInterpreter();
-	// TODO: here we need to add the object model funcs with
-	gblinterp->addModule( "dismember", &initdismember );
+	try {
+		
+		// Setup the global python interpreters
+		GlobalPythonInterpreter * gblinterp = GlobalPythonInterpreter::getGlobalInterpreter();
+		
+		gblinterp->addModule( "_dismember_core", &init_dismember_core );
+		gblinterp->addModule( "_dismember_datatype_builtins", &init_dismember_datatype_builtins );
+		
+		gblinterp->init();
 	
-	gblinterp->init();
-	gblinterp->import("dismember");
-					  
+	
+		gblinterp->exec("import sys;\nsys.path.append(\"./pythonsrc\")");
+
+		gblinterp->import("dismember");
+		gblinterp->import("dismemauto");
+		
+	} catch(.../* boost::python::error_already_set*/ ) {
+		PyErr_Print();
+	}
+	
 	// Create an initial document
 }

@@ -15,6 +15,7 @@
 class Trace;
 class LocalPythonInterpreter;
 class DocumentGui;
+class IRunQueueControl;
 
 /**
  * \brief Document encapsulates the entire state of a Dismember document
@@ -44,7 +45,18 @@ public:
 	 */
 	LocalPythonInterpreter * getPythonInterpreter();
 	
+	/**
+	 * Get the run-queue controller
+	 */
+	IRunQueueControl * getRunQueue();
+	
+	/**
+	 * Post an update notification to the gui 
+	 */
+	void postGuiUpdate();
+	
 private:
+	IRunQueueControl * m_runQueue;
 	DocumentGui * m_docgui;
 	std::string m_name;
 	Trace * m_trace;

@@ -7,9 +7,9 @@
 #include "memlocdata.h"
 #include "instruction.h"
 #include "architecture.h"
+#include "program_flow_analysis.h"
 
-
-void Trace::undefine(address_t start)
+bool ProgramFlowAnalysis::undefine(Trace * t, address_t start)
 {
 	std::stack<address_t> analysis_addrs;
 	analysis_addrs.push(start);
@@ -21,7 +21,7 @@ void Trace::undefine(address_t start)
 		address_t addr = analysis_addrs.top();
 		analysis_addrs.pop();
 		
-		MemlocData * m = lookup_memloc(addr);
+		MemlocData * m = t->lookup_memloc(addr);
 		if (!m)
 			continue;
 		
@@ -32,16 +32,16 @@ void Trace::undefine(address_t start)
 			analysis_addrs.push(m->get_addr() + m->get_length());
 		
 		analysis_addrs.push(start);
-		remove_memloc(addr);
+		t->remove_memloc(addr);
 		
 		first = false;
 	}
-	
+	return true;
 }
 
 
-void Trace::follow_code_build_insns(address_t start)
-{
+bool ProgramFlowAnalysis::analyze(Trace * t, address_t start)
+{/*
 	address_t addr;
 	std::stack<address_t> analysis_addrs;
 	addr = start;
@@ -51,12 +51,12 @@ void Trace::follow_code_build_insns(address_t start)
 	
 	// HACK
 	while (!done) {
-		Instruction * curr = m_arch->create_instruction(this, addr);
+		Instruction * curr = t->m_arch->create_instruction(t, addr);
 		if (first)
 			curr->mark_explicit(true);
 		
 		first = false;
-		insert_memlocd(curr);
+		t->insert_memlocd(curr);
 	
 		//fprintf(stderr, "%p %x %x %p %p: %x %x\n", curr, addr, curr->get_addr(), instrns[addr], instrns[addr-4],  curr->get_pcflags(), curr->get_direct_jump_addr());
 		// Decided where to look next
@@ -86,7 +86,7 @@ void Trace::follow_code_build_insns(address_t start)
 			break;
 		}
 		
-		while (lookup_memloc(addr))
+		while (t->lookup_memloc(addr))
 		{
 			if (analysis_addrs.empty())
 			{
@@ -100,5 +100,6 @@ void Trace::follow_code_build_insns(address_t start)
 				analysis_addrs.pop();
 			}
 		}
-	}
+	}*/
+	return true;
 }

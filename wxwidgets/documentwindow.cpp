@@ -189,12 +189,19 @@ void DocumentWindow::OnLoad(wxCommandEvent & event)
 	UpdateAll();
 }
 
+// Todo: Make this filter
+void DocumentWindow::postUpdate()
+{
+	UpdateAll();
+}
+
 void DocumentWindow::UpdateAll()
 {
 	m_canvas->updateLines();
 	m_canvas->RefreshAll();
 	m_routines->Update();
 	m_dataview->Refresh();
+	m_datatypelist->Update();
 }
 
 BEGIN_EVENT_TABLE(DocumentWindow, wxFrame)

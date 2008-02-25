@@ -4,7 +4,7 @@
 #include "datatype.h"
 
 
-
+#include <memory>
 
 class BinaryConstantDataType : public DataType {
 public:
@@ -83,7 +83,6 @@ BinaryConstantDataType::BinaryConstantDataType(Trace * t, std::string name, npar
 											   u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs) : 
 	DataType(t), m_name(name), m_elemsize(len)
 {
-		 t->insertDataType(this->getName(),this);
 }
 
 const std::string BinaryConstantDataType::getName() const
@@ -187,8 +186,18 @@ const std::string BinaryConstantDataType::BinaryConstant::get_textual()
 bool BinaryConstantDataType::BinaryConstant::logically_continues() const {
 	return false;
 }
+#include <memory>
+
+#include <boost/python.hpp>
+void bindBinaryConstantDataTypes()
+{//BinaryConstantDataType(Trace * t, std::string name, nparse_e type, u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs = 0);
+	boost::python::class_<BinaryConstantDataType, boost::python::bases<DataType>,  boost::shared_ptr<BinaryConstantDataType> >
+	("BinaryConstantDataType", boost::python::init<Trace *, std::string, nparse_e, u32, bool, nparse_sign_e>());
+	
+}
 
 // HACK HACK HACK
+/*
 void createBinaryConstantDataTypes(Trace * t)
 {
 	if (!datatype_u8_le) datatype_u8_le = new BinaryConstantDataType(t, "u8_le", BTYPE_PLAIN, 1, false, BSIGN_NONE);
@@ -200,4 +209,4 @@ void createBinaryConstantDataTypes(Trace * t)
 	if (!datatype_s16_le) datatype_s16_le = new BinaryConstantDataType(t, "s16_le", BTYPE_PLAIN, 2, false, BSIGN_STD);
 	if (!datatype_s32_le) datatype_s32_le = new BinaryConstantDataType(t, "s32_le", BTYPE_PLAIN, 4, false, BSIGN_STD);
 	if (!datatype_s64_le) datatype_s64_le = new BinaryConstantDataType(t, "s64_le", BTYPE_PLAIN, 8, false, BSIGN_STD);
-}
+}*/

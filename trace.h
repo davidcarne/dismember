@@ -7,6 +7,7 @@
 #include <string>
 #include <set>
 #include <stdint.h>
+#include <boost/noncopyable.hpp>
 
 #include "types.h"
 
@@ -42,7 +43,7 @@ typedef memlochash_t::const_iterator memlochash_ci;
 #include "callback.h"
 #include "datatypereg.h"
 
-class Trace
+class Trace : boost::noncopyable
 {	
 public:
 	
@@ -54,7 +55,6 @@ public:
 	~Trace();
 
 	void analyze(address_t start);
-	void undefine(address_t start);
 	
 	void createMemlocDataAt(DataType * d, address_t addr);
 	
@@ -100,10 +100,6 @@ public:
 	// Read a byte from memory
 	bool readByte(address_t taddr, uint8_t * data) const;
 	
-	// Factor out into a specific algorithm class..
-	// this doesn't need internal knowledge of trace
-	// code_follow.cpp
-	void follow_code_build_insns(address_t start);
 
 	// Factor out into a specific helper algorithm class..
 	// doesn't need any internal trace knowledge
@@ -123,8 +119,8 @@ public:
 	DataTypeReg::datatypereg_ci getDataTypeBegin() const;
 	DataTypeReg::datatypereg_ci getDataTypeEnd() const;
 	
-	DataType * lookupDataType(std::string name) const;
-	void insertDataType(std::string name, DataType * d);
+	sp_DataType lookupDataType(std::string name) const;
+	void addDataType(sp_DataType d);
 	
 	
 protected:
@@ -145,10 +141,10 @@ private:
 	typedef xref_list::const_iterator xref_list_ci;
 	
 	void insert_memlocd(MemlocData * a);
-	
+public:	
 	/* Serialize by name */
 	Architecture * m_arch;
-	
+
 	/* do not serialize - cache*/
 	mutable MemSegment * m_last_segment;
 	

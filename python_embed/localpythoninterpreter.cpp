@@ -29,8 +29,8 @@ LocalPythonInterpreter::LocalPythonInterpreter(Document * doc) : m_doc(doc),
 	m_localNamespace["sys"] = sys_module;
 	m_localNamespace["doc"] = python::ptr(m_doc);
 	m_localNamespace["local"] = python::ptr(this);
-	printf("this = %p\n", this);
-	execsingle("print local");
+	//printf("this = %p\n", this);
+	//execsingle("print local");
 }
 
 python::object LocalPythonInterpreter::exec(python::str code)

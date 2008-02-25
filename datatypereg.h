@@ -8,18 +8,19 @@
 
 #include <map>
 #include <string>
-class DataType;
+
+#include "datatype.h"
 
 class DataTypeReg {
 	public:
-	typedef std::map<std::string, DataType *> datatypemap_t;
+	typedef std::map<std::string, sp_DataType> datatypemap_t;
 	typedef datatypemap_t::const_iterator datatypereg_ci;
 	
 	datatypereg_ci getBegin() const;
 	datatypereg_ci getEnd() const;
 	
-	DataType * lookupDataType(std::string name) const;
-	void insertDataType(std::string name, DataType * d);
+	sp_DataType lookupDataType(std::string name) const;
+	void insertDataType(std::string name, sp_DataType);
 	
 	DataTypeReg();
 	

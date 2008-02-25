@@ -1,10 +1,15 @@
 #ifndef _DATATYPE_H_
 #define _DATATYPE_H_
 
-#include "types.h"
-#include "trace.h"
-#include "memlocdata.h"
 #include <stdexcept>
+
+#include "types.h"
+
+#include <boost/shared_ptr.hpp>
+
+class Trace;
+class MemlocData;
+
 /**
  * \brief DataType represents the concept of a datatype.
  *
@@ -61,6 +66,8 @@ class DataType {
 		return m_ctx;
 	}
 	
+	virtual ~DataType() {
+	};
 	protected:
 	/**
 	 * \brief Default constructor for the datatype class - cannot fully construct a datatype.
@@ -82,4 +89,5 @@ private:
 	
 };
 
+typedef boost::shared_ptr<DataType> sp_DataType;
 #endif
