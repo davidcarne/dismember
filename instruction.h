@@ -22,7 +22,7 @@ protected:
 	 * \brief Create a new Instruction
 	 * \todo Need to pass the datatype
 	 */
-	Instruction(const Trace * ctx, address_t addr, u32 length) : MemlocData(NULL, ctx,  addr, length) {};
+	Instruction(const Trace * ctx, address_t addr, u32 length);
 	
 public:
 	/**

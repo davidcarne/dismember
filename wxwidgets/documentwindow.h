@@ -45,7 +45,10 @@ public:
 	void OnSave(wxCommandEvent& event);
 	void OnLoad(wxCommandEvent & event);
 	void OnLoadAuto(wxCommandEvent & event);
-		
+	
+	void OnUpdateAll(wxCommandEvent & event);
+	void OnEventTimer(wxTimerEvent& event);
+	
 	void UpdateAll();
 	virtual void postUpdate();
 	
@@ -59,7 +62,10 @@ public:
 	DECLARE_EVENT_TABLE()
 private:
 	
-
+	wxTimer *m_eventFilterTimer;
+	bool m_onTimeOut;
+	bool m_eventAccuum;
+	
 	DocumentWindow(const wxString& title, Document & doc);
 	
 	friend DocumentGui * setupDocumentGui(Document & doc);

@@ -17,7 +17,8 @@ enum
 	ID_New,
 	ID_Loadbin,
 	ID_LoadAuto,
-	ID_ShowAll
+	ID_ShowAll,
+	ID_Update
 };
 
 #endif

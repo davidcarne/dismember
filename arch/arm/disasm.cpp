@@ -184,11 +184,28 @@ static void write_barrelshift (char **retp, int bsh)
     *retp = p;
 }
 
+static bool ldw(const Trace * t, address_t addr, u32 * data)
+{
+	u8 dataar[4];
+	if (!t->readBytes(addr, 4, dataar))
+		return false;
+	*data = dataar[3];
+	*data <<= 8;
+	*data |= dataar[2];
+	*data <<= 8;
+	*data |= dataar[1];
+	*data <<= 8;
+	*data |= dataar[0];
+	return true;
+}
+
+
 static void write_addr (const Trace *t, char **retp, int Pre, int Up, int Writeback, int Immed, int offset, int base, u32 pc)
 {
     char *p = *retp;
     if (base == 15 && !Writeback && Immed) {
-			u32 destword = t->ldw(pc + offset);
+		u32 destword;
+		if (ldw(t, pc + offset, &destword))
 			*retp += sprintf (*retp, "=0x%08x", destword);
         return;
     }

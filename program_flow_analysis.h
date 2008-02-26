@@ -9,10 +9,19 @@
 
 #ifndef _program_flow_analysis_H_
 #define _program_flow_analysis_H_
+#include "trace.h"
+#include "datatype.h"
+#include "run_queue.h"
+#include "document.h"
 
 class ProgramFlowAnalysis {
+public:
+	static sp_RunQueueJob createAnalysisJob(Document * d, DataType * dtcreate, address_t start);
+	static void submitAnalysisJob(Document * d, DataType * dtcreate, address_t start);
+	
+private:
 	static bool ProgramFlowAnalysis::undefine(Trace * t, address_t start);
-	static bool analyze(Trace * t,  address_t start);
+	static bool analyze(Document * d, DataType * dtcreate, address_t start);
 };
 
 #endif

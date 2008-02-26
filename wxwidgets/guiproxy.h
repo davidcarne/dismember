@@ -53,6 +53,12 @@ class GuiProxy {
 	 * @return line
 	 */	
 	line_ind_t get_line_for_addr(address_t addr);
+	
+	
+	/**
+	 * \brief update the internal state of the guiproxy
+	 */
+	void update(void);
 private:
 	
 	Trace * m_ctx;
@@ -65,7 +71,6 @@ private:
 		uint32_t lc;
 	};
 	
-	void update(void);
 	
 	bool m_dirty;
 	std::list<struct addrblock *> m_blocks;

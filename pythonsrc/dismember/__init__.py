@@ -8,3 +8,4 @@
 
 from _dismember_core import *
 import datatype_builtins
+import analysis_builtins

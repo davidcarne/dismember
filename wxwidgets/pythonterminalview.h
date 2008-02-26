@@ -51,6 +51,7 @@ private:
 	
 	DocumentWindow * m_docwin;
 public:
+	/** IGNORE */
 	DECLARE_EVENT_TABLE();
 };
 

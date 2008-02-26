@@ -17,17 +17,13 @@ GuiProxy::GuiProxy(Trace * ctx, DocumentWindow * gui) : m_ctx(ctx), m_gui(gui), 
 
 line_ind_t GuiProxy::get_line_count()
 {
-	if (m_dirty)
-		update();
 	
-	//printf("Linecount: %d\n", m_lc);
+	printf("Linecount: %d\n", m_lc);
 	return m_lc;
 }
 
 uint8_t GuiProxy::get_line_rows(line_ind_t line)
 {
-	if (m_dirty)
-		update();
 	
 	assert(line < m_lc);
 	
@@ -44,9 +40,6 @@ void GuiProxy::UpdateMemloc(MemlocData *s, HookChange hc)
 
 address_t GuiProxy::get_addr_for_line(line_ind_t line)
 {
-	
-	if (m_dirty)
-		update();
 	
 	assert(line < m_lc);
 	
@@ -106,8 +99,6 @@ address_t GuiProxy::get_addr_for_line(line_ind_t line)
 
 line_ind_t GuiProxy::get_line_for_addr(address_t addr)
 {
-	if (m_dirty)
-		update();
 	
 	line_ind_t lca = 0;
 	
@@ -144,6 +135,9 @@ line_ind_t GuiProxy::get_line_for_addr(address_t addr)
 
 void GuiProxy::update(void)
 {
+	if (!m_dirty)
+		return;
+		
 	m_lc = 0;
 	m_last_look_set = false;
 	

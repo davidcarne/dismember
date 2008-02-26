@@ -16,27 +16,33 @@
 
 #include <string>
 
-class RunQueueJob;
-typedef boost::shared_ptr<RunQueueJob> sp_RunQueueJob;
+class IRunQueueJob;
+typedef boost::shared_ptr<IRunQueueJob> sp_RunQueueJob;
 
-class RunQueueJob{
+class IRunQueueJob {
+public:
+	virtual bool exec() = 0;
+	virtual const std::string & getName() = 0;
+};
+
+class FunctorRunQueueJob : public IRunQueueJob {
 public:
 	typedef boost::function<bool()> jobfun_t;
 
 	
-	bool exec();
-	const std::string & getName();
+	virtual bool exec();
+	virtual const std::string & getName();
 	
 private:
 	std::string m_jobname;
 	jobfun_t m_jobfunctor;
 	
-	RunQueueJob(std::string jobname, jobfun_t functor);
-	friend sp_RunQueueJob createRunQueueJob(std::string jobname, RunQueueJob::jobfun_t job);
+	FunctorRunQueueJob(std::string jobname, jobfun_t functor);
+	friend sp_RunQueueJob createFunctorRunQueueJob(std::string jobname, FunctorRunQueueJob::jobfun_t job);
 };
 
 
-sp_RunQueueJob createRunQueueJob(std::string jobname, RunQueueJob::jobfun_t job);
+sp_RunQueueJob createFunctorRunQueueJob(std::string jobname, FunctorRunQueueJob::jobfun_t job);
 
 class IRunQueueControl {
 public:

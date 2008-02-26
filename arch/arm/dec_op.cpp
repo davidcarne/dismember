@@ -369,6 +369,8 @@ void ARMInstruction::decode_pcflow()
 	else {
 		instrname = "undf";
 		pcflags &= ~PCFLAG_CONTINUE;
+		m_pcflags = pcflags;
+		return;
 	}
 
 	

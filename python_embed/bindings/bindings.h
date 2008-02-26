@@ -15,9 +15,13 @@ void bind_trace();
 void bind_codeblocks();
 void bind_datatype();
 void bind_types();
+void bind_arch();
+void bind_analysis();
+void bind_runqueue();
 
 extern "C" void init_dismember_core();
 extern "C" void init_dismember_datatype_builtins();
+extern "C" void init_dismember_analysis_builtins();
 #endif
 
 

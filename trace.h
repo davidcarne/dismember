@@ -56,7 +56,12 @@ public:
 
 	void analyze(address_t start);
 	
-	void createMemlocDataAt(DataType * d, address_t addr);
+	// Todo: This needs to be rethought
+	DataType * getCodeDataType() {
+		return m_cdat;
+	}
+	
+	MemlocData * createMemlocDataAt(DataType * d, address_t addr);
 	
 	Symbol *create_sym(const std::string & name, address_t addr);
 	Xref *create_xref(address_t src, address_t dst, u32 type);
@@ -91,16 +96,13 @@ public:
 	
 	bool add_segment(MemSegment * m);
 	
-	// ramops.cpp
-	// Anything larger than a byte needs to be looked at thru the architecture
-	// and eventually, we can have more than one arch per file. need to decide how to do this
-	// but one global ldw/ldh handler isn't gonna work
-	u32 ldw(address_t taddr) const __attribute__((deprecated));
-	
 	// Read a byte from memory
 	bool readByte(address_t taddr, uint8_t * data) const;
 	
-
+	/* This needs and the memseglist_t need to be pushed to another object */
+	bool readBytes(address_t, u8, u8*) const;
+	
+	
 	// Factor out into a specific helper algorithm class..
 	// doesn't need any internal trace knowledge
 	// xref_build.cpp
@@ -173,9 +175,11 @@ public:
 	xref_map m_xrefs_to;
 	xref_map m_xrefs_from;
 
-	/* This needs and the memseglist_t need to be pushed to another object */
-	bool resolve(address_t, u8, u8*) const;
 
+
+	// REMOVE ME
+	DataType * m_cdat;
+	
 	/* Callback stuff - do not serialize */
 	typedef std::list<CallbackBase<MemlocData *> *> memloc_hook_list;
 	typedef std::list<CallbackBase<Xref *> *> xref_hook_list;

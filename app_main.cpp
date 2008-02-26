@@ -20,6 +20,7 @@ void app_main()
 		
 		gblinterp->addModule( "_dismember_core", &init_dismember_core );
 		gblinterp->addModule( "_dismember_datatype_builtins", &init_dismember_datatype_builtins );
+		gblinterp->addModule( "_dismember_analysis_builtins", &init_dismember_analysis_builtins );
 		
 		gblinterp->init();
 	

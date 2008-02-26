@@ -13,6 +13,7 @@
 #include <boost/shared_ptr.hpp>
 #include "trace.h"
 #include "datatype.h"
+#include "program_flow_analysis.h"
 
 using namespace boost::python;
 
@@ -26,8 +27,9 @@ void addDataType_wrap(Trace & t, boost::shared_ptr<DataType> a)
 void bind_trace()
 {
 	class_<Trace, boost::noncopyable>("Trace", no_init)
-	.def("analyze", &Trace::analyze)
+	//.def("analyze", &Trace::analyze)
 	//.def("undefine", &Trace::undefine)
-	.def("createMemlocDataAt", &Trace::createMemlocDataAt)
+	//.def("createMemlocDataAt", &Trace::createMemlocDataAt)
+	.add_property("defdatatype", make_function(&Trace::getCodeDataType, return_internal_reference<>() ))
 	.def("addDataType", &addDataType_wrap);
 }

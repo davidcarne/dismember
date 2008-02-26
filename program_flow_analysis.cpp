@@ -8,6 +8,21 @@
 #include "instruction.h"
 #include "architecture.h"
 #include "program_flow_analysis.h"
+#include "xref.h"
+
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
+
+sp_RunQueueJob ProgramFlowAnalysis::createAnalysisJob(Document * d, DataType * dtcreate, address_t start)
+{
+	FunctorRunQueueJob::jobfun_t jb = boost::bind(&ProgramFlowAnalysis::analyze, d, dtcreate, start);
+	return createFunctorRunQueueJob("code flow analysis..", jb);
+}
+
+void ProgramFlowAnalysis::submitAnalysisJob(Document * d, DataType * dtcreate, address_t start)
+{
+	d->getRunQueue()->submit(createAnalysisJob(d, dtcreate, start));
+}
 
 bool ProgramFlowAnalysis::undefine(Trace * t, address_t start)
 {
@@ -40,8 +55,10 @@ bool ProgramFlowAnalysis::undefine(Trace * t, address_t start)
 }
 
 
-bool ProgramFlowAnalysis::analyze(Trace * t, address_t start)
-{/*
+bool ProgramFlowAnalysis::analyze(Document * d, DataType * dtcreate, address_t start)
+{
+	Trace * t = d->getTrace();
+	
 	address_t addr;
 	std::stack<address_t> analysis_addrs;
 	addr = start;
@@ -49,57 +66,30 @@ bool ProgramFlowAnalysis::analyze(Trace * t, address_t start)
 	bool done = false;
 	bool first = true;
 	
-	// HACK
 	while (!done) {
-		Instruction * curr = t->m_arch->create_instruction(t, addr);
-		if (first)
+		if (t->lookup_memloc(addr))
+			break;
+		
+		Instruction * curr = dynamic_cast<Instruction *>(t->createMemlocDataAt(dtcreate, addr));
+	
+		if (curr && first)
 			curr->mark_explicit(true);
 		
 		first = false;
-		t->insert_memlocd(curr);
 	
-		//fprintf(stderr, "%p %x %x %p %p: %x %x\n", curr, addr, curr->get_addr(), instrns[addr], instrns[addr-4],  curr->get_pcflags(), curr->get_direct_jump_addr());
-		// Decided where to look next
-		if (curr->get_pcflags() & Instruction::PCFLAG_CONTINUE)
-		{
-			// easy call if its an incremental instr
-			addr += curr->get_length();
-			
-			// If this instruction could also branch, save it
-			if ((curr->get_pcflags() & Instruction::PCFLAG_LOCMASK) == Instruction::PCFLAG_DIRLOC)
-				analysis_addrs.push(curr->get_direct_jump_addr());
-			
-		}
-		else if ((curr->get_pcflags() & Instruction::PCFLAG_LOCMASK) == Instruction::PCFLAG_DIRLOC)
-		{
-			addr = curr->get_direct_jump_addr();
-			//printf("following dirjump %x\n", addr);
-		}
-		else if (!analysis_addrs.empty())
-		{
-			addr = analysis_addrs.top();
-			//printf("following popped addy %x\n", addr);
-			analysis_addrs.pop();
-		}
-		else
-		{
-			break;
-		}
+		// If we jump anywhere, submit a new analysis job
+		if (curr && (curr->get_pcflags() & Instruction::PCFLAG_LOCMASK) == Instruction::PCFLAG_DIRLOC)
+			submitAnalysisJob(d, dtcreate, curr->get_direct_jump_addr());
 		
-		while (t->lookup_memloc(addr))
-		{
-			if (analysis_addrs.empty())
-			{
-				done = true;
-				break;
-			}
-			else {
-				addr = analysis_addrs.top();
-				
-				//printf("_following popped addy %x\n", addr);
-				analysis_addrs.pop();
-			}
-		}
-	}*/
+		// If the instruction can continue
+		if (curr && (curr->get_pcflags() & Instruction::PCFLAG_CONTINUE))
+			addr += curr->get_length();
+		else
+			break;
+		
+
+	}
+	
+	d->postGuiUpdate();
 	return true;
 }

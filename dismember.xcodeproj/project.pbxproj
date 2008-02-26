@@ -23,6 +23,10 @@
 /* Begin PBXBuildFile section */
 		6719E2D50D7275D800D8AC6C /* bind_datatype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6719E1A40D72746300D8AC6C /* bind_datatype.cpp */; };
 		6736EAC90D7281E300149F2D /* bind_types.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6736EABE0D72805D00149F2D /* bind_types.cpp */; };
+		6736F7F10D72A0A100149F2D /* bind_arch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6736F76C0D729EC400149F2D /* bind_arch.cpp */; };
+		6736F94C0D72AA0700149F2D /* bind_analysis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6736F94B0D72AA0700149F2D /* bind_analysis.cpp */; };
+		6736F94F0D72AABA00149F2D /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 6736F94E0D72AABA00149F2D /* __init__.py */; };
+		6736FC1B0D732A5400149F2D /* bind_runqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6736FC1A0D732A5400149F2D /* bind_runqueue.cpp */; };
 		674260F00D639EE900B7A6E0 /* dsmem_trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674260EF0D639EE900B7A6E0 /* dsmem_trace.cpp */; };
 		674263FA0D650D2A00B7A6E0 /* globalpythoninterpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674263F60D650D2A00B7A6E0 /* globalpythoninterpreter.cpp */; };
 		674263FB0D650D2A00B7A6E0 /* localpythoninterpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674263F80D650D2A00B7A6E0 /* localpythoninterpreter.cpp */; };
@@ -44,6 +48,7 @@
 		674AF85E0D65934C005B012D /* bind_codeblocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AF85D0D65934C005B012D /* bind_codeblocks.cpp */; };
 		674AFAA10D66170A005B012D /* guiglue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AFA9C0D66170A005B012D /* guiglue.cpp */; };
 		674AFAA20D66170A005B012D /* pythonterminalview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AFA9E0D66170A005B012D /* pythonterminalview.cpp */; };
+		678DF0860D739416004254C0 /* instruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 678DF0850D739416004254C0 /* instruction.cpp */; };
 		67CACBCF0D708B0300DF9AD4 /* analysis_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CACBCE0D708B0300DF9AD4 /* analysis_queue.cpp */; };
 		67CACC1C0D7235C300DF9AD4 /* run_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CACC1B0D7235C300DF9AD4 /* run_queue.cpp */; };
 		67CAD2570D7254DD00DF9AD4 /* program_flow_analysis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CAD2560D7254DD00DF9AD4 /* program_flow_analysis.cpp */; };
@@ -86,6 +91,10 @@
 		670E59C30D62F7DC00A30E5E /* string_hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string_hash.h; sourceTree = "<group>"; };
 		6719E1A40D72746300D8AC6C /* bind_datatype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bind_datatype.cpp; sourceTree = "<group>"; };
 		6736EABE0D72805D00149F2D /* bind_types.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bind_types.cpp; sourceTree = "<group>"; };
+		6736F76C0D729EC400149F2D /* bind_arch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bind_arch.cpp; sourceTree = "<group>"; };
+		6736F94B0D72AA0700149F2D /* bind_analysis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bind_analysis.cpp; sourceTree = "<group>"; };
+		6736F94E0D72AABA00149F2D /* __init__.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		6736FC1A0D732A5400149F2D /* bind_runqueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bind_runqueue.cpp; sourceTree = "<group>"; };
 		674260EF0D639EE900B7A6E0 /* dsmem_trace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dsmem_trace.cpp; sourceTree = "<group>"; };
 		674263F60D650D2A00B7A6E0 /* globalpythoninterpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = globalpythoninterpreter.cpp; sourceTree = "<group>"; };
 		674263F70D650D2A00B7A6E0 /* globalpythoninterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = globalpythoninterpreter.h; sourceTree = "<group>"; };
@@ -119,7 +128,6 @@
 		674AF8150D6591FD005B012D /* ids.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ids.h; sourceTree = "<group>"; };
 		674AF8160D6591FD005B012D /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		674AF8170D6591FD005B012D /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
-		674AF8180D6591FD005B012D /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		674AF8190D6591FD005B012D /* routinelist.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = routinelist.cpp; sourceTree = "<group>"; };
 		674AF81A0D6591FD005B012D /* routinelist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = routinelist.h; sourceTree = "<group>"; };
 		674AF81B0D6591FD005B012D /* toolbar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = toolbar.cpp; sourceTree = "<group>"; };
@@ -173,6 +181,7 @@
 		674D3CF60D244E8A0074B172 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		674D46490D248A270074B172 /* stringconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stringconstant.cpp; sourceTree = "<group>"; };
 		674D464A0D248A270074B172 /* stringconstant.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stringconstant.h; sourceTree = "<group>"; };
+		678DF0850D739416004254C0 /* instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = instruction.cpp; sourceTree = "<group>"; };
 		67CACBCD0D708B0300DF9AD4 /* analysis_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = analysis_queue.h; sourceTree = "<group>"; };
 		67CACBCE0D708B0300DF9AD4 /* analysis_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = analysis_queue.cpp; sourceTree = "<group>"; };
 		67CACC1A0D7235C300DF9AD4 /* run_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = run_queue.h; sourceTree = "<group>"; };
@@ -213,6 +222,14 @@
 			name = armtrace;
 			sourceTree = "<group>";
 		};
+		6736F94D0D72AA9600149F2D /* analysis_builtins */ = {
+			isa = PBXGroup;
+			children = (
+				6736F94E0D72AABA00149F2D /* __init__.py */,
+			);
+			path = analysis_builtins;
+			sourceTree = "<group>";
+		};
 		674263F50D650D2A00B7A6E0 /* python_embed */ = {
 			isa = PBXGroup;
 			children = (
@@ -235,6 +252,9 @@
 				674AF85D0D65934C005B012D /* bind_codeblocks.cpp */,
 				6719E1A40D72746300D8AC6C /* bind_datatype.cpp */,
 				6736EABE0D72805D00149F2D /* bind_types.cpp */,
+				6736F76C0D729EC400149F2D /* bind_arch.cpp */,
+				6736F94B0D72AA0700149F2D /* bind_analysis.cpp */,
+				6736FC1A0D732A5400149F2D /* bind_runqueue.cpp */,
 			);
 			path = bindings;
 			sourceTree = "<group>";
@@ -280,7 +300,6 @@
 				674AF8150D6591FD005B012D /* ids.h */,
 				674AF8160D6591FD005B012D /* main.cpp */,
 				674AF8170D6591FD005B012D /* main.h */,
-				674AF8180D6591FD005B012D /* Makefile */,
 				674AF8190D6591FD005B012D /* routinelist.cpp */,
 				674AF81A0D6591FD005B012D /* routinelist.h */,
 				674AF81B0D6591FD005B012D /* toolbar.cpp */,
@@ -397,6 +416,7 @@
 				6744A0F00D62E7A100311E95 /* instruction.h */,
 				6744A1E20D62F03600311E95 /* architecture.h */,
 				6744A1E30D62F07D00311E95 /* xref.h */,
+				678DF0850D739416004254C0 /* instruction.cpp */,
 			);
 			name = "global trace";
 			sourceTree = "<group>";
@@ -439,6 +459,7 @@
 		67CAD55A0D726E6C00DF9AD4 /* dismember */ = {
 			isa = PBXGroup;
 			children = (
+				6736F94D0D72AA9600149F2D /* analysis_builtins */,
 				67CAD7260D7270E200DF9AD4 /* datatype_builtins */,
 				67CAD55B0D726E8000DF9AD4 /* __init__.py */,
 			);
@@ -506,6 +527,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6736F94F0D72AABA00149F2D /* __init__.py in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -581,6 +603,10 @@
 				67CAD2570D7254DD00DF9AD4 /* program_flow_analysis.cpp in Sources */,
 				6719E2D50D7275D800D8AC6C /* bind_datatype.cpp in Sources */,
 				6736EAC90D7281E300149F2D /* bind_types.cpp in Sources */,
+				6736F7F10D72A0A100149F2D /* bind_arch.cpp in Sources */,
+				6736F94C0D72AA0700149F2D /* bind_analysis.cpp in Sources */,
+				6736FC1B0D732A5400149F2D /* bind_runqueue.cpp in Sources */,
+				678DF0860D739416004254C0 /* instruction.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

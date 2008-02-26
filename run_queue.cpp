@@ -11,19 +11,23 @@
 #include <boost/thread.hpp>
 #include <queue>
 
+sp_RunQueueJob createFunctorRunQueueJob(std::string jobname, FunctorRunQueueJob::jobfun_t job)
+{
+	return sp_RunQueueJob(new FunctorRunQueueJob(jobname, job));
+}
 
-bool RunQueueJob::exec()
+bool FunctorRunQueueJob::exec()
 {
 	return m_jobfunctor();
 }
 
-const std::string & RunQueueJob::getName()
+const std::string & FunctorRunQueueJob::getName()
 {
 	return m_jobname;
 }
 
 
-RunQueueJob::RunQueueJob(std::string jobname, jobfun_t functor) : m_jobname(jobname), m_jobfunctor(functor)
+FunctorRunQueueJob::FunctorRunQueueJob(std::string jobname, jobfun_t functor) : m_jobname(jobname), m_jobfunctor(functor)
 {}
 
 class RunQueueControl : public IRunQueueControl {

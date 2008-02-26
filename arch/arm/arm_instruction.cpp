@@ -23,7 +23,7 @@ u32	ARMInstruction::get_pcflags() const
 	return m_pcflags;
 }
 
-ARMInstruction::ARMInstruction(Trace * ctx, address_t address, u32 opcode) : Instruction(ctx, address, 4), m_opcode(opcode), m_pcflags(0), m_ddest(0)
+ARMInstruction::ARMInstruction(const Trace * ctx, address_t address, u32 opcode) : Instruction(ctx, address, 4), m_opcode(opcode), m_pcflags(0), m_ddest(0)
 {
 	decode_pcflow();
 	decode_data_refs();

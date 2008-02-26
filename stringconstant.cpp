@@ -24,6 +24,8 @@ protected:
 		 */
 		virtual MemlocData * instantiate(address_t addr) const
 	{
+		address_t stadr = addr;
+		
 		address_t len = 0;
 		std::string contents;
 		
@@ -68,7 +70,7 @@ protected:
 			len++;
 		}
 		
-		return new StringConstant(this, getTraceContext(), addr, len, contents);
+		return new StringConstant(this, getTraceContext(), stadr, len, contents);
 	}
 	
 private:
@@ -130,7 +132,11 @@ bool StringConstantDataType::isMutable() const
 {
 	return false;
 }
-void createStringConstantDataTypes(Trace * t)
+#include <memory>
+
+#include <boost/python.hpp>
+void bindStringConstantDataType()
 {
-	new StringConstantDataType(t);
+	boost::python::class_<StringConstantDataType, boost::python::bases<DataType>,  boost::shared_ptr<StringConstantDataType> >
+	("StringConstantDataType", boost::python::init<Trace *>());
 }

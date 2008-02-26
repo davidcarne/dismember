@@ -47,3 +47,7 @@ def setupDocumentDefaultDataTypes(thedoc):
 	# Signed 64 bit int
 	x = BinaryConstantDataType(trce, "s64_le", dismember.nparse.BTYPE_PLAIN, 8, False, dismember.nparse_sign.BSIGN_STD)
 	trce.addDataType(x)
+
+	# Ascii String
+	x = StringConstantDataType(trce)
+	trce.addDataType(x)

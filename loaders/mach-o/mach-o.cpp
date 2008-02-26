@@ -106,6 +106,8 @@ void load_symtab(FILE * f, Trace * ctx, long start, long lcstart, uint8_t * data
 			// Defined symbol
 			//printf("%04d: %02x %02x %04x %08x %s\n", i, ns[i].n_type, ns[i].n_sect, ns[i].n_desc, ns[i].n_value, strtab + ns[i].n_un.n_strx);
 			ctx->create_sym(strtab + ns[i].n_un.n_strx, ns[i].n_value);
+			
+			//ProgramFlowAnalysis::submitAnalysisJob(d, ctx->getCodeDataType(), curr->get_direct_jump_addr());
 		}
 	}
 	

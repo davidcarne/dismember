@@ -1,29 +1,31 @@
 #include "address_hash.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdexcept>
+#include <errno.h>
+#include <assert.h>
+#include <stack>
+
 #include "trace.h"
 #include "memlocdata.h"
 #include "binaryconstant.h"
 #include "stringconstant.h"
 #include "datatype.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
+#include "xref.h"
+#include "instruction.h"
 
-#include <stdexcept>
-#include <errno.h>
-#include <assert.h>
-#include <stack>
 //#include "memtags.h"
-
+#include "architecture.h"
 #include "memsegment.h"
 
 #define ASSERT_RESOLVE(addr) assert(readByte(addr, NULL))
 Trace::Trace(Architecture * arch) : m_arch(arch)
 {
 	m_last_segment = NULL;
-	/** \todo Creating and binding binary constants needs to be done much more gracefully */
-	createStringConstantDataTypes(this);
+	m_cdat = m_arch->createDataType(this);
 }
 
 void Trace::analyze(address_t start)
@@ -63,10 +65,13 @@ bool Trace::add_segment(MemSegment * m)
 }
 
 
-void Trace::createMemlocDataAt(DataType * d, address_t addr)
+MemlocData * Trace::createMemlocDataAt(DataType * d, address_t addr)
 {
 	assert(d);
-	insert_memlocd(d->instantiate(addr));
+	MemlocData * i = d->instantiate(addr);
+	if (i)
+		insert_memlocd(i);
+	return i;
 }
 
 Trace::~Trace()
@@ -133,9 +138,24 @@ void Trace::insert_memlocd(MemlocData * a)
 	if (ov)
 		throw std::out_of_range("fixme: Overlapping memlocds.");
 
+	// Todo: this is sorta hacky....  the memlocd's should insert their own xrefs, or provide a way to enumerate them
+	Instruction * b = dynamic_cast<Instruction*>(a);
+	
 	// insert into both lookup tables
 	m_memdata_hash[addr] = a;
 	m_memdata[addr] = a;
+	
+	// Create Code XREF's if this memlocdata has any
+	// The fn / jmp business is to avoid a gcc bug
+	u32 fn = Xref::XR_TYPE_FNCALL;
+	u32 jmp = Xref::XR_TYPE_JMP;
+	if (b && (b->get_pcflags() & Instruction::PCFLAG_LOCMASK) == Instruction::PCFLAG_DIRLOC)
+		create_xref(b->get_addr(), b->get_direct_jump_addr(), b->get_pcflags() & Instruction::PCFLAG_DIRLK ? fn : jmp);
+	
+	if (b->get_pcflags() & Instruction::PCFLAG_DREF)
+		create_xref(b->get_addr(), b->get_data_ref_addr(), Xref::XR_TYPE_DATA);
+	
+	notifyMemlocChange(a, HOOK_MODIFY);
 }
 
 MemlocData * Trace::lookup_memloc(address_t addr, bool exactmatch) const
@@ -274,4 +294,62 @@ void Trace::addDataType(sp_DataType d)
 	assert(d);
 	assert(d->getName().size() > 0);
 	return m_datatypelist.insertDataType(d->getName(), d);
+}
+
+
+Xref *Trace::create_xref(address_t srcaddr, address_t dstaddr, u32 type)
+{
+	
+	MemlocData * src = lookup_memloc(srcaddr);
+	MemlocData * dst = lookup_memloc(dstaddr);
+	
+	if (!src)
+		return NULL;
+	
+	// Check if we already have an xref pointing to the destination
+	for (xref_map_ci i = xref_from_lower_bound(srcaddr); i!= xref_from_upper_bound(srcaddr); i++)
+		if ((*i).second->get_dst_addr() == dstaddr)
+			return (*i).second;
+	
+	Xref * sx = new Xref(this, srcaddr, dstaddr, type);
+	
+	// TODO: This should be attached as a notifier, maybe?
+	// Build data if its a data xreef
+	if (type == Xref::XR_TYPE_DATA)
+	{
+		Instruction * id  = dynamic_cast<Instruction *>(src);
+		if (id)
+			switch (id->get_pcflags() & Instruction::PCFLAG_DSMASK) {
+					// HACK HACK HACK - changeme
+				case Instruction::PCFLAG_DSBYTE:
+					//	insert_memlocd(datatype_u8_le->instantiate(daddr));
+					break;
+				
+				case Instruction::PCFLAG_DSWORD:
+					//	insert_memlocd(datatype_u32_le->instantiate(daddr));
+					break;
+			}
+	}
+	
+	// Mark as a function call
+	if (dst)
+	{
+		if (type == Xref::XR_TYPE_FNCALL)
+		{
+			Instruction * instdst;
+			instdst = dynamic_cast<Instruction *>(dst);
+			if (instdst)
+				instdst->mark_fn_ent(true);
+		}
+		
+	}
+	
+	// Insert into the master xref list
+	m_xrefs_master.push_back(sx);
+	
+	// Add to the to/from caches
+	m_xrefs_to.insert(std::pair<const address_t, Xref*>(dstaddr, sx));
+	m_xrefs_from.insert(std::pair<const address_t, Xref*>(srcaddr, sx));
+	
+	return sx;
 }

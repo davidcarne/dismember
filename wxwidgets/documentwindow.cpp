@@ -35,6 +35,10 @@ DocumentWindow::DocumentWindow(const wxString& title, Document & doc) :
 	wxMenu * menuLoadTypes = new wxMenu;
 	wxRegisterId(7000);
 	
+	m_eventFilterTimer = new wxTimer(this, -1);
+	m_onTimeOut = false;
+	m_eventAccuum = false;
+	
 	FileLoaderMaker::factories_ci loaders_ind = FileLoaderMaker::getMap().begin();
 	FileLoaderMaker::factories_ci loaders_end = FileLoaderMaker::getMap().end();
 	
@@ -189,9 +193,41 @@ void DocumentWindow::OnLoad(wxCommandEvent & event)
 	UpdateAll();
 }
 
+void DocumentWindow::OnEventTimer(wxTimerEvent& event)
+{
+    if (m_eventAccuum)
+	{
+		m_eventAccuum = false;
+		UpdateAll();
+		m_eventFilterTimer->Start(1000, wxTIMER_ONE_SHOT );
+		return;
+	}
+
+	m_onTimeOut = false;
+	
+}
+
+
+wxCommandEvent tempevt(wxEVT_COMMAND_MENU_SELECTED, ID_Update);
 // Todo: Make this filter
 void DocumentWindow::postUpdate()
 {
+	if (m_onTimeOut)
+	{
+		m_eventAccuum = true;
+		return;
+	}
+	
+	wxPostEvent(this, tempevt);
+	
+	m_onTimeOut = true;
+	m_eventFilterTimer->Start(1000, wxTIMER_ONE_SHOT );
+}
+
+
+void DocumentWindow::OnUpdateAll(wxCommandEvent & event)
+{
+	
 	UpdateAll();
 }
 
@@ -211,5 +247,9 @@ EVT_MENU(ID_GotoAddress, DocumentWindow::OnGoto)
 EVT_MENU(ID_Font, DocumentWindow::OnFont)
 EVT_MENU(ID_LoadAuto, DocumentWindow::OnLoadAuto)
 EVT_BUTTON(ID_ToolClose, DocumentWindow::OnQuit)
+
+// Hack Hack Hack
+EVT_MENU(ID_Update, DocumentWindow::OnUpdateAll)
+
 END_EVENT_TABLE()
 

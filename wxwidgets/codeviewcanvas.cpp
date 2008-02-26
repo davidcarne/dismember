@@ -8,7 +8,7 @@
 #include "../memlocdata.h"
 #include "../xref.h"
 #include "document.h"
-
+#include "program_flow_analysis.h"
 static wxFont G_font;
 static int G_font_height;
 
@@ -79,8 +79,11 @@ void CodeViewCanvas::OnComment(wxCommandEvent& WXUNUSED(event))
 void CodeViewCanvas::OnAnalyze(wxCommandEvent& WXUNUSED(event))
 {
 	if (!m_is_sel) return;
-	m_trace.analyze(m_sel_addr);
-	((DocumentWindow *)m_parent)->m_dataview->Update();
+	
+	ProgramFlowAnalysis::submitAnalysisJob(&m_doc, m_trace.getCodeDataType(), m_sel_addr);
+	
+	//m_trace.analyze(m_sel_addr);
+	//((DocumentWindow *)m_parent)->m_dataview->Update();
 	updateLines();
 }
 
@@ -156,11 +159,15 @@ void CodeViewCanvas::OnGotoBranch(wxCommandEvent& WXUNUSED(event))
 		Xref * x = (*(i->begin_xref_from())).second;
 		
 		u32 na = x->get_dst_addr();
-		
-		ScrollToLine(m_gprox->get_line_for_addr(na));
-		m_addr_stack.push(m_sel_addr);
-		m_is_sel = true;
-		m_sel_addr = na;
+		try {
+			ScrollToLine(m_gprox->get_line_for_addr(na));
+			m_addr_stack.push(m_sel_addr);
+			m_is_sel = true;
+			m_sel_addr = na;
+		} catch (std::out_of_range e) {
+			
+		}
+
 	}
 	Refresh();
 }
@@ -386,7 +393,10 @@ void CodeViewCanvas::OnCreateData(bool directFromBox)
 #define LINEHEIGHT(x) ((x)+(x)/6)
 void CodeViewCanvas::updateLines()
 {
-	SetLineCount(m_gprox->get_line_count());
+	m_gprox->update();
+	u32 lc = m_gprox->get_line_count();
+	printf("Setting line count to: %d", lc);
+	SetLineCount(lc);
 	Refresh();
 	
 	if (m_gprox->get_line_count() != 0 && m_current_first_addr_set)

@@ -9,6 +9,8 @@
 
 #ifndef _architecture_H_
 #define _architecture_H_
+class DataType;
+class Trace;
 
 /**
  * Architecture is an abstract base class that provides the interface through which architecture specific details can be queried
@@ -18,6 +20,9 @@ public:
 	virtual ~Architecture() {};
 	/** Get the short [display] name for the architecture */
 	virtual std::string get_short_name() const = 0; 
+	
+	// HACK HACK
+	virtual DataType * createDataType(Trace * t) const = 0;
 	
 	/** Create an instruction for the architecture at address addr */
 	//virtual Instruction * create_instruction(Trace * ctx, address_t addr) = 0;
