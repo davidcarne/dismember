@@ -63,18 +63,18 @@ bool FlatLoader::loadFromFile(FILE * loadimg, Trace * ctx)
 	reloc((u32)data, loadimg);
 
 #if MULTIPLE_MEM_SEGMENTS_WORK
-	ctx->add_segment(new MemSegment(0, header.data_end, data)); /* code */
-	ctx->add_segment(new MemSegment(header.data_end, header.bss_end,
+	ctx->addSegment(new MemSegment(0, header.data_end, data)); /* code */
+	ctx->addSegment(new MemSegment(header.data_end, header.bss_end,
 			data + header.data_end)); /* bss */
-	ctx->add_segment(new MemSegment(header.bss_end, header.stack_size,
+	ctx->addSegment(new MemSegment(header.bss_end, header.stack_size,
 			data + header.bss_end)); /* stack */
 #else
-	ctx->add_segment(new MemSegment(0, header.bss_end + header.stack_size,				data));
+	ctx->addSegment(new MemSegment(0, header.bss_end + header.stack_size,				data));
 #endif
 	free(data);
 
 	ctx->create_sym("_start", header.entry);
-	ctx->analyze(header.entry);
+	//ctx->analyze(header.entry);
 
 	return true;
 }

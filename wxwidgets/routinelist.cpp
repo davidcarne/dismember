@@ -130,7 +130,7 @@ void SymbolListView::OnSelect(wxListEvent& WXUNUSED(event))
 	const Symbol *sym = m_trace.find_ordered_symbol(GetFirstSelected(), order);
 	
 	if (sym)
-		((DocumentWindow *)m_parent)->m_canvas->jumpToAddr(sym->get_addr());
+		((DocumentWindow *)m_parent)->getCodeListingView()->jumpToAddr(sym->get_addr());
 }
 
 

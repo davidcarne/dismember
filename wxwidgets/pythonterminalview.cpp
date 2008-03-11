@@ -98,7 +98,7 @@ void PythonTerminalView::OnTextEnter(wxCommandEvent & WXUNUSED(m))
 	m_output->Refresh();
 	
 	m_commandLine->Clear();
-	m_docwin->UpdateAll();
+	m_docwin->postUpdate();
 }
 
 BEGIN_EVENT_TABLE(PythonTerminalView, wxPanel)

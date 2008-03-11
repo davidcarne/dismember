@@ -11,6 +11,7 @@
 #include "memlocdata.h"
 #include "instruction.h"
 #include "xref.h"
+#include "xrefmanager.h"
 
 CodeBlock::CodeBlock(Trace * t, address_t start, address_t end) : m_trace(t), m_start(start), m_end(end)
 {
@@ -29,11 +30,11 @@ void CodeBlockManager::unlinkCodeBlocks(CodeBlock * pre, CodeBlock * post)
 	pre->m_post.erase(post);
 }
 
-bool hasNonLinkCodeXref(xref_map_ci begin, xref_map_ci end)
+bool hasNonLinkCodeXref(XrefManager::xref_map_ci begin, XrefManager::xref_map_ci end)
 {
 
 	
-	for (xref_map_ci i=begin; i != end; i++)
+	for (XrefManager::xref_map_ci i=begin; i != end; i++)
 	{
 		Xref * xr = (*i).second;
 		uint32_t type = xr->get_type();

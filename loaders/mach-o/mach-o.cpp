@@ -131,7 +131,7 @@ void load_seg(FILE * f, Trace * ctx, long start, long lcstart, uint8_t * data)
 	MemSegment * msg = new MemSegment(s->vmaddr, s->vmsize, segment_mem, s->filesize);
 	delete segment_mem;
 	
-	ctx->add_segment(msg);
+	ctx->addSegment(msg);
 }
 class MachOLoader : public FileLoaderMaker {
 public:

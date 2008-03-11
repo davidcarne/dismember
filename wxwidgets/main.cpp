@@ -11,12 +11,12 @@
 
 #include "../app_main.h"
 
-IMPLEMENT_APP(ArmTraceApp)
+IMPLEMENT_APP(ArmTraceWXApp)
 
-BEGIN_EVENT_TABLE(ArmTraceApp, wxApp)
-EVT_MENU(ID_Open, ArmTraceApp::OnOpen)
-EVT_MENU(ID_New, ArmTraceApp::OnNew)
-EVT_BUTTON(ID_ToolOpen, ArmTraceApp::OnOpen)
+BEGIN_EVENT_TABLE(ArmTraceWXApp, wxApp)
+EVT_MENU(ID_Open, ArmTraceWXApp::OnOpen)
+EVT_MENU(ID_New, ArmTraceWXApp::OnNew)
+EVT_BUTTON(ID_ToolOpen, ArmTraceWXApp::OnOpen)
 END_EVENT_TABLE()
 
 const wxChar *ALL_FILETYPES = _T(
@@ -25,7 +25,7 @@ const wxChar *ALL_FILETYPES = _T(
 const wxChar *ARMTRACE_FILETYPES = _T(
 								 "Armtrace Compressed Project Files|*.ap.bz2"
 								 );
-void ArmTraceApp::OnOpen(wxCommandEvent & WXUNUSED(event))
+void ArmTraceWXApp::OnOpen(wxCommandEvent & WXUNUSED(event))
 {
 	
 	throw new std::runtime_error("Open not yet implemented");
@@ -44,12 +44,12 @@ void ArmTraceApp::OnOpen(wxCommandEvent & WXUNUSED(event))
 	
 }
 
-void ArmTraceApp::OnNew(wxCommandEvent & WXUNUSED(event))
+void ArmTraceWXApp::OnNew(wxCommandEvent & WXUNUSED(event))
 {
 	Document * d = new Document();
 }
 
-bool ArmTraceApp::OnInit()
+bool ArmTraceWXApp::OnInit()
 {
 	if (!wxApp::OnInit())
 		return false;

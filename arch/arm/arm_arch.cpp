@@ -5,6 +5,11 @@
 
 #include <boost/python.hpp>
 
+ARMArchitecture::ARMArchitecture()
+{
+	m_adt = NULL;
+}
+
 std::string ARMArchitecture::get_short_name() const
 {
 	return "ARM";
@@ -79,9 +84,12 @@ void ARMArchitecture::bind_type()
 	("ARMInstructionDataType", boost::python::init<Trace *>());
 }
 
-DataType * ARMArchitecture::createDataType(Trace *t) const
+DataType * ARMArchitecture::getDataType(Trace *t) const
 {
-	return new ARMInstructionDataType(t);
+	if (!m_adt)
+		m_adt = new ARMInstructionDataType(t);
+	
+	return m_adt;
 }
 	
 /*

@@ -134,13 +134,13 @@ void DocumentWindow::OnFont(wxCommandEvent& event)
 
 void DocumentWindow::OnSave(wxCommandEvent& event)
 {
-	throw new std::runtime_error("Open not yet implemented");
-	/*
-	wxFileDialog* saveFileDialog = new wxFileDialog( this, _("Save File.."), _T(""), _T(""), ARMTRACE_FILETYPES, wxSAVE, wxDefaultPosition);
+	//throw new std::runtime_error("Open not yet implemented");
 	
-	if (saveFileDialog->ShowModal() == wxID_OK) {
-		m_ctx.write_file(saveFileDialog->GetPath().fn_str());
-	}*/
+	wxFileDialog saveFileDialog( this, _("Save File.."), _T(""), _T(""), ARMTRACE_FILETYPES, wxSAVE, wxDefaultPosition);
+	
+	if (saveFileDialog.ShowModal() == wxID_OK) {
+		m_doc.saveTo(std::string(saveFileDialog.GetPath().fn_str()));//write_file(saveFileDialog->GetPath().fn_str());
+	}
 }
 
 void DocumentWindow::OnLoadAuto(wxCommandEvent & event)

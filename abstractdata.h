@@ -3,6 +3,8 @@
 
 #include <string>
 
+/* TODO: Replace this all with boost::variant */
+
 class AbstractData
 {
  public:

@@ -5,9 +5,7 @@
 #include "datatype.h"
 #include "xref.h"
 
-void Trace::build_xrefs()
-{}
-
+#if 0
 void Trace::build_xref_syms()
 {
 	char namebuf[128];
@@ -15,7 +13,7 @@ void Trace::build_xref_syms()
 	int size;
 	bool subroutine = false;
 	
-	for (memloclist_i i = m_memdata.begin(); i != m_memdata.end(); i++) {
+	for (MemlocManager::memloclist_ci i = m_memdata.begin(); i != m_memdata.end(); i++) {
 		MemlocData * id = (*i).second;
 
 		if (id && id->has_xrefs_to() && (!id->get_symbol() || id->get_symbol()->get_name().c_str()[0] == '_'))
@@ -63,3 +61,5 @@ void Trace::build_xref_syms()
 		}
 	}
 }
+#endif
+

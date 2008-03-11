@@ -7,6 +7,8 @@
 #include "datatypelist.h"
 #include "../memlocdata.h"
 #include "../xref.h"
+#include "../xrefmanager.h"
+
 #include "document.h"
 #include "program_flow_analysis.h"
 static wxFont G_font;
@@ -82,7 +84,6 @@ void CodeViewCanvas::OnAnalyze(wxCommandEvent& WXUNUSED(event))
 	
 	ProgramFlowAnalysis::submitAnalysisJob(&m_doc, m_trace.getCodeDataType(), m_sel_addr);
 	
-	//m_trace.analyze(m_sel_addr);
 	//((DocumentWindow *)m_parent)->m_dataview->Update();
 	updateLines();
 }
@@ -91,7 +92,7 @@ void CodeViewCanvas::OnUndefine(wxCommandEvent& WXUNUSED(event))
 {
 	if (!m_is_sel) return;
 	//TODO: re-enable m_trace.undefine(m_sel_addr);
-	((DocumentWindow *)m_parent)->m_dataview->Update();
+	((DocumentWindow *)m_parent)->postUpdate();
 	updateLines();
 }
 
@@ -197,7 +198,7 @@ void CodeViewCanvas::OnXREFs(wxCommandEvent & WXUNUSED(event))
 	u32 * client = new u32[i->count_xrefs_to()];
 	u32 * client_p = client;
 	
-	xref_map_ci xr = i->begin_xref_to();
+	XrefManager::xref_map_ci xr = i->begin_xref_to();
 		
 	for (; xr != i->end_xref_to(); xr++)
 	{
@@ -382,9 +383,7 @@ void CodeViewCanvas::OnCreateData(bool directFromBox)
 {
 	if (directFromBox)
 	{
-		wxMouseEvent dummy;
-		m_parent->m_datatypelist->createSelectedDataType();
-		
+		m_parent->getDataTypeListView()->createSelectedDataType();
 	} else {
 		
 	}
@@ -501,7 +500,7 @@ void CodeViewCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 				dc.SetTextForeground(*wxLIGHT_GREY);
 				int nrefs = id->count_xrefs_to();
 				
-				for (xref_map_ci j = id->begin_xref_to(); j != id->end_xref_to(); j++)
+				for (XrefManager::xref_map_ci j = id->begin_xref_to(); j != id->end_xref_to(); j++)
 				{
 					Xref * x = (*j).second;
 					

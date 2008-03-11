@@ -27,7 +27,6 @@ void addDataType_wrap(Trace & t, boost::shared_ptr<DataType> a)
 void bind_trace()
 {
 	class_<Trace, boost::noncopyable>("Trace", no_init)
-	//.def("analyze", &Trace::analyze)
 	//.def("undefine", &Trace::undefine)
 	//.def("createMemlocDataAt", &Trace::createMemlocDataAt)
 	.add_property("defdatatype", make_function(&Trace::getCodeDataType, return_internal_reference<>() ))

@@ -4,6 +4,7 @@
 #ifndef _MEMLOCDATA_H_
 #define _MEMLOCDATA_H_
 
+#include "xrefmanager.h"
 
 
 class Trace;
@@ -54,12 +55,12 @@ public:
 	/**
 	 * @return begin iterator of the xrefs to this memory location
 	 */
-	xref_map_ci begin_xref_to() const;
+	XrefManager::xref_map_ci begin_xref_to() const;
 	
 	/**
 	 * @return end iterator of the xrefs to this memory location
 	 */
-	xref_map_ci end_xref_to() const;
+	XrefManager::xref_map_ci end_xref_to() const;
 	
 	/**
 	 * @return count of the xrefs to this memory location
@@ -74,12 +75,12 @@ public:
 	/**
 	 * @return begin iterator of the xrefs from this memory location
 	 */
-	xref_map_ci begin_xref_from() const;
+	XrefManager::xref_map_ci begin_xref_from() const;
 
 	/**
 	 * @return end iterator of the xrefs from this memory location
 	 */
-	xref_map_ci end_xref_from() const;
+	XrefManager::xref_map_ci end_xref_from() const;
 	
 	/**
 	 * @return count of the xrefs from this memory location

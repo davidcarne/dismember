@@ -49,6 +49,9 @@
 		674AFAA10D66170A005B012D /* guiglue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AFA9C0D66170A005B012D /* guiglue.cpp */; };
 		674AFAA20D66170A005B012D /* pythonterminalview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 674AFA9E0D66170A005B012D /* pythonterminalview.cpp */; };
 		678DF0860D739416004254C0 /* instruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 678DF0850D739416004254C0 /* instruction.cpp */; };
+		679B7F440D7F21CE00258578 /* xrefmanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 679B7F430D7F21CE00258578 /* xrefmanager.cpp */; };
+		679B888E0D7F33A800258578 /* memlocmanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 679B888D0D7F33A800258578 /* memlocmanager.cpp */; };
+		679B8D730D7F434900258578 /* memsegmentmanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 679B8D680D7F416600258578 /* memsegmentmanager.cpp */; };
 		67CACBCF0D708B0300DF9AD4 /* analysis_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CACBCE0D708B0300DF9AD4 /* analysis_queue.cpp */; };
 		67CACC1C0D7235C300DF9AD4 /* run_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CACC1B0D7235C300DF9AD4 /* run_queue.cpp */; };
 		67CAD2570D7254DD00DF9AD4 /* program_flow_analysis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CAD2560D7254DD00DF9AD4 /* program_flow_analysis.cpp */; };
@@ -182,6 +185,13 @@
 		674D46490D248A270074B172 /* stringconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stringconstant.cpp; sourceTree = "<group>"; };
 		674D464A0D248A270074B172 /* stringconstant.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stringconstant.h; sourceTree = "<group>"; };
 		678DF0850D739416004254C0 /* instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = instruction.cpp; sourceTree = "<group>"; };
+		679B7F420D7F21CE00258578 /* xrefmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xrefmanager.h; sourceTree = "<group>"; };
+		679B7F430D7F21CE00258578 /* xrefmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xrefmanager.cpp; sourceTree = "<group>"; };
+		679B888C0D7F33A800258578 /* memlocmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memlocmanager.h; sourceTree = "<group>"; };
+		679B888D0D7F33A800258578 /* memlocmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memlocmanager.cpp; sourceTree = "<group>"; };
+		679B8BEC0D7F3ABD00258578 /* endian_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = endian_util.h; sourceTree = "<group>"; };
+		679B8D670D7F416600258578 /* memsegmentmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memsegmentmanager.h; sourceTree = "<group>"; };
+		679B8D680D7F416600258578 /* memsegmentmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memsegmentmanager.cpp; sourceTree = "<group>"; };
 		67CACBCD0D708B0300DF9AD4 /* analysis_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = analysis_queue.h; sourceTree = "<group>"; };
 		67CACBCE0D708B0300DF9AD4 /* analysis_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = analysis_queue.cpp; sourceTree = "<group>"; };
 		67CACC1A0D7235C300DF9AD4 /* run_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = run_queue.h; sourceTree = "<group>"; };
@@ -417,6 +427,13 @@
 				6744A1E20D62F03600311E95 /* architecture.h */,
 				6744A1E30D62F07D00311E95 /* xref.h */,
 				678DF0850D739416004254C0 /* instruction.cpp */,
+				679B7F420D7F21CE00258578 /* xrefmanager.h */,
+				679B7F430D7F21CE00258578 /* xrefmanager.cpp */,
+				679B888C0D7F33A800258578 /* memlocmanager.h */,
+				679B888D0D7F33A800258578 /* memlocmanager.cpp */,
+				679B8BEC0D7F3ABD00258578 /* endian_util.h */,
+				679B8D670D7F416600258578 /* memsegmentmanager.h */,
+				679B8D680D7F416600258578 /* memsegmentmanager.cpp */,
 			);
 			name = "global trace";
 			sourceTree = "<group>";
@@ -607,6 +624,9 @@
 				6736F94C0D72AA0700149F2D /* bind_analysis.cpp in Sources */,
 				6736FC1B0D732A5400149F2D /* bind_runqueue.cpp in Sources */,
 				678DF0860D739416004254C0 /* instruction.cpp in Sources */,
+				679B7F440D7F21CE00258578 /* xrefmanager.cpp in Sources */,
+				679B888E0D7F33A800258578 /* memlocmanager.cpp in Sources */,
+				679B8D730D7F434900258578 /* memsegmentmanager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -727,6 +747,7 @@
 					"-lwx_mac_richtext-2.8",
 					"-lboost_thread-mt",
 					"-lpthread",
+					"-lboost_serialization-d-1_34_1",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = dismember;

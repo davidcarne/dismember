@@ -12,6 +12,9 @@
 
 #include "types.h"
 
+class MemlocData;
+class Trace;
+
 /**
  * \brief represents a reference, aka, a link between two objects.
  */
@@ -21,19 +24,25 @@ private:
 	
 public:
 	/**
-	 * \brief Xref of type jump
+	 * Xref type enum
 	 */
-	static const u32 XR_TYPE_JMP = 0x0;
-	
-	/**
-	 * \brief Xref of type function call
-	 */
-	static const u32 XR_TYPE_FNCALL = 0x1;
-	
-	/**
-	 * \brief Xref of type data reference. See source pcflags for more info
-	 */
-	static const u32 XR_TYPE_DATA = 0x2;
+	typedef enum {
+		/**
+		 * \brief Xref of type jump
+		 */
+		XR_TYPE_JMP,
+		
+		/**
+		 * \brief Xref of type function call
+		 */
+		XR_TYPE_FNCALL,
+		
+		/**
+		 * \brief Xref of type data reference. See source pcflags for more info
+		 */
+		XR_TYPE_DATA
+	} xref_type_e;
+
 	
 	
 	/**
@@ -80,16 +89,16 @@ protected:
 	 * @param dstaddr dest address of the xref
 	 * @param type type of the xref
 	 */
-	Xref(Trace * lookup, address_t srcaddr, address_t dstaddr, u32 type);
+	Xref(Trace * lookup, address_t srcaddr, address_t dstaddr, xref_type_e type);
 
 	
 private:
-	friend class Trace;
+	friend class XrefManager;
 	
 	address_t m_srcaddr;
 	address_t m_dstaddr;
 	
-	u32 m_type;
+	xref_type_e m_type;
 	
 	Trace * m_lookuptrace;
 };

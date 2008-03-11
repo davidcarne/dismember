@@ -22,7 +22,8 @@ public:
 	virtual std::string get_short_name() const = 0; 
 	
 	// HACK HACK
-	virtual DataType * createDataType(Trace * t) const = 0;
+	/** get the datatype that will instantiate an instruction of this architecture. needs rethinking */
+	virtual DataType * getDataType(Trace * t) const = 0;
 	
 	/** Create an instruction for the architecture at address addr */
 	//virtual Instruction * create_instruction(Trace * ctx, address_t addr) = 0;

@@ -150,10 +150,10 @@ void GuiProxy::update(void)
 	m_lclookup.clear();
 	struct addrblock * cins = NULL;
 	
-	memloclist_ci li = m_ctx->memloc_list_begin();
+	MemlocManager::memloclist_ci li = m_ctx->memloc_list_begin();
 	u32 sblc = m_lc;
 	
-	for (Trace::memseglist_ci mi = m_ctx->memsegs_begin(); mi != m_ctx->memsegs_end(); mi++)
+	for (MemSegmentManager::memseglist_ci mi = m_ctx->memsegs_begin(); mi != m_ctx->memsegs_end(); mi++)
 	{
 		// for each segment
 		u32 memind = (*mi)->get_start();

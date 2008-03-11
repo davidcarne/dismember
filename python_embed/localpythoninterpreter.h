@@ -33,43 +33,52 @@
 #include <stdexcept>
 #include "document.h"
 
+/**
+ * Interface for an output that the python output redirector can write to
+ */
 class LPIOutputStreamAcceptor {
 public:
+	/**
+	 * Write to the Output stream acceptor
+	 */
 	virtual void write(const std::string &, int stream) = 0;
 };
 
+/**
+ * Output redirector thats fed to python for sys.stdout + sys.stderr
+ */
 class LocalPythonOutputRedirector {
 
 public:
-	// TODO: removeme
-	LocalPythonOutputRedirector(const LocalPythonOutputRedirector &arg)
-	{
-		throw new std::runtime_error("Can't copy a OutputRedirector\n");
-	}
 	
+	/**
+	 * Set the output to which the incoming data will be written
+	 */
 	void setOutputAcceptor(LPIOutputStreamAcceptor * a);
+	
+	/**
+	 * Write data to the output redirector
+	 */
 	void write(std::string data);
 	
 private:
-
-	
 	friend class LocalPythonInterpreter;
 	LocalPythonOutputRedirector(int stream);
 	int m_stream;
 	LPIOutputStreamAcceptor * m_dest;
 };
 
+/**
+ * Document specific python interpreter. Plays tricks with python state to make it seem local
+ */
 class LocalPythonInterpreter
-{	// HACK REMOVEME
+{
 
 	
 public:
-	
-	// TODO: removeme
-	LocalPythonInterpreter(const LocalPythonInterpreter &arg)
-	{
-		throw new std::runtime_error("Can't copy a LocalPythonInterpreter\n");
-	}
+	/**
+	 * 
+	 */
 	LocalPythonInterpreter(Document * doc);
 	python::object exec(python::str code);
 	python::object eval(python::str code);

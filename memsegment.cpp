@@ -7,7 +7,8 @@ MemSegment::MemSegment(address_t base, address_t len, void * buffer, address_t f
 {
 	if (buffer)
 	{
-		m_data = new uint8_t[len];
+		// TODO:, removeme, +1 to hack around a boost bug
+		m_data = new uint8_t[len+1];
 		bzero(m_data, len);
 		
 		if (flength != (address_t)-1)

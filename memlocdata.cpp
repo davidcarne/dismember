@@ -59,19 +59,19 @@ const DataType * MemlocData::getCreatingDataType() const
 }
 
 
-xref_map_ci MemlocData::begin_xref_to() const
+XrefManager::xref_map_ci MemlocData::begin_xref_to() const
 {
-	return m_ctx->xref_to_lower_bound(m_address);
+	return m_ctx->m_xrefmanager.xref_to_lower_bound(m_address);
 }
 
-xref_map_ci MemlocData::end_xref_to() const
+XrefManager::xref_map_ci MemlocData::end_xref_to() const
 {
-	return m_ctx->xref_to_upper_bound(m_address);
+	return m_ctx->m_xrefmanager.xref_to_upper_bound(m_address);
 }
 
 u32 MemlocData::count_xrefs_to() const
 {
-	return m_ctx->xref_to_count(m_address);
+	return m_ctx->m_xrefmanager.xref_to_count(m_address);
 }
 
 bool MemlocData::has_xrefs_to() const
@@ -79,19 +79,19 @@ bool MemlocData::has_xrefs_to() const
 	return count_xrefs_to() != 0;
 }
 
-xref_map_ci MemlocData::begin_xref_from() const
+XrefManager::xref_map_ci MemlocData::begin_xref_from() const
 {
-	return m_ctx->xref_from_lower_bound(m_address);
+	return m_ctx->m_xrefmanager.xref_from_lower_bound(m_address);
 }
 
-xref_map_ci MemlocData::end_xref_from() const
+XrefManager::xref_map_ci MemlocData::end_xref_from() const
 {
-	return m_ctx->xref_from_upper_bound(m_address);
+	return m_ctx->m_xrefmanager.xref_from_upper_bound(m_address);
 }
 
 u32 MemlocData::count_xrefs_from() const
 {
-	return m_ctx->xref_from_count(m_address);
+	return m_ctx->m_xrefmanager.xref_from_count(m_address);
 }
 
 bool MemlocData::has_xrefs_from() const

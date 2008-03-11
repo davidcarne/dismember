@@ -50,7 +50,7 @@ bool BinaryLoader::loadFromFile(FILE * loadimg, Trace * ctx)
 	MemSegment * msg = new MemSegment(addr, len, data);
 	free(data);
 	
-	ctx->add_segment(msg);
+	ctx->addSegment(msg);
 	
 	return true;
 }

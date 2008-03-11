@@ -6,7 +6,25 @@
  *  Copyright 2008 __MyCompanyName__. All rights reserved.
  *
  */
+#include <iomanip>
+#include <iostream>
+#include <fstream>
+#include <string>
 
+#include <boost/archive/tmpdir.hpp>
+
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+
+#include <boost/serialization/base_object.hpp>
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/list.hpp>
+
+#include <boost/serialization/set.hpp>
+#include <boost/serialization/map.hpp>
+
+#include "memlocdata.h"
+#include "trace.h"
 #include "document.h"
 #include "localpythoninterpreter.h"
 
@@ -14,6 +32,7 @@
 #include "arch/arm/arm.h"
 #include "guiglue.h"
 #include "run_queue.h"
+
 
 Document::Document()
 {
@@ -59,3 +78,14 @@ void Document::postGuiUpdate()
 	
 	m_docgui->postUpdate();
 }
+
+void Document::saveTo(const std::string & filename)
+{
+	std::ofstream ofs(filename.c_str(), std::ios::binary);
+	boost::archive::text_oarchive oa(ofs);
+	oa << this;
+}
+	
+
+
+

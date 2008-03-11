@@ -12,7 +12,7 @@
 #include "arch/arm/arm.h"
 
 #define buf_len 256
-
+#if 0
 
 void Trace::write_file(const char * filename)
 {
@@ -201,7 +201,7 @@ Trace * Trace::load_project_file(const char * filename)
 		return NULL;
 	}
 	MemSegment * m = new MemSegment(base_addr, code_len, code_buf);
-	t->add_segment(m);
+	t->addSegment(m);
 	
 	free(code_buf);
 	xmlNodePtr instructions_n = findChild(root_element,  "instructions");
@@ -334,4 +334,5 @@ Trace * Trace::load_project_file(const char * filename)
 	
 	return t;
 }
+#endif
 #endif

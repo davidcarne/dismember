@@ -9,9 +9,14 @@
 
 #ifndef _document_H_
 #define _document_H_
-#include <string>
 
-// Predeclare to avoid forever compile times, since this is included in lots of places
+#include <string>
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/version.hpp>
+#include <boost/serialization/tracking.hpp>
+
+// This has to be included for serialization deps.
+
 class Trace;
 class LocalPythonInterpreter;
 class DocumentGui;
@@ -55,13 +60,28 @@ public:
 	 */
 	void postGuiUpdate();
 	
+	/**
+	 * Save the document to a file
+	 */
+	void saveTo(const std::string & filename);
+
 private:
+	
+	friend class boost::serialization::access;
+	template<class Archive> void serialize(Archive & ar,  const unsigned int)
+	{
+		ar & m_trace & m_name;
+	}
+	
 	IRunQueueControl * m_runQueue;
 	DocumentGui * m_docgui;
 	std::string m_name;
 	Trace * m_trace;
 	LocalPythonInterpreter * m_pyInterpreter;
 };
+
+BOOST_CLASS_VERSION(Document, 1)
+BOOST_CLASS_TRACKING(Document, boost::serialization::track_never)
 
 
 #endif

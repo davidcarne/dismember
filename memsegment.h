@@ -6,6 +6,9 @@
 #ifndef _MEMSEGMENT_H_
 #define _MEMSEGMENT_H_
 
+#include <boost/serialization/binary_object.hpp>
+
+
 /**
  * \brief Represents a memory segment, optionally backed by a stretch of data
  */
@@ -69,6 +72,17 @@ public:
 	};
 
 private:
+	
+	template<class Archive> void serialize(Archive & ar, const unsigned int)
+	{
+		ar & m_base & m_len;
+		ar & boost::serialization::make_binary_object(m_data, m_len);
+	}
+	
+	friend class boost::serialization::access;
+	
+	
+	
 	address_t m_base;
 	address_t m_len;
 	uint8_t * m_data;

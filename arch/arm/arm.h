@@ -4,15 +4,21 @@
 #include "../../trace.h"
 #include "../../architecture.h"
 
+class ARMInstructionDataType;
+
 /**
  * Arm architecture, implements arm specific architecture.
  */
 class ARMArchitecture : public Architecture {
 public:
+	ARMArchitecture();
+	
 	virtual std::string get_short_name() const; 
 	
 	static void bind_type();
-	virtual DataType * createDataType(Trace *) const;
+	virtual DataType * getDataType(Trace *) const;
+private:
+	mutable ARMInstructionDataType * m_adt;
 	
 	//virtual Instruction * create_instruction(Trace * ctx, address_t addr);
 	//virtual endian_e getArchEndian(void);

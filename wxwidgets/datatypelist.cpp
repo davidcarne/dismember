@@ -35,7 +35,7 @@ void DataTypeListView::Update()
 void DataTypeListView::createSelectedDataType(void)
 {
 	address_t seladdr;
-	if (m_parent->m_canvas->getSelection(&seladdr))
+	if (m_parent->getCodeListingView()->getSelection(&seladdr))
 	{
 		wxString selname = wxControlWithItems::GetStringSelection();
 		
@@ -49,7 +49,7 @@ void DataTypeListView::createSelectedDataType(void)
 		m_ctx.createMemlocDataAt(dt.get(), seladdr);
 		
 		
-		m_parent->m_canvas->updateLines();
+		m_parent->postUpdate();
 	}
 }
 
