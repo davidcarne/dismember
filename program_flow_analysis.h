@@ -9,7 +9,7 @@
 
 #ifndef _program_flow_analysis_H_
 #define _program_flow_analysis_H_
-#include "trace.h"
+#include "dsmem_trace.h"
 #include "datatype.h"
 #include "run_queue.h"
 #include "document.h"

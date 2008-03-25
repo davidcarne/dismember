@@ -1,4 +1,4 @@
-#include "trace.h"
+#include "dsmem_trace.h"
 #include "callback.h"
 
 void Trace::registerMemlocHook(CallbackBase<MemlocData *> *cb)

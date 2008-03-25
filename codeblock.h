@@ -13,7 +13,7 @@
 
 #include <set>
 #include "types.h"
-#include "trace.h"
+#include "dsmem_trace.h"
 
 class CodeBlock;
 

@@ -1,5 +1,5 @@
 #include "types.h"
-#include "trace.h"
+#include "dsmem_trace.h"
 
 #ifndef _MEMLOCDATA_H_
 #define _MEMLOCDATA_H_

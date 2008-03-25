@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 
-#include "trace.h"
+#include "dsmem_trace.h"
 #include "memlocdata.h"
 #include "instruction.h"
 #include "architecture.h"

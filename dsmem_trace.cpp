@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <stack>
 
-#include "trace.h"
+#include "dsmem_trace.h"
 #include "memlocdata.h"
 #include "binaryconstant.h"
 #include "stringconstant.h"

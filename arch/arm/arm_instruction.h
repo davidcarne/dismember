@@ -1,6 +1,6 @@
 #ifndef _ARM_INSTRUCTION_H_
 #define _ARM_INSTRUCTION_H_
-#include "../../trace.h"
+#include "../../dsmem_trace.h"
 
 #include "../../instruction.h"
 

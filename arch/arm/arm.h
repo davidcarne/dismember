@@ -1,7 +1,7 @@
 #ifndef _ARM_H_
 #define _ARM_H_
 
-#include "../../trace.h"
+#include "../../dsmem_trace.h"
 #include "../../architecture.h"
 
 class ARMInstructionDataType;

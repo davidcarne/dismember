@@ -150,7 +150,6 @@
 		674D3CAC0D244E2E0074B172 /* ramops.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ramops.cpp; sourceTree = "<group>"; };
 		674D3CB00D244E2E0074B172 /* symlist.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = symlist.cpp; sourceTree = "<group>"; };
 		674D3CB10D244E2E0074B172 /* symlist.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = symlist.h; sourceTree = "<group>"; };
-		674D3CB30D244E2E0074B172 /* trace.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = trace.h; sourceTree = "<group>"; };
 		674D3CB40D244E2E0074B172 /* traceloadsave.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = traceloadsave.cpp; sourceTree = "<group>"; };
 		674D3CB50D244E2E0074B172 /* types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		674D3CB70D244E2E0074B172 /* xmlbzip2_fileio.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = xmlbzip2_fileio.cpp; sourceTree = "<group>"; };
@@ -171,6 +170,7 @@
 		674D3CF40D244E8A0074B172 /* mach-o.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = "mach-o.cpp"; sourceTree = "<group>"; };
 		674D46490D248A270074B172 /* stringconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stringconstant.cpp; sourceTree = "<group>"; };
 		674D464A0D248A270074B172 /* stringconstant.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stringconstant.h; sourceTree = "<group>"; };
+		6762822B0D99831C00FD4176 /* dsmem_trace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dsmem_trace.h; sourceTree = "<group>"; };
 		678DF0850D739416004254C0 /* instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = instruction.cpp; sourceTree = "<group>"; };
 		679B7F420D7F21CE00258578 /* xrefmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xrefmanager.h; sourceTree = "<group>"; };
 		679B7F430D7F21CE00258578 /* xrefmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xrefmanager.cpp; sourceTree = "<group>"; };
@@ -389,6 +389,7 @@
 		674D3D010D244EFE0074B172 /* memory backed trace */ = {
 			isa = PBXGroup;
 			children = (
+				6762822B0D99831C00FD4176 /* dsmem_trace.h */,
 				674260EF0D639EE900B7A6E0 /* dsmem_trace.cpp */,
 				674D3C9E0D244E2E0074B172 /* callback.h */,
 				674D3CA00D244E2E0074B172 /* comment.cpp */,
@@ -401,7 +402,6 @@
 				674D3CB00D244E2E0074B172 /* symlist.cpp */,
 				674D3CB10D244E2E0074B172 /* symlist.h */,
 				674D3CBC0D244E2E0074B172 /* xref.cpp */,
-				674D3CB30D244E2E0074B172 /* trace.h */,
 				674D3CB50D244E2E0074B172 /* types.h */,
 				674D3C9D0D244E2E0074B172 /* callback.cpp */,
 				67CD5ED90D287A51003B72E8 /* hint.h */,

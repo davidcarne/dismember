@@ -1,7 +1,7 @@
 #ifndef _LOADERFACTORY_H_
 #define _LOADERFACTORY_H_
 
-#include "trace.h"
+#include "dsmem_trace.h"
 #include <map>
 
 /**

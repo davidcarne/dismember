@@ -11,7 +11,7 @@
 
 #include <boost/python.hpp>
 #include <boost/shared_ptr.hpp>
-#include "trace.h"
+#include "dsmem_trace.h"
 #include "datatype.h"
 #include "program_flow_analysis.h"
 

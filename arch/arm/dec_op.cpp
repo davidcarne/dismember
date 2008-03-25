@@ -8,7 +8,7 @@
  *
  */
 
-#include "../../trace.h"
+#include "dsmem_trace.h"
 #include "../../memlocdata.h"
 
 #include "arm_instruction.h"

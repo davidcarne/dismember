@@ -9,7 +9,7 @@
 
 #include "document.h"
 #include <boost/python.hpp>
-#include "trace.h"
+#include "dsmem_trace.h"
 #include "bindings.h"
 #include "run_queue.h"
 

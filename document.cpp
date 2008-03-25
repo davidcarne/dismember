@@ -24,7 +24,7 @@
 #include <boost/serialization/map.hpp>
 
 #include "memlocdata.h"
-#include "trace.h"
+#include "dsmem_trace.h"
 #include "document.h"
 #include "localpythoninterpreter.h"
 

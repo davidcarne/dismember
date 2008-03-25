@@ -1,4 +1,4 @@
-#include "trace.h"
+#include "dsmem_trace.h"
 #include "xmlbzip2_fileio.h"
 #include "memlocdata.h"
 

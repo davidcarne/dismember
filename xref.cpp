@@ -1,4 +1,4 @@
-#include "trace.h"
+#include "dsmem_trace.h"
 #include "xref.h"
 
 address_t Xref::get_src_addr() const
