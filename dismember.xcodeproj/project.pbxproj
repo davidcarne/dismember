@@ -80,16 +80,6 @@
 		67CD5EDB0D287A52003B72E8 /* hint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67CD5EDA0D287A51003B72E8 /* hint.cpp */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		670E59520D62F33F00A30E5E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6744A1D80D62EFCE00311E95;
-			remoteInfo = doxygen;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		670E59C30D62F7DC00A30E5E /* string_hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string_hash.h; sourceTree = "<group>"; };
 		6719E1A40D72746300D8AC6C /* bind_datatype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bind_datatype.cpp; sourceTree = "<group>"; };
@@ -174,14 +164,11 @@
 		674D3CDC0D244E8A0074B172 /* dec_op.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = dec_op.cpp; sourceTree = "<group>"; };
 		674D3CDE0D244E8A0074B172 /* disasm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = disasm.cpp; sourceTree = "<group>"; };
 		674D3CE40D244E8A0074B172 /* bflt.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = bflt.cpp; sourceTree = "<group>"; };
-		674D3CE70D244E8A0074B172 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		674D3CE90D244E8A0074B172 /* binary.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = binary.cpp; sourceTree = "<group>"; };
-		674D3CEC0D244E8A0074B172 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		674D3CED0D244E8A0074B172 /* loader.mk */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = loader.mk; sourceTree = "<group>"; };
 		674D3CEE0D244E8A0074B172 /* loaderfactory.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = loaderfactory.cpp; sourceTree = "<group>"; };
 		674D3CEF0D244E8A0074B172 /* loaderfactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = loaderfactory.h; sourceTree = "<group>"; };
 		674D3CF40D244E8A0074B172 /* mach-o.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = "mach-o.cpp"; sourceTree = "<group>"; };
-		674D3CF60D244E8A0074B172 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		674D46490D248A270074B172 /* stringconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stringconstant.cpp; sourceTree = "<group>"; };
 		674D464A0D248A270074B172 /* stringconstant.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = stringconstant.h; sourceTree = "<group>"; };
 		678DF0850D739416004254C0 /* instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = instruction.cpp; sourceTree = "<group>"; };
@@ -222,7 +209,6 @@
 			isa = PBXGroup;
 			children = (
 				67CAD3170D725B1200DF9AD4 /* pythonsrc */,
-				674D3CFB0D244ECA0074B172 /* gui assist */,
 				674D3CD20D244E8A0074B172 /* arch */,
 				674D3CE20D244E8A0074B172 /* loaders */,
 				674D3CC10D244E5C0074B172 /* wxwidgets */,
@@ -272,13 +258,13 @@
 		674D3CC00D244E3D0074B172 /* main src */ = {
 			isa = PBXGroup;
 			children = (
+				674D3CFB0D244ECA0074B172 /* gui interface */,
+				676281760D99810A00FD4176 /* utils */,
 				674263F50D650D2A00B7A6E0 /* python_embed */,
 				674D3D030D244F0E0074B172 /* ser */,
 				674D3D020D244F080074B172 /* analysis */,
-				674D3D010D244EFE0074B172 /* global trace */,
+				674D3D010D244EFE0074B172 /* memory backed trace */,
 				674D3CFE0D244EE80074B172 /* datatypes */,
-				67CD5D780D286328003B72E8 /* address_hash.h */,
-				670E59C30D62F7DC00A30E5E /* string_hash.h */,
 				674264330D65129C00B7A6E0 /* document.h */,
 				674264340D65129C00B7A6E0 /* document.cpp */,
 				674264370D65143700B7A6E0 /* app_main.h */,
@@ -356,7 +342,6 @@
 			isa = PBXGroup;
 			children = (
 				674D3CE40D244E8A0074B172 /* bflt.cpp */,
-				674D3CE70D244E8A0074B172 /* Makefile */,
 			);
 			path = bflt;
 			sourceTree = "<group>";
@@ -365,7 +350,6 @@
 			isa = PBXGroup;
 			children = (
 				674D3CE90D244E8A0074B172 /* binary.cpp */,
-				674D3CEC0D244E8A0074B172 /* Makefile */,
 			);
 			path = binary;
 			sourceTree = "<group>";
@@ -374,19 +358,18 @@
 			isa = PBXGroup;
 			children = (
 				674D3CF40D244E8A0074B172 /* mach-o.cpp */,
-				674D3CF60D244E8A0074B172 /* Makefile */,
 			);
 			path = "mach-o";
 			sourceTree = "<group>";
 		};
-		674D3CFB0D244ECA0074B172 /* gui assist */ = {
+		674D3CFB0D244ECA0074B172 /* gui interface */ = {
 			isa = PBXGroup;
 			children = (
 				674D3C990D244E2E0074B172 /* abstractdata.cpp */,
 				674D3C9A0D244E2E0074B172 /* abstractdata.h */,
 				674D3CA70D244E2E0074B172 /* guidialog.h */,
 			);
-			name = "gui assist";
+			name = "gui interface";
 			sourceTree = "<group>";
 		};
 		674D3CFE0D244EE80074B172 /* datatypes */ = {
@@ -403,7 +386,7 @@
 			name = datatypes;
 			sourceTree = "<group>";
 		};
-		674D3D010D244EFE0074B172 /* global trace */ = {
+		674D3D010D244EFE0074B172 /* memory backed trace */ = {
 			isa = PBXGroup;
 			children = (
 				674260EF0D639EE900B7A6E0 /* dsmem_trace.cpp */,
@@ -435,7 +418,7 @@
 				679B8D670D7F416600258578 /* memsegmentmanager.h */,
 				679B8D680D7F416600258578 /* memsegmentmanager.cpp */,
 			);
-			name = "global trace";
+			name = "memory backed trace";
 			sourceTree = "<group>";
 		};
 		674D3D020D244F080074B172 /* analysis */ = {
@@ -462,6 +445,15 @@
 				674D3CB80D244E2E0074B172 /* xmlbzip2_fileio.h */,
 			);
 			name = ser;
+			sourceTree = "<group>";
+		};
+		676281760D99810A00FD4176 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				67CD5D780D286328003B72E8 /* address_hash.h */,
+				670E59C30D62F7DC00A30E5E /* string_hash.h */,
+			);
+			name = utils;
 			sourceTree = "<group>";
 		};
 		67CAD3170D725B1200DF9AD4 /* pythonsrc */ = {
@@ -513,7 +505,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				670E59530D62F33F00A30E5E /* PBXTargetDependency */,
 			);
 			name = dismember.app;
 			productName = dismember.app;
@@ -631,14 +622,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		670E59530D62F33F00A30E5E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6744A1D80D62EFCE00311E95 /* doxygen */;
-			targetProxy = 670E59520D62F33F00A30E5E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB919408733D9F0010E9CD /* Debug */ = {

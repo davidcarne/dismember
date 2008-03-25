@@ -14,6 +14,7 @@
 #include <ext/hash_map>
 #include <map>
 #include "types.h"
+#include <boost/serialization/access.hpp>
 
 class MemlocData;
 

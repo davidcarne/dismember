@@ -7,6 +7,8 @@
  *
  */
 
+#include <vector>
+
 #include "pythonterminalview.h"
 #include <wx/wx.h>
 #include <wx/richtext/richtextctrl.h>
@@ -32,13 +34,6 @@ wxPanel(frame, wxID_ANY, wxDefaultPosition, wxSize(50, 50)), m_lpy(lpy), m_docwi
 	wxFont textFont = wxFont(10, wxTELETYPE, wxNORMAL, wxNORMAL);
 	r.SetFont(textFont);
 	
-	/*r.BeginSuppressUndo();
-	r.BeginTextColour(wxColour(255, 0, 0));
-    r.WriteText(wxT("colour, like this red bit."));
-    r.EndTextColour();
-	r.EndSuppressUndo();
-	r.Show(true);*/
-
 	wxCaret * c = new wxCaret(m_output, 0,0);
 	c->Hide();
 	

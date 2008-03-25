@@ -1,0 +1,8 @@
+OSXVERS := 10.5
+SDKVERS := 10.5
+GUI := wxwidgets
+ARCH = $(shell uname -p)
+CPPFLAGS += -arch $(ARCH)  -mmacosx-version-min=$(OSXVERS)
+
+LDFLAGS +=  -Wl,-arch,i386 -mmacosx-version-min=$(OSXVERS) -Wl,-syslibroot,/Developer/SDKs/MacOSX$(SDKVERS).sdk -lwx_mac_richtext-2.8
+include dismember.mk
