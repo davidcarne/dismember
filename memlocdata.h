@@ -1,9 +1,8 @@
-#include "types.h"
-#include "dsmem_trace.h"
-
 #ifndef _MEMLOCDATA_H_
 #define _MEMLOCDATA_H_
 
+#include "types.h"
+#include "dsmem_trace.h"
 #include "xrefmanager.h"
 
 

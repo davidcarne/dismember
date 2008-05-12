@@ -214,7 +214,7 @@ void CodeViewCanvas::OnXREFs(wxCommandEvent & WXUNUSED(event))
 	wxSingleChoiceDialog d(m_parent, _T("Select an XREF to jump to"),_T("Select an XREF to jump to"), xrefs, (char**)client);
 	if (d.ShowModal() == wxID_OK)
 	{
-		u32 addr = (u32) d.GetSelectionClientData();
+		u32 addr = (u32)(long) d.GetSelectionClientData();
 		u32 line = m_gprox->get_line_for_addr(addr);
 		
 		// save current line + select new

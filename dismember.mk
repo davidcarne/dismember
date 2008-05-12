@@ -32,7 +32,9 @@ all: $(PROG)
 CPPSRCS := $(filter %.cpp, $(SRC) )
 CPPOBJS := $(patsubst %.cpp,%.o, $(CPPSRCS) )
 
-CPPFLAGS += -Wall -Wno-unused  -Wno-pragmas -g
+CPPDEFS =
+CPPFLAGS += -Wall -Wno-unused  -Wno-unknown-pragmas -Wno-reorder \
+	    -Wno-non-virtual-dtor -g $(CPPDEFS)
 
 
 PYEXTCPP := $(shell python-config --cflags)

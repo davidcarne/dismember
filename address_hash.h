@@ -8,6 +8,7 @@
 #include <ext/hash_map>
 #include "types.h"
 
+#ifndef DISABLE_ADDRESS_T_HASH
 namespace __gnu_cxx {
 	/** hash functor for hashing an address_t */
 	template<> struct hash<address_t>
@@ -19,5 +20,6 @@ namespace __gnu_cxx {
 }
 };
 }
+#endif
 
 #endif

@@ -27,7 +27,7 @@ public:
 	virtual bool loadFromFile(FILE * f, Trace * ctx);
 private:
 	struct flat_hdr header;
-	void reloc(u32 base, FILE *fd);
+	void reloc(long base, FILE *fd);
 	int readHeader(FILE *fd);
 } registerFlatLoader;
 
@@ -60,7 +60,7 @@ bool FlatLoader::loadFromFile(FILE * loadimg, Trace * ctx)
 	int bss_size = header.bss_end - header.data_end;
 	memset(data + header.data_end, 0, bss_size);
 
-	reloc((u32)data, loadimg);
+	reloc((long)data, loadimg);
 
 #if MULTIPLE_MEM_SEGMENTS_WORK
 	ctx->addSegment(new MemSegment(0, header.data_end, data)); /* code */
@@ -112,9 +112,9 @@ int FlatLoader::readHeader(FILE *fd)
 	return 0;
 }
 
-void FlatLoader::reloc(u32 base, FILE *fd)
+void FlatLoader::reloc(long base, FILE *fd)
 {
-	u32 i, *reloc = (u32 *)malloc(sizeof(u32) * header.reloc_count);
+	long i, *reloc = (long *)malloc(sizeof(u32) * header.reloc_count);
 	fseek(fd, header.reloc_start, SEEK_SET);
 	fread(reloc, sizeof(u32), header.reloc_count, fd);
 

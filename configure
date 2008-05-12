@@ -1,0 +1,23 @@
+CPPDEFS=
+test=ztest$$
+cat > $test.c <<EOF
+#include "types.h"
+int main() {
+	return (sizeof(unsigned long) == sizeof(address_t));
+}
+EOF
+
+echo -n "checking necessity for hash<address_t>... "
+cc $test.c -o $test &> /dev/null
+./$test
+if test $? -eq 0; then
+	echo "Needed."
+else
+	echo "Not needed."
+	CPPDEFS="$CPPDEFS -DDISABLE_ADDRESS_T_HASH"
+fi
+
+rm -f $test.[co] $test
+
+sed -i -e "/^CPPDEFS *=/s#=.*#=$CPPDEFS#" dismember.mk
+
