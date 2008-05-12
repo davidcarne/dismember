@@ -20,7 +20,7 @@ public:
 	static void submitAnalysisJob(Document * d, DataType * dtcreate, address_t start);
 	
 private:
-	static bool ProgramFlowAnalysis::undefine(Trace * t, address_t start);
+	static bool undefine(Trace * t, address_t start);
 	static bool analyze(Document * d, DataType * dtcreate, address_t start);
 };
 

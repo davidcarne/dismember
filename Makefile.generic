@@ -1,1 +1,2 @@
 GUI := wxwidgets
+include dismember.mk

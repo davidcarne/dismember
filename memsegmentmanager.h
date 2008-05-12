@@ -10,7 +10,7 @@
 #ifndef _memsegmentmanager_H_
 #define _memsegmentmanager_H_
 #include <set>
-#include "MemSegment.h"
+#include "memsegment.h"
 
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/version.hpp>

@@ -1,6 +1,6 @@
 
 WXUNI := $(shell echo `wx-config --unicode=no 2>&1` | grep -o unicode)
-ifeq ($(WXUNI),unicode)
+ifneq ($(WXUNI),unicode)
 	# double assignment speeds up build
 	WXCPPFLAGS := $(shell wx-config --cflags)
 	CPPFLAGS += $(WXCPPFLAGS) 
