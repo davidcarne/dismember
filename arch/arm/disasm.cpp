@@ -13,22 +13,35 @@ struct arm_insn
     u32 value;
     const char *fmt;
 } arm_insns[] = {
-    // The % escapes are as such:
-    // %a - LDR addressing mode
-    // %A - LDRH addressing mode (doesn't have a barrel shifter)
-    // %b - "b" if bit 22 is set, "" if not
-    // %B - "h" if bits 6:5 are 01, "sb" if they're 10, "sh" if they're 11, "?" if they're 00
-    // %c - the condition code (eq, cs, etc.)
-    // %i - a 24-bit hex value in the bottom 24 bits of the instruction (for swi)
-    // %j - a 24-bit signed instruction count for branches
-    // %m - a multiple-reg argument in bits 15:0
-    // %M - a multiple-reg indexing mode
-    // %o - the shift specification from bits 0 to 11, with the I bit at bit 25
-    // %<nn>r - the register from bits <nn> to <nn>+3. <nn> is 0 if not specified.
-    // %s - "s" if bit 20 is set, "" if not
-    // %u - "s" if bit 22 is set, "u" if not
-    // %! - "!" if bit 21 is set, "" if not
-    // %^ - "^" if bit 22 is set, "" if not
+  /* The % escapes are as such:
+     * %a - LDR addressing mode
+     * %A - LDRH addressing mode (doesn't have a barrel shifter)
+     * %b - "b" if bit 22 is set, "" if not
+     * %B - "h" if bits 6:5 are 01, "sb" if they're 10, "sh" if
+     * 	    they're 11, "?" if they're 00
+     * %c - the condition code (eq, cs, etc.)
+     * %<nn>C - coprocessor register <nn> to <nn>+3
+     * %d - "d" if  bit 22 is set, "" if not
+     * %i - a 24-bit hex value in the bottom 24 bits of the instruction(for swi)
+     * %j - a 24-bit signed instruction count for branches
+     * %k - a 16-bit immediate value, the top 12 bits in 19:8 and the rest 3:0
+     * %l - "l" if bit 22 is set, "" if not
+     * %m - a multiple-reg argument in bits 15:0
+     * %M - a multiple-reg indexing mode
+     * %o - the shift specification from bits 0 to 11, with the I bit at bit 25
+     * %p - coprocessor # from bits 8:12
+     * %<nn>r - the register from bits <nn> to <nn>+3. <nn> is 0 if !specified.
+     * %s - "s" if bit 20 is set, "" if not
+     * %t - "2" if condition code is 0b1111 and ARM_v5, else same as %c
+     * %u - "s" if bit 22 is set, "u" if not
+     * %<nn>W - if bit <nn> set "w" and if bit 6 set "t" else "b"
+     *     or if bit <nn> is 0 and if bits 6:5 00 "bb", if 01 "bt",
+     *     if 10 "tb", if 11 "tt"
+     * %<nn>x - opcode from <nn> to <nn>+4 & ~3. 0 if <nn> !specified
+     * %<nn>X - same as %x if result is > 0, else ""
+     * %! - "!" if bit 21 is set, "" if not
+     * %^ - "^" if bit 22 is set, "" if not
+     */
 
     /* BX */
     { 0x0ffffff0, 0x012fff10, "bx%c\t%r" },
@@ -56,7 +69,9 @@ struct arm_insn
     { 0x0db1f000, 0x0120f000, "msr%c\tcpsr_flg, %o" },
     { 0x0db1f000, 0x0160f000, "msr%c\tspsr_flg, %o" },
 
-    /* LDR, STR, LDRB, STRB */
+   /* LDR, STR, LDRB, STRB, LDRT, STRT, LDRBT, STRBT */
+    { 0x0d700000, 0x04300000, "ldr%c%bt\t%12r, %a" },
+    { 0x0d700000, 0x04200000, "str%c%bt\t%12r, %a" },
     { 0x0c100000, 0x04100000, "ldr%c%b\t%12r, %a" },
     { 0x0c100000, 0x04000000, "str%c%b\t%12r, %a" },
 
@@ -82,12 +97,41 @@ struct arm_insn
     { 0x0de00000, 0x00e00000, "rsc%c%s\t%12r, %16r, %o" },
     { 0x0de00000, 0x01000000, "tst%c\t%16r, %o" },
     { 0x0de00000, 0x01200000, "teq%c\t%16r, %o" },
-    { 0x0de00000, 0x01400000, "cmp%c\t%16r, %o" },
+    { 0x0df00000, 0x01500000, "cmp%c\t%16r, %o" },
     { 0x0de00000, 0x01600000, "cmn%c\t%16r, %o" },
     { 0x0de00000, 0x01800000, "orr%c%s\t%12r, %16r, %o" },
     { 0x0de00000, 0x01a00000, "mov%c%s\t%12r, %o" },
     { 0x0de00000, 0x01c00000, "bic%c%s\t%12r, %16r, %o" },
     { 0x0de00000, 0x01e00000, "mvn%c%s\t%12r, %o" },
+
+    { 0xfff000f0, 0xe1200070, "bkpt\t%k" },
+    { 0xfe000000, 0xfc000000, "blx\t%j" },
+    { 0x0ff000f0, 0x01200030, "blx%c\t%r" },
+    { 0x0ff000f0, 0x01600010, "clz%c\t%12r, %r" },
+
+    /* LDRD, STRD */
+    { 0x0e100ff0, 0x001000f0, "ldr%cd\t%12r, %A" },
+    { 0x0e100ff0, 0x000000f0, "str%cd\t%12r, %A" },
+
+    /* Co-processor functions */
+    { 0x0f100010, 0x0e000010, "mcr%t\t%p, %21x, %12r, %16C, %C, %5X" },
+    { 0x0f100010, 0x0e100010, "mrc%t\t%p, %21x, %12r, %16C, %C, %5X" },
+    { 0x0e100000, 0x0c000000, "stc%t%l\t%p, %12C, %a" },
+    { 0x0e100000, 0x0c100000, "ldc%t%l\t%p, %12C, %a" },
+    { 0x0f000010, 0x0e000000, "cdp%t\t%p, %20x, %12C, %16C, %C, %5x" },
+    { 0x0ff00000, 0x0c400000, "mcrr%c\t%p, %x, %12r, %16r, %C" },
+    { 0x0ff00000, 0x0c500000, "mrrc%c\t%p, %x, %12r, %16r, %C" },
+
+    /* PLD */
+    { 0xfd70f000, 0xf550f000, "pld\t%a" },
+
+    /* QDADD, QDSUB, QADD, QSUB */
+    { 0x0fb000f0, 0x01000050, "q%dadd%c\t%12r, %r, %16r" },
+    { 0x0fb000f0, 0x01200050, "q%dsub%c\t%12r, %r, %16r" },
+
+    { 0x0fb00090, 0x01200080, "smul%22W%c\t%16r, %r, %8r" },
+    /* SMLABB, SMLABT, SMLATB, SMLATT, + SMLAL and SMLAW varieties */
+    { 0x0f900090, 0x01000080, "smla%l%21W%c\t%16r, %r, %8r, %12r" },
 
     { 0, 0, "invalid" }
 };
@@ -142,8 +186,8 @@ static void write_reg (char **retp, int reg)
 {
     const char *regs[] = { "r0", "r1", "r2", "r3",
                            "r4", "r5", "r6", "r7",
-                           "r8", "r9", "r10", "r11",
-                           "r12", "sp", "lr", "pc" };
+                           "r8", "r9", "r10", "fp",
+                           "ip", "sp", "lr", "pc" };
 
     *retp += sprintf (*retp, regs[reg]);
 }
@@ -314,6 +358,13 @@ const std::string ARMInstruction::get_textual()
                         arg *= 10;
                         arg += *p - '0';
                         goto cont;
+                    case 'b':
+                    case 'd':
+                    case 'l':
+                    case '^':
+                        if (instr & (1 << 22))
+                            *retp++ = *p;
+                        break;
                     case 'a':
                         // write_addr (slixt, pptr, Pre, Up, Writeback, Immbit, Barrelshift);
                         write_addr (get_ctx(), &retp, !!(instr & (1 << 24)), !!(instr & (1 << 23)),
@@ -330,10 +381,6 @@ const std::string ARMInstruction::get_textual()
                             write_addr (get_ctx(), &retp, !!(instr & (1 << 24)), !!(instr & (1 << 23)),
                                         !!(instr & (1 << 21)), 0, instr & 0xf, (instr >> 16) & 0xf,
                                         addr + 8);
-                        break;
-                    case 'b':
-                        if (instr & (1 << 22))
-                            *retp++ = 'b';
                         break;
                     case 'B':
                         switch ((instr >> 5) & 3) {
@@ -356,11 +403,18 @@ const std::string ARMInstruction::get_textual()
                     case 'c':
                         write_cond (&retp, (instr >> 28) & 0xf);
                         break;
+                    case 'C':
+                        *retp++ = 'c';
+                        write_reg (&retp, (instr >> arg) & 0xf);
+                        break;
                     case 'i':
                         retp += sprintf (retp, "0x%06x", instr & 0xffffff);
                         break;
                     case 'j':
                         write_jump (get_ctx(), &retp, instr & 0xffffff, addr + 8);
+                        break;
+                    case 'k':
+                        retp += sprintf (retp, "%04x", ((instr >> 4) & 0xfff0) | (instr & 0xf));
                         break;
                     case 'm':
                         write_multireg (&retp, instr & 0xffff);
@@ -379,6 +433,9 @@ const std::string ARMInstruction::get_textual()
                             write_barrelshift (&retp, instr & 0xfff);
                         }
                         break;
+                    case 'p':
+                        retp += sprintf (retp, "p%d", (instr >> 8) & 0xf);
+                        break;
                     case 'r':
                         write_reg (&retp, (instr >> arg) & 0xf);
                         break;
@@ -386,19 +443,39 @@ const std::string ARMInstruction::get_textual()
                         if (instr & (1 << 20))
                             *retp++ = 's';
                         break;
+                    case 't':
+                        if (((instr >> 28) & 0xf) == 0xf) {
+                            *retp++ = '2'; /* guess that this proc is armv5+ */
+                            break;
+                        }
+                        write_cond (&retp, (instr >> 28)  & 0xf);
+                        break;
                     case 'u':
                         if (instr & (1 << 22))
                             *retp++ = 's';
                         else
                             *retp++ = 'u';
                         break;
+                    case 'W':
+                        if (instr & (1 << arg)) {
+                            *retp++ = 'w';
+                            *retp++ = (instr & (1 << 6)) ? 't' : 'b';
+                        }
+                        else {
+                            *retp++ = (instr & (1 << 5)) ? 't' : 'b';
+                            *retp++ = (instr & (1 << 6)) ? 't' : 'b';
+                        }
+                        break;
+                    case 'x':
+                        retp += sprintf (retp, "%d", (instr >> arg) & ((arg % 4) ? 0x7 : 0xf));
+                        break;
+                    case 'X':
+                        if ((arg = (instr >> arg) & ((arg % 4) ? 0x7 : 0xf)))
+                            retp += sprintf (retp, "%d", arg);
+                        break;
                     case '!':
                         if (instr & (1 << 21))
                             *retp++ = '!';
-                        break;
-                    case '^':
-                        if (instr & (1 << 22))
-                            *retp++ = '^';
                         break;
                     case '%':
                         *retp++ = '%';
