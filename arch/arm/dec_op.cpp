@@ -193,6 +193,24 @@ void ARMInstruction::decode_pcflow()
 		}
 	}
 
+	// MCR, MRC
+	else if (((instr & 0x0f000010) == 0x0e000010)) {
+		int regD = (instr >> 12) & 0xf;
+
+		if ((instr >> 20) & 1) { // MRC
+			if (regD == 15) {
+				// We don't continue
+				pcflags &= ~PCFLAG_CONTINUE;
+				
+				// Jump location is indirectly determined
+				pcflags |= PCFLAG_INDLOC;
+			}
+			instrname = "mrc";
+		} else { // MCR
+			instrname = "mcr";
+		}
+	}
+
 	// SWP
 	else if ((instr & 0x0fb00ff0) == 0x01000090) {
 		//int regN   = (instr >> 16) & 0xf;
