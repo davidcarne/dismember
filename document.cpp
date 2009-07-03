@@ -10,6 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <climits> // workaround for boost < 1.38
 
 #include <boost/archive/tmpdir.hpp>
 
