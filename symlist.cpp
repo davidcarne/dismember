@@ -1,3 +1,4 @@
+#include <string.h>
 #include "address_hash.h"
 #include "symlist.h"
 

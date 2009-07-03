@@ -1,4 +1,5 @@
 #include <arpa/inet.h>
+#include <string.h>
 #include "../loaderfactory.h"
 #include "memsegment.h"
 

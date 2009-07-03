@@ -1,3 +1,4 @@
+#include <string.h>
 #include "comment.h"
 
 Comment::Comment(std::string cmt, address_t addr)
