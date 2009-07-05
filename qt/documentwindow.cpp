@@ -11,17 +11,21 @@
 #include "documentwindow.h"
 #include "documentproxymodel.h"
 #include "document.h"
+#include "dummygui.h"
 
-DocumentWindow::DocumentWindow(Document &doc)
- : QMainWindow(NULL), m_doc(doc), m_fileChanged(false), m_updated(false)
+DocumentWindow::DocumentWindow()
+ : QMainWindow(NULL), m_fileChanged(false), m_updated(false)
 {
 	m_ui.setupUi(this);
 	connect(m_ui.a_quit, SIGNAL(activated()), this, SLOT(quit()));
 	connect(m_ui.a_open, SIGNAL(activated()), this, SLOT(open()));
 	connect(m_ui.a_save, SIGNAL(activated()), this, SLOT(save()));
 	connect(m_ui.a_saveas, SIGNAL(activated()), this, SLOT(saveas()));
-	m_model = new DocumentProxyModel(m_doc);
-	m_ui.e_assembly->setModel(m_model);
+	connect(this, SIGNAL(destroyed()), this, SLOT(quit()));
+
+	m_doc = NULL;
+	m_model = NULL;
+	replaceDocument();
 
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
@@ -56,7 +60,8 @@ void DocumentWindow::open()
 				.append(serr));
 			return;
 		}
-		if (!FileLoaderMaker::autoLoadFromFile(fp, m_doc.getTrace())) {
+		replaceDocument();
+		if (!FileLoaderMaker::autoLoadFromFile(fp, m_doc->getTrace())) {
 			error(tr("Open failed"),
 				fileName
 				.append(": ")
@@ -68,13 +73,34 @@ void DocumentWindow::open()
 	postUpdate();
 }
 
+void DocumentWindow::closeEvent(QCloseEvent *event)
+{
+	if (confirmSave())
+		event->accept();
+	else
+		event->ignore();
+}
+
+void DocumentWindow::replaceDocument()
+{
+	Document *n_doc = new Document();
+	DocumentProxyModel *n_model = new DocumentProxyModel(n_doc);
+	m_ui.e_assembly->setModel(n_model);
+	if (m_model) delete m_model;
+	if (m_doc) delete m_doc;
+	m_doc = n_doc;
+	m_model = n_model;
+	DummyGUI *gui = (DummyGUI *)m_doc->getDocumentGui();
+	gui->hookUpdate(this);
+}
+
 void DocumentWindow::save()
 {
 	if (m_filename == QString()) {
 		saveas(); // calls us back
 		return;
 	}
-	m_doc.saveTo(m_filename.toStdString());
+	m_doc->saveTo(m_filename.toStdString());
 	m_fileChanged = false;
 }
 
@@ -139,6 +165,5 @@ void DocumentWindow::updateTimeout()
 void DocumentWindow::postUpdate()
 {
 	//m_fileChanged = true;
-	printf("Post-update called\n");
 	m_updated = true;
 }

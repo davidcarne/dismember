@@ -5,6 +5,7 @@ QTSRC := qt/documentwindow.cpp \
 	 qt/guiglue.cpp \
 	 qt/documentwindow.moc.cpp \
 	 qt/dialog.cpp \
+	 qt/dummygui.cpp \
 	 qt/codeview.cpp \
 	 qt/documentproxymodel.cpp \
 	 qt/main.cpp

@@ -2,6 +2,7 @@
 #define _DOCUMENTWINDOW_H_
 
 #include <QMainWindow>
+#include <QCloseEvent>
 #include <QString>
 #include "guiglue.h"
 #include "guiproxy.h"
@@ -14,8 +15,10 @@ class DocumentWindow : public QMainWindow, public DocumentGui
 {
 	Q_OBJECT
  public:
+	DocumentWindow();
 	virtual ~DocumentWindow();
 	virtual void postUpdate();
+	void closeEvent(QCloseEvent *);
 
  private slots:
 	void quit();
@@ -25,14 +28,13 @@ class DocumentWindow : public QMainWindow, public DocumentGui
 	void updateTimeout();
 
  private:
-	DocumentWindow(Document & doc);
-	friend DocumentGui *setupDocumentGui(Document & doc);
-
 	void error(QString brief, QString err);
 	bool confirmSave();
-	Document &m_doc;
+	void replaceDocument();
+
 	bool m_fileChanged;
 	bool m_updated;
+	Document *m_doc;
 	Ui::MainWindow m_ui;
 	QString m_filename;
 	DocumentProxyModel *m_model;

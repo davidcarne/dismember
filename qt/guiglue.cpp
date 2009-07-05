@@ -8,12 +8,10 @@
  */
 
 #include "guiglue.h"
-#include "documentwindow.h"
+#include "dummygui.h"
 #include "document.h"
 
-DocumentGui * setupDocumentGui(Document & doc)
+DocumentGui *setupDocumentGui(Document &)
 { 
-	DocumentWindow *frame = new DocumentWindow(doc);
-	frame->show();
-	return frame;
+	return new DummyGUI();
 }

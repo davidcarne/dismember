@@ -56,6 +56,11 @@ public:
 	IRunQueueControl * getRunQueue();
 	
 	/**
+	 * Get the document's gui
+	 */
+	DocumentGui * getDocumentGui();
+
+	/**
 	 * Post an update notification to the gui 
 	 */
 	void postGuiUpdate();

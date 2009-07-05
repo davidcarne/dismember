@@ -11,7 +11,7 @@ class Document;
 class DocumentProxyModel : public QAbstractItemModel
 {
  public:
-	DocumentProxyModel(Document &doc);
+	DocumentProxyModel(Document *doc);
 	~DocumentProxyModel();
 
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -41,8 +41,7 @@ class DocumentProxyModel : public QAbstractItemModel
 	QString displayComment(address_t addr) const;
 	QString displayXrefBrief(address_t addr) const;
 
-
-	Document &m_doc;
+	Document *m_doc;
 	GuiProxy *m_gprox;
 };
 

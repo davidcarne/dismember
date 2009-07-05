@@ -34,7 +34,6 @@
 #include "guiglue.h"
 #include "run_queue.h"
 
-
 Document::Document()
 {
 	// Create all the constituent parts of the document
@@ -72,7 +71,10 @@ IRunQueueControl * Document::getRunQueue()
 	return m_runQueue;
 }
 
-
+DocumentGui * Document::getDocumentGui()
+{
+	return m_docgui;
+}
 
 void Document::postGuiUpdate()
 {
@@ -86,7 +88,3 @@ void Document::saveTo(const std::string & filename)
 	boost::archive::text_oarchive oa(ofs);
 	oa << this;
 }
-	
-
-
-
