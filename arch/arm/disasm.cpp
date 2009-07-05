@@ -100,6 +100,7 @@ struct arm_insn
     { 0x0df00000, 0x01500000, "cmp%c\t%16r, %o" },
     { 0x0de00000, 0x01600000, "cmn%c\t%16r, %o" },
     { 0x0de00000, 0x01800000, "orr%c%s\t%12r, %16r, %o" },
+    { 0x0fffffff, 0x01a00000, "nop%c" },
     { 0x0de00000, 0x01a00000, "mov%c%s\t%12r, %o" },
     { 0x0de00000, 0x01c00000, "bic%c%s\t%12r, %16r, %o" },
     { 0x0de00000, 0x01e00000, "mvn%c%s\t%12r, %o" },
