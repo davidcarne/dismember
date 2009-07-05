@@ -87,7 +87,7 @@ address_t GuiProxy::getLineAddr(line_ind_t line)
 			return look;
 		}
 		
-		printf("addr not in block - block start %llx end %llx len %llx lca %d line %d\n", a->start, a->start + a->lc, a->len, lca, line);
+		printf("addr not in block - block start %x end %x len %x lca %d line %d\n", (u32)a->start, (u32)(a->start + a->lc), (u32)a->len, lca, line);
 	}
 
 	throw std::out_of_range("bad line addr!\n");
@@ -123,7 +123,7 @@ line_ind_t GuiProxy::getLineAtAddr(address_t addr)
 		lca += a->lc;
 	}
 	
-	printf("Looking up invalid addr %llx\n", addr);
+	printf("Looking up invalid addr %x\n", (u32)addr);
 	throw std::out_of_range("bad line addr!\n");
 }
 
