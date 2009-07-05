@@ -115,8 +115,8 @@ struct arm_insn
     { 0x0e100ff0, 0x000000f0, "str%cd\t%12r, %A" },
 
     /* Co-processor functions */
-    { 0x0f100010, 0x0e000010, "mcr%t\t%p, %21x, %12r, %16C, %C, %5X" },
-    { 0x0f100010, 0x0e100010, "mrc%t\t%p, %21x, %12r, %16C, %C, %5X" },
+    { 0x0f100010, 0x0e000010, "mcr%t\t%p, %21x, %12r, %16C, %C, %5x" },
+    { 0x0f100010, 0x0e100010, "mrc%t\t%p, %21x, %12r, %16C, %C, %5x" },
     { 0x0e100000, 0x0c000000, "stc%t%l\t%p, %12C, %a" },
     { 0x0e100000, 0x0c100000, "ldc%t%l\t%p, %12C, %a" },
     { 0x0f000010, 0x0e000000, "cdp%t\t%p, %20x, %12C, %16C, %C, %5x" },
@@ -247,28 +247,34 @@ static bool ldw(const Trace * t, address_t addr, u32 * data)
 
 static void write_addr (const Trace *t, char **retp, int Pre, int Up, int Writeback, int Immed, int offset, int base, u32 pc)
 {
-    char *p = *retp;
-    if (base == 15 && !Writeback && Immed) {
+	char *p = *retp;
+	if (base == 15 && !Writeback && Immed) {
 		u32 destword;
-		if (ldw(t, pc + offset, &destword))
+		if (ldw(t, pc + offset, &destword)) {
 			*retp += sprintf (*retp, "=0x%08x", destword);
-        return;
-    }
-    *p++ = '[';
-    write_reg (&p, base);
-    if (Immed && offset) {
-        p += sprintf (p, "%s, #%s%d%s%s\t; 0x%x", Pre? "" : "]", Up? "" : "-",
-                      offset, Pre? "]" : "", (Writeback && Pre)? "!" : "",
-                      (base == 15)? pc + offset : offset);
-    } else if (Immed) {
-        p += sprintf (p, "]%s", Writeback? "!" : "");
-    } else {
-        p += sprintf (p, "%s, %s", Pre? "" : "]", Up? "" : "-");
-        write_barrelshift (&p, offset);
-        p += sprintf (p, "%s", Pre? Writeback? "]!" : "]" : "");
-    }
+			return;
+		}
+	}
+	*p++ = '[';
+	write_reg (&p, base);
+	if (Immed && offset) {
+		p += sprintf (p, "%s, #%s0x%x%s%s",
+				Pre? "" : "]",
+				Up? "" : "-",
+            			offset,
+				Pre? "]" : "",
+				(Writeback && Pre)? "!" : "");
+		if (base == 15)
+			p += sprintf (p, "\t; %x", pc + offset);
+	} else if (Immed) {
+		p += sprintf (p, "]%s", Writeback? "!" : "");
+	} else {
+		p += sprintf (p, "%s, %s", Pre? "" : "]", Up? "" : "-");
+		write_barrelshift (&p, offset);
+		p += sprintf (p, "%s", Pre? Writeback? "]!" : "]" : "");
+	}
 
-    *retp = p;
+	*retp = p;
 }
 
 static void write_cond (char **retp, int cond) 
