@@ -32,11 +32,15 @@ class DocumentProxyModel : public QAbstractItemModel
 	void setSymbol(int row, QString str);
 	QString getSymbol(int row);
 
+	int getJumpLine(int row);
+
  private:
 	QString displayText(address_t addr) const;
 	QString displayXrefs(address_t addr) const;
 	QString displaySymbol(address_t addr) const;
 	QString displayComment(address_t addr) const;
+	QString displayXrefBrief(address_t addr) const;
+
 
 	Document &m_doc;
 	GuiProxy *m_gprox;

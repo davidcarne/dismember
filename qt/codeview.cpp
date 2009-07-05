@@ -25,13 +25,24 @@ void CodeView::keyPressEvent(QKeyEvent *event)
 	int row = selectionModel()->currentIndex().row();
 	DocumentProxyModel *dpm = (DocumentProxyModel *)model();
 	switch (event->key()) {
+	case Qt::Key_Escape:
+	case Qt::Key_Backspace:
+		if (!m_jumpStack.empty()) {
+			row = m_jumpStack.pop();
+			QModelIndex idx = dpm->index(row, 0, QModelIndex());
+			scrollTo(idx);
+			setCurrentIndex(idx);
+		}
+		break;
 	case Qt::Key_Enter:
 	case Qt::Key_Return:
 	case Qt::Key_G:
-		// goto, push goto list
-		//if (row != -1 && (row = dpm->getJump(row)) != -1)
-			
-
+		if (row != -1 && (row = dpm->getJumpLine(row)) != -1) {
+			QModelIndex idx = dpm->index(row, 0, QModelIndex());
+			m_jumpStack.push(selectionModel()->currentIndex().row());
+			scrollTo(idx);
+			setCurrentIndex(idx);
+		}
 		break;
 	case Qt::Key_C:
 	case Qt::Key_I:
@@ -67,13 +78,22 @@ void CodeView::keyPressEvent(QKeyEvent *event)
 	case Qt::Key_Minus:
 		// collapse
 		break;
-	case Qt::Key_Escape:
-		// pop goto list
-		break;
 	default:
 		// todo: filter out everything that'll cause a search.
 		QTableView::keyPressEvent(event);
 		break;
+	}
+}
+
+void CodeView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+	int row = indexAt(event->pos()).row();
+	DocumentProxyModel *dpm = (DocumentProxyModel *)model();
+	if (row != -1 && (row = dpm->getJumpLine(row)) != -1) {
+		QModelIndex idx = dpm->index(row, 0, QModelIndex());
+		m_jumpStack.push(selectionModel()->currentIndex().row());
+		scrollTo(idx);
+		setCurrentIndex(idx);
 	}
 }
 
@@ -87,12 +107,15 @@ void CodeView::contextMenuEvent(QContextMenuEvent *event)
 	if (dpm->isDefined(row))
 		actions.push_back(new QAction(tr("Undefine"), this));
 	else
-		actions.push_back(new QAction(tr("Code"), this));
+		actions.push_back(new QAction(tr("Analyze Code"), this));
+	if (dpm->getJumpLine(row) != -1)
+		actions.push_back(new QAction(tr("Jump to branch"), this));
 
 	QAction *action = QMenu::exec(actions, event->globalPos(),
 			(QAction *)0, this);
 	if (action) {
-		if (action->text() == tr("Code")) {
+		// todo: using names here for compare sucks
+		if (action->text() == tr("Analyze Code")) {
 			dpm->analyze(row);
 		} else if (action->text() == tr("Undefine")) {
 			dpm->undefine(row);
@@ -105,6 +128,12 @@ void CodeView::contextMenuEvent(QContextMenuEvent *event)
 					dpm->getSymbol(row), &ok);
 			if (ok && !ntext.isEmpty())
 				dpm->setSymbol(row, ntext);
+		} else if (action->text() == tr("Jump to branch")) {
+			int nrow = dpm->getJumpLine(row);
+			QModelIndex idx = dpm->index(nrow, 0, QModelIndex());
+			m_jumpStack.push(row);
+			scrollTo(idx);
+			setCurrentIndex(idx);
 		}
 	}
 	while (!actions.isEmpty())

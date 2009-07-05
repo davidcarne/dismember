@@ -3,6 +3,7 @@
 #include <QFontMetrics>
 #include <QSize>
 #include "document.h"
+#include "xref.h"
 #include "documentproxymodel.h"
 #include "../memlocdata.h"
 #include "program_flow_analysis.h"
@@ -72,11 +73,45 @@ QString DocumentProxyModel::displayXrefs(address_t addr) const
 		for (XrefManager::xref_map_ci j = id->begin_xref_to();
 				j != id->end_xref_to(); j++) {
 			Xref * x = (*j).second;
+			const char *type = "?";
 			char buf[256];
-			snprintf(buf, 256, "; xref %08lx\t %x\n",
-					x->get_src_addr(), x->get_type());
+			switch (x->get_type()) {
+			case Xref::XR_TYPE_JMP:
+				type = "jump";
+				break;
+			case Xref::XR_TYPE_FNCALL:
+				type = "call";
+				break;
+			case Xref::XR_TYPE_DATA:
+				type = "data";
+				break;
+			}
+			snprintf(buf, 256, "xref: 0x%08lx(%s)\n",
+					x->get_src_addr(), type);
 			str.append(buf);
 		}
+		str.chop(1);
+		return str;
+	}
+	return QString();
+}
+
+QString DocumentProxyModel::displayXrefBrief(address_t addr) const
+{
+	MemlocData *id = m_doc.getTrace()->lookup_memloc(addr);
+	if (id && id->has_xrefs_to()) {
+		char buf[256];
+		QString str("; xrefs");
+		snprintf(buf, 256, "(%d): ", id->count_xrefs_to());
+		str.append(buf);
+		for (XrefManager::xref_map_ci j = id->begin_xref_to();
+				j != id->end_xref_to(); j++) {
+			Xref * x = (*j).second;
+			snprintf(buf, 256, "0x%08lx,", x->get_src_addr());
+			str.append(buf);
+		}
+		str.chop(1);
+		return str;
 	}
 	return QString();
 }
@@ -93,6 +128,13 @@ QVariant DocumentProxyModel::data(const QModelIndex &index, int role) const
 {
 	char data[256];
 	switch (role) {
+	case Qt::ToolTipRole:
+		if (index.column() == 3) {
+			address_t addr = m_gprox->getLineAddr(index.row());
+			return QVariant(displayXrefs(addr));
+		}
+		return QVariant();
+		break;
 	case Qt::FontRole:
 		break;
 	case Qt::SizeHintRole: {
@@ -137,7 +179,7 @@ QVariant DocumentProxyModel::data(const QModelIndex &index, int role) const
 			case 2:
 				return QVariant(displayText(addr));
 			case 3:
-				return QVariant(displayXrefs(addr));
+				return QVariant(displayXrefBrief(addr));
 			case 4:
 				return QVariant(displayComment(addr));
 			}
@@ -190,4 +232,22 @@ QString DocumentProxyModel::getSymbol(int row)
 	address_t addr = m_gprox->getLineAddr(row);
 	const Symbol *sym = m_doc.getTrace()->lookup_symbol(addr);
 	return sym ? QString(sym->get_name().c_str()) : QString();
+}
+
+int DocumentProxyModel::getJumpLine(int row)
+{
+	int nrow = -1;
+	address_t addr = m_gprox->getLineAddr(row);
+	MemlocData * i = m_doc.getTrace()->lookup_memloc(addr);
+
+	if (i && i->has_xrefs_from()) {
+		Xref * x = (*(i->begin_xref_from())).second;
+		address_t na = x->get_dst_addr();
+
+		try {
+			nrow = m_gprox->getLineAtAddr(na);
+		} catch (std::out_of_range e) { }
+	}
+
+	return nrow;
 }

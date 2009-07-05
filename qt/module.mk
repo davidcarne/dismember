@@ -9,11 +9,13 @@ QTSRC := qt/documentwindow.cpp \
 	 qt/documentproxymodel.cpp \
 	 qt/main.cpp
 
+QTUI =  qt/documentwindow.ui
+
 SRC += $(QTSRC)
 
 $(QTSRC:.cpp=.o): CPPFLAGS += $(shell pkg-config QtGui --cflags) -Wno-deprecated
 
-$(QTSRC:.cpp=.o): qt/documentwindow.ui.h
+$(QTSRC:.cpp=.o): $(QTUI:.ui=.ui.h)
 
 %.ui.h: %.ui
 	uic -o $@ $<
