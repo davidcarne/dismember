@@ -329,7 +329,34 @@ static void write_jump (const Trace * m_ctx, char **retp, u32 jumpfield, u32 pc)
     if (s)
         *retp += sprintf(*retp, "%s", s->get_name().c_str());
     else
-        *retp += sprintf (*retp, "%08x", pc + jump);
+        *retp += sprintf (*retp, "0x%08x", pc + jump);
+}
+
+static int bitcount(unsigned int n)
+{
+#ifdef __GNUC__
+	return __builtin_popcount(n);
+#else
+	// MIT HAKMEM 169
+	register unsigned int t;
+	t = n - ((n >> 1) & 033333333333) - ((n >> 2) & 011111111111);
+	return ((t + (t >> 3)) & 030707070707) % 63;
+#endif
+}
+
+static void writeImmed(char **retp, u32 imm)
+{
+	int ubc = bitcount(imm & 0xffff);
+	int lbc = bitcount(imm >> 16);
+	int simm = (s32)imm;
+	if (simm < 256 && simm > -256)
+		*retp += sprintf(*retp, "#%d", simm);
+	else if (ubc <= 4 || lbc <= 4 || ubc == 16 || lbc == 16)
+		*retp += sprintf(*retp, "#0x%x", imm);
+	else if (simm % 1000 == 0)
+		*retp += sprintf(*retp, "#%d", simm);
+	else
+		*retp += sprintf(*retp, "#%d\t; 0x%x", simm, imm);
 }
 
 const std::string ARMInstruction::get_textual()
@@ -427,8 +454,7 @@ const std::string ARMInstruction::get_textual()
                             u32 nsimm = instr & 0xff;
                             int rot = (instr >> 7) & 0x1e;
                             u32 imm = (nsimm >> rot) | (nsimm << (32 - rot));
-                            int simm = (s32)imm;
-                            retp += sprintf (retp, "#%d\t; 0x%x", simm, imm);
+			    writeImmed(&retp, imm);
                         } else {
                             write_barrelshift (&retp, instr & 0xfff);
                         }
