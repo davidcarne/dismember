@@ -15,13 +15,6 @@ SRC := 	abstractdata.cpp comment.cpp memlocdata.cpp ramops.cpp xref.cpp \
 	codeblock.cpp instruction.cpp program_flow_analysis.cpp
 
 
-
-
-include $(patsubst %, %/module.mk, $(MODULES))
-
-
-INCPATHS += $(patsubst %, -I%, $(INCDIRS))
-
 BUILDDIR := build
 #DEPSFILE := $(BUILDDIR)/deps.mk
 PROG := $(BUILDDIR)/dismember
@@ -29,10 +22,15 @@ PROG := $(BUILDDIR)/dismember
 # Default build target
 all: $(PROG)
 
+include $(patsubst %, %/module.mk, $(MODULES))
+
+
+INCPATHS += $(patsubst %, -I%, $(INCDIRS))
+
 CPPSRCS := $(filter %.cpp, $(SRC) )
 CPPOBJS := $(patsubst %.cpp,%.o, $(CPPSRCS) )
 
-CPPDEFS =
+CPPDEFS = -DDISABLE_ADDRESS_T_HASH
 CPPFLAGS += -Wall -Wno-unused  -Wno-unknown-pragmas -Wno-reorder \
 	    -Wno-non-virtual-dtor -g $(CPPDEFS)
 
