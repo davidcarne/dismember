@@ -20,8 +20,8 @@ void MemlocManager::insertMemloc(MemlocData * a)
 	
 	memloclist_ci ci = m_memdata.lower_bound(addr);
 	memloclist_ci end = m_memdata.lower_bound(addr + a->get_length());
-	for (; ci != end; ++ci) {
-		address_t baddr = (*ci).first;
+	while (ci != end) {
+		address_t baddr = (*ci++).first;
 		m_memdata_hash.erase(baddr);
 		m_memdata.erase(baddr);
 	}
