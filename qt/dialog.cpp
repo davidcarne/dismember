@@ -48,8 +48,8 @@ void QTDialog::addSubmit(std::string text)
 
 guiWidget &QTDialog::getValue(std::string idx)
 {
-	//fixme: memory leak
-	return *(new QTVariant(m_map[idx]->text()));
+	// fixme: memory leak
+	return *(new AbstractData(m_map[idx]->text().toStdString()));
 }
 
 void QTDialog::show()
@@ -64,33 +64,6 @@ void QTDialog::showModal()
 {
 	m_dialog->setLayout(m_layout);
 	m_dialog->exec();
-}
-
-
-QTVariant::QTVariant(QString str)
- : m_str(str)
-{ }
-
-std::string QTVariant::text()
-{
-	return m_str.toStdString();
-}
-
-int QTVariant::number()
-{
-	return strtol(m_str.toAscii(), 0, 0);
-}
-bool QTVariant::boolean()
-{
-	if (m_str.toLower() == QString("true")) return true;
-	else if (m_str.toLower() == QString("1")) return true;
-	else if (m_str.toLower() == QString("on")) return true;
-	else if (m_str.toLower() == QString("yes")) return true;
-	else if (m_str.toLower() == QString("false")) return false;
-	else if (m_str.toLower() == QString("0")) return false;
-	else if (m_str.toLower() == QString("off")) return false;
-	else if (m_str.toLower() == QString("no")) return false;
-	return false;
 }
 
 guiDialog *createGuiDialog(std::string name)

@@ -2,48 +2,11 @@
 #define _ABSTRACT_DATA_H_
 
 #include <string>
+#include <boost/variant/get.hpp>
+#include <boost/variant/variant.hpp>
 
-/* TODO: Replace this all with boost::variant */
+#include "types.h"
 
-class AbstractData
-{
- public:
-	AbstractData() {};
-	virtual ~AbstractData() {};
-
-	virtual std::string text() = 0;
-	virtual int number() = 0;
-	virtual bool boolean() = 0;
-};
-
-class GenericAbstractData
-{
- public:
-	GenericAbstractData(int data);
-	GenericAbstractData(bool data);
-	GenericAbstractData(std::string data);
-	~GenericAbstractData();
-
-	enum DataType {
-		TEXT,
-		NUMBER,
-		BOOLEAN
-	};
-
-	DataType type();
-
-	std::string text();
-	int number();
-	bool boolean();
-
- protected:
- 	DataType m_type;
-	//union data {
-	struct data {
-		std::string text;
-		int number;
-		bool boolean;
-	} data;
-};
+typedef boost::variant<int, bool, std::string, address_t> AbstractData;
 
 #endif

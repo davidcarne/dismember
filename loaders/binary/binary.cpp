@@ -27,10 +27,10 @@ bool BinaryLoader::loadFromFile(FILE * loadimg, Trace * ctx)
 	base->addSubmit("OK");
 	base->showModal();
 
-	std::string str = base->getValue("addr").text();
+	AbstractData &var = base->getValue("addr");
+	std::string str = boost::get<std::string>(var);
 	if (str.length() > 0)
 		addr = strtol(str.c_str(), 0, 0);
-	
 	
 	
 	u32 len;

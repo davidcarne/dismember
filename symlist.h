@@ -35,13 +35,13 @@ public:
 	 * \brief set a property of the symbol.
 	 * \todo add this to another class that this can inherit from
 	 */
-	void set_property(std::string key, GenericAbstractData *value);
+	void set_property(std::string key, AbstractData *value);
 	
 	/**
 	 * \brief get a property of the symbol. This may be reworked
 	 * \todo add this to another class that this can inherit from
 	 */
-	GenericAbstractData *get_property(std::string key) const;
+	AbstractData *get_property(std::string key) const;
 protected:
 	/**
 	 * \brief allocate a new symbol. protected as trace owns
@@ -52,7 +52,7 @@ private:
 	std::string m_name;
 	address_t m_addr;
 
-	typedef __gnu_cxx::hash_map<std::string, GenericAbstractData *> propertymap_t;
+	typedef __gnu_cxx::hash_map<std::string, AbstractData *> propertymap_t;
 	typedef propertymap_t::iterator propertymap_i;	
 	typedef propertymap_t::const_iterator propertymap_ci;
 	propertymap_t properties;

@@ -7,18 +7,6 @@
 #include "string_hash.h"
 #include "guidialog.h"
 
-class QTVariant : public AbstractData
-{
- public:
-	QTVariant(QString str);
-
-	std::string text();
-	int number();
-	bool boolean();
- private:
-	QString m_str;
-};
-
 class QTDialog : public guiDialog
 {
  public:

@@ -33,13 +33,13 @@ inline bool SymbolListView::isAllowed(const Symbol *sym) const
 // apparently way too slow
 	return true;
 
-	GenericAbstractData *gad;
+	AbstractData *gad;
 	if (!m_data->IsChecked() && (gad = sym->get_property("type"))) {
-		if (gad->text() == "data")
+		if (boost::get<std::string>(*gad) == "data")
 			return false;
 	}
 	if (!m_subs->IsChecked() && (gad = sym->get_property("subroutine"))) {
-		if (gad->boolean())
+		if (boost::get<bool>(*gad))
 			return false;
 	}
 	//if (!locs->IsChecked())
@@ -101,9 +101,9 @@ wxString SymbolListView::OnGetItemText(long item, long column) const
 	case 0: return wxString::Format(_T("%s"), sym->get_name().c_str());
 	case 1: return wxString::Format(_T("%08x"), sym->get_addr());
 	case 2: {
-		GenericAbstractData *gad = sym->get_property("type");
+		AbstractData *gad = sym->get_property("type");
 		if (gad)
-			return _U(gad->text().c_str());
+			return _U(boost::get<std::string>(*gad)*c_str());
 		else return _U("");
 		}
 	}

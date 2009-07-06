@@ -7,7 +7,7 @@ INCDIRS := $(MODULES)
 INCPATHS := -I.
 
 LIBS :=
-SRC := 	abstractdata.cpp comment.cpp memlocdata.cpp xref.cpp \
+SRC := 	comment.cpp memlocdata.cpp xref.cpp \
 	datatypereg.cpp memlocmanager.cpp run_queue.cpp xref_build.cpp \
 	app_main.cpp document.cpp memsegment.cpp stringconstant.cpp \
 	xrefmanager.cpp binaryconstant.cpp dsmem_trace.cpp \

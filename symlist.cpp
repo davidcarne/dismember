@@ -17,12 +17,12 @@ const address_t Symbol::get_addr() const
 	return m_addr;
 }
 
-void Symbol::set_property(std::string key, GenericAbstractData *value)
+void Symbol::set_property(std::string key, AbstractData *value)
 {
 	properties[key.c_str()] = value;
 }
 
-GenericAbstractData *Symbol::get_property(std::string key) const
+AbstractData *Symbol::get_property(std::string key) const
 {
 	propertymap_ci i = properties.find(key.c_str());
 	if (i == properties.end())
