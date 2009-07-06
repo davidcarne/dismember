@@ -35,13 +35,11 @@ QModelIndex QTSymbolModel::parent(const QModelIndex &index) const
 QModelIndex QTSymbolModel::index(int row, int column,
 		const QModelIndex &parent) const
 {
-	printf("index %dx%d\n", row, column);
 	return createIndex(row, column);
 }
 
 QVariant QTSymbolModel::data(const QModelIndex &index, int role) const
 {
-	printf("data %dx%d\n", index.row(), index.column());
 	switch (role) {
 	case Qt::BackgroundRole:
 		if (index.row() & 1)

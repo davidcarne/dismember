@@ -24,7 +24,6 @@ void QTSymbolView::runtimeUpdated(QTRuntimeEvent *evt)
 		break;
 	case QTRuntimeEvent::RuntimeUpdate:
 	case QTRuntimeEvent::RuntimeFlush:
-		printf("flush\n");
 		m_model->flush();
 		break;
 	default: break;
