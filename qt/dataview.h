@@ -6,16 +6,17 @@
 #include <QMouseEvent>
 
 #include <vector>
+#include "runtimemodel.h"
 
 class Document;
 
-class DataView : public QWidget
+class QTDataView : public QWidget, public QTRuntimeModelListener
 {
  public:
-	DataView(QWidget *parent);
+	QTDataView(QWidget *parent);
 
-	void setDocument(Document *doc);
-	void flush();
+	void setRuntimeModel(QTRuntimeModel *rt);
+	void runtimeUpdated(QTRuntimeEvent *m);
 
  protected:
 	void paintEvent(QPaintEvent *event);
@@ -25,7 +26,7 @@ class DataView : public QWidget
 	void enterEvent(QEvent *event);
 	void leaveEvent(QEvent *event);
 
-	Document *m_doc;
+	QTRuntimeModel *m_model;
 	bool m_mouseActive;
 	bool m_mouseInside;
 	std::vector<address_t> m_paddrMap;

@@ -4,49 +4,47 @@
 #include <QSize>
 #include "document.h"
 #include "xref.h"
-#include "documentproxymodel.h"
-#include "../memlocdata.h"
+#include "memlocdata.h"
 #include "program_flow_analysis.h"
 
-DocumentProxyModel::DocumentProxyModel(Document *doc)
- : QAbstractItemModel(NULL), m_doc(doc)
+#include "codemodel.h"
+
+
+QTCodeModel::QTCodeModel(QTRuntimeModel *model)
+ : QAbstractItemModel(NULL), m_model(model)
+{ }
+
+QTCodeModel::~QTCodeModel()
+{ }
+
+int QTCodeModel::rowCount(const QModelIndex &parent) const
 {
-	m_gprox = new GuiProxy(m_doc->getTrace());
+	return m_model->getProxy().getLineCount();
 }
 
-DocumentProxyModel::~DocumentProxyModel()
-{
-	delete m_gprox;
-}
-
-int DocumentProxyModel::rowCount(const QModelIndex &parent) const
-{
-	return m_gprox->getLineCount();
-}
-
-int DocumentProxyModel::columnCount(const QModelIndex & parent) const
+int QTCodeModel::columnCount(const QModelIndex & parent) const
 {
 	return 5;
 }
 
-QModelIndex DocumentProxyModel::parent(const QModelIndex &index) const
+QModelIndex QTCodeModel::parent(const QModelIndex &index) const
 {
 	return QModelIndex();
 }
 
-QModelIndex DocumentProxyModel::index(int row, int column,
+QModelIndex QTCodeModel::index(int row, int column,
 		const QModelIndex &parent) const
 {
 	return createIndex(row, column);
 }
 
-QString DocumentProxyModel::displayText(address_t addr) const
+QString QTCodeModel::displayText(Trace &t, address_t addr) const
 {
-	MemlocData *id = m_doc->getTrace()->lookup_memloc(addr);
+	MemlocData *id = t.lookup_memloc(addr);
 	u8 ch;
 	if (id) {
 		return QString(id->get_textual().c_str());
-	} else if (m_doc->getTrace()->readByte(addr, &ch)) {
+	} else if (t.readByte(addr, &ch)) {
 		char text[32], *p;
 		p = text + snprintf(text, 32, "0x%02x", ch);
 		if (isprint(ch))
@@ -56,17 +54,17 @@ QString DocumentProxyModel::displayText(address_t addr) const
 	return QString();
 }
 
-QString DocumentProxyModel::displayComment(address_t addr) const
+QString QTCodeModel::displayComment(Trace &t, address_t addr) const
 {
-	const Comment *cmt = m_doc->getTrace()->lookup_comment(addr);
+	const Comment *cmt = t.lookup_comment(addr);
 	if (cmt)
 		return QString(cmt->get_comment().c_str());
 	return QString();
 }
 
-QString DocumentProxyModel::displayXrefs(address_t addr) const
+QString QTCodeModel::displayXrefs(Trace &t, address_t addr) const
 {
-	MemlocData *id = m_doc->getTrace()->lookup_memloc(addr);
+	MemlocData *id = t.lookup_memloc(addr);
 	if (id && id->has_xrefs_to()) {
 		QString str("");
 		for (XrefManager::xref_map_ci j = id->begin_xref_to();
@@ -95,9 +93,9 @@ QString DocumentProxyModel::displayXrefs(address_t addr) const
 	return QString();
 }
 
-QString DocumentProxyModel::displayXrefBrief(address_t addr) const
+QString QTCodeModel::displayXrefBrief(Trace &t, address_t addr) const
 {
-	MemlocData *id = m_doc->getTrace()->lookup_memloc(addr);
+	MemlocData *id = t.lookup_memloc(addr);
 	if (id && id->has_xrefs_to()) {
 		char buf[256];
 		QString str("; xrefs");
@@ -115,22 +113,24 @@ QString DocumentProxyModel::displayXrefBrief(address_t addr) const
 	return QString();
 }
 
-QString DocumentProxyModel::displaySymbol(address_t addr) const
+QString QTCodeModel::displaySymbol(Trace &t, address_t addr) const
 {
-	const Symbol *sym = m_doc->getTrace()->lookup_symbol(addr);
+	const Symbol *sym = t.lookup_symbol(addr);
 	if (sym)
 		return QString(sym->get_name().c_str()).append(":");
 	return QString();
 }
 
-QVariant DocumentProxyModel::data(const QModelIndex &index, int role) const
+QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 {
+	GuiProxy &gprox = m_model->getProxy();
 	char data[256];
 	switch (role) {
 	case Qt::ToolTipRole:
 		if (index.column() == 3) {
-			address_t addr = m_gprox->getLineAddr(index.row());
-			return QVariant(displayXrefs(addr));
+			address_t addr = gprox.getLineAddr(index.row());
+			Trace &t = m_model->getTrace();
+			return QVariant(displayXrefs(t, addr));
 		}
 		return QVariant();
 		break;
@@ -143,14 +143,14 @@ QVariant DocumentProxyModel::data(const QModelIndex &index, int role) const
 			return QVariant(QColor(255,255,255));
 	case Qt::ForegroundRole:
 		try {
-			address_t addr = m_gprox->getLineAddr(index.row());
+			address_t addr = gprox.getLineAddr(index.row());
 			switch (index.column()) {
 			case 0:
 				return QVariant(QColor(0, 0, 0));
 			case 1:
 				return QVariant(QColor(0, 0, 255));
 			case 2:
-				if (m_doc->getTrace()->lookup_memloc(addr))
+				if (m_model->getTrace().lookup_memloc(addr))
 					return QVariant(QColor(0, 0, 200));
 				else
 					return QVariant(QColor(125, 125, 125));
@@ -164,19 +164,20 @@ QVariant DocumentProxyModel::data(const QModelIndex &index, int role) const
 		break;
 	case Qt::DisplayRole:
 		try {
-			address_t addr = m_gprox->getLineAddr(index.row());
+			address_t addr = gprox.getLineAddr(index.row());
+			Trace &t = m_model->getTrace();
 			switch (index.column()) {
 			case 0:
 				snprintf(data, 256, "%08x:", (u32)addr);
 				return QVariant(QString(data));
 			case 1:
-				return QVariant(displaySymbol(addr));
+				return QVariant(displaySymbol(t, addr));
 			case 2:
-				return QVariant(displayText(addr));
+				return QVariant(displayText(t, addr));
 			case 3:
-				return QVariant(displayXrefBrief(addr));
+				return QVariant(displayXrefBrief(t, addr));
 			case 4:
-				return QVariant(displayComment(addr));
+				return QVariant(displayComment(t, addr));
 			}
 		} catch (std::out_of_range &e) {
 			return QVariant();
@@ -189,58 +190,59 @@ QVariant DocumentProxyModel::data(const QModelIndex &index, int role) const
 	return QVariant();
 }
 
-void DocumentProxyModel::flush()
+void QTCodeModel::flush()
 {
-	m_gprox->update();
+	m_model->getProxy().update();
 	reset();
 }
 
-bool DocumentProxyModel::isDefined(int row)
+bool QTCodeModel::isDefined(int row)
 {
-	return m_doc->getTrace()->lookup_memloc(m_gprox->getLineAddr(row)) != 0;
+	address_t addr = m_model->getProxy().getLineAddr(row);
+	return m_model->getTrace().lookup_memloc(addr) != 0;
 }
 
-void DocumentProxyModel::analyze(int row)
+void QTCodeModel::analyze(int row)
 {
-	ProgramFlowAnalysis::submitAnalysisJob(m_doc,
-			m_doc->getTrace()->getCodeDataType(),
-			m_gprox->getLineAddr(row));
+	ProgramFlowAnalysis::submitAnalysisJob(&m_model->getRuntime(),
+			m_model->getTrace().getCodeDataType(),
+			m_model->getProxy().getLineAddr(row));
 	//flush();
 }
 
-void DocumentProxyModel::undefine(int row)
+void QTCodeModel::undefine(int row)
 {
 	// todo: apparently Trace::undefine(addr) doesn't work
 	//flush();
 }
 
 
-void DocumentProxyModel::setSymbol(int row, QString str)
+void QTCodeModel::setSymbol(int row, QString str)
 {
-	address_t addr = m_gprox->getLineAddr(row);
-	m_doc->getTrace()->create_sym(str.toStdString(), addr);
+	address_t addr = m_model->getProxy().getLineAddr(row);
+	m_model->getTrace().create_sym(str.toStdString(), addr);
 	flush();
 }
 
-QString DocumentProxyModel::getSymbol(int row)
+QString QTCodeModel::getSymbol(int row)
 {
-	address_t addr = m_gprox->getLineAddr(row);
-	const Symbol *sym = m_doc->getTrace()->lookup_symbol(addr);
+	address_t addr = m_model->getProxy().getLineAddr(row);
+	const Symbol *sym = m_model->getTrace().lookup_symbol(addr);
 	return sym ? QString(sym->get_name().c_str()) : QString();
 }
 
-int DocumentProxyModel::getJumpLine(int row)
+int QTCodeModel::getJumpLine(int row)
 {
 	int nrow = -1;
-	address_t addr = m_gprox->getLineAddr(row);
-	MemlocData * i = m_doc->getTrace()->lookup_memloc(addr);
+	address_t addr = m_model->getProxy().getLineAddr(row);
+	MemlocData * i = m_model->getTrace().lookup_memloc(addr);
 
 	if (i && i->has_xrefs_from()) {
 		Xref * x = (*(i->begin_xref_from())).second;
 		address_t na = x->get_dst_addr();
 
 		try {
-			nrow = m_gprox->getLineAtAddr(na);
+			nrow = m_model->getProxy().getLineAtAddr(na);
 		} catch (std::out_of_range e) { }
 	}
 

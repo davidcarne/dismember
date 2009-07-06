@@ -4,15 +4,16 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
+#include "runtimemodel.h"
 #include "guiproxy.h"
 
 class Document;
 
-class DocumentProxyModel : public QAbstractItemModel
+class QTCodeModel : public QAbstractItemModel
 {
  public:
-	DocumentProxyModel(Document *doc);
-	~DocumentProxyModel();
+	QTCodeModel(QTRuntimeModel *model);
+	~QTCodeModel();
 
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	int columnCount(const QModelIndex & parent = QModelIndex()) const;
@@ -35,14 +36,13 @@ class DocumentProxyModel : public QAbstractItemModel
 	int getJumpLine(int row);
 
  private:
-	QString displayText(address_t addr) const;
-	QString displayXrefs(address_t addr) const;
-	QString displaySymbol(address_t addr) const;
-	QString displayComment(address_t addr) const;
-	QString displayXrefBrief(address_t addr) const;
+	QString displayText(Trace &, address_t addr) const;
+	QString displayXrefs(Trace &, address_t addr) const;
+	QString displaySymbol(Trace &, address_t addr) const;
+	QString displayComment(Trace &, address_t addr) const;
+	QString displayXrefBrief(Trace &, address_t addr) const;
 
-	Document *m_doc;
-	GuiProxy *m_gprox;
+	QTRuntimeModel *m_model;
 };
 
 #endif

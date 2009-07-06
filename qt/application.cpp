@@ -7,13 +7,12 @@
 #include <QMessageBox>
 #include <QString>
 #include <QTimer>
-#include "../loaders/loaderfactory.h"
-#include "documentwindow.h"
-#include "documentproxymodel.h"
+#include "loaders/loaderfactory.h"
+#include "application.h"
+#include "runtimemodel.h"
 #include "document.h"
-#include "dummygui.h"
 
-DocumentWindow::DocumentWindow()
+QTApplication::QTApplication()
  : QMainWindow(NULL), m_fileChanged(false), m_updated(false)
 {
 	m_ui.setupUi(this);
@@ -22,19 +21,14 @@ DocumentWindow::DocumentWindow()
 	connect(m_ui.a_save, SIGNAL(activated()), this, SLOT(save()));
 	connect(m_ui.a_saveas, SIGNAL(activated()), this, SLOT(saveas()));
 
-	m_doc = NULL;
-	m_model = NULL;
-	replaceDocument();
-
-	QTimer *timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
-	timer->start(250);
+	m_runtime = NULL;
+	replaceRuntime();
 }
 
-DocumentWindow::~DocumentWindow()
+QTApplication::~QTApplication()
 { }
 
-void DocumentWindow::open()
+void QTApplication::open()
 {
 	if (!confirmSave())
 		return;
@@ -59,8 +53,9 @@ void DocumentWindow::open()
 				.append(serr));
 			return;
 		}
-		replaceDocument();
-		if (!FileLoaderMaker::autoLoadFromFile(fp, m_doc->getTrace())) {
+		replaceRuntime();
+		if (!FileLoaderMaker::autoLoadFromFile(fp,
+				m_runtime->getTrace())) {
 			error(tr("Open failed"),
 				fileName
 				.append(": ")
@@ -69,10 +64,10 @@ void DocumentWindow::open()
 		fclose(fp);
 	}
 	m_fileChanged = false;
-	postUpdate();
+	m_runtime->postGuiUpdate();
 }
 
-void DocumentWindow::closeEvent(QCloseEvent *event)
+void QTApplication::closeEvent(QCloseEvent *event)
 {
 	if (confirmSave())
 		event->accept();
@@ -80,31 +75,27 @@ void DocumentWindow::closeEvent(QCloseEvent *event)
 		event->ignore();
 }
 
-void DocumentWindow::replaceDocument()
+void QTApplication::replaceRuntime()
 {
-	Document *n_doc = new Document();
-	DocumentProxyModel *n_model = new DocumentProxyModel(n_doc);
-	m_ui.e_assembly->setModel(n_model);
-	m_ui.e_dataview->setDocument(n_doc);
-	if (m_model) delete m_model;
-	if (m_doc) delete m_doc;
-	m_doc = n_doc;
-	m_model = n_model;
-	DummyGUI *gui = (DummyGUI *)m_doc->getDocumentGui();
-	gui->hookUpdate(this);
+	Document *n_runtime = new Document();
+	QTRuntimeModel *n_model = (QTRuntimeModel *)n_runtime->getDocumentGui();
+	n_model->registerRuntimeModelListener(m_ui.e_assembly);
+	n_model->registerRuntimeModelListener(m_ui.e_dataview);
+	if (m_runtime) delete m_runtime;
+	m_runtime = n_runtime;
 }
 
-void DocumentWindow::save()
+void QTApplication::save()
 {
 	if (m_filename == QString()) {
 		saveas(); // calls us back
 		return;
 	}
-	m_doc->saveTo(m_filename.toStdString());
+	m_runtime->saveTo(m_filename.toStdString());
 	m_fileChanged = false;
 }
 
-void DocumentWindow::saveas()
+void QTApplication::saveas()
 {
 	QString fileName = QFileDialog::getSaveFileName(this,
 			tr("Save File..."), QString(),
@@ -118,7 +109,7 @@ void DocumentWindow::saveas()
 	}
 }
 
-void DocumentWindow::quit()
+void QTApplication::quit()
 {
 	if (confirmSave()) {
 		// todo: cleanup?
@@ -126,7 +117,7 @@ void DocumentWindow::quit()
 	}
 }
 
-bool DocumentWindow::confirmSave()
+bool QTApplication::confirmSave()
 {
 	if (m_fileChanged) {
 		QMessageBox msgBox;
@@ -147,24 +138,9 @@ bool DocumentWindow::confirmSave()
 	return true;
 }
 
-void DocumentWindow::error(QString brief, QString err)
+void QTApplication::error(QString brief, QString err)
 {
 	QErrorMessage *em = new QErrorMessage(this);
 	em->showMessage(err);
 	em->exec();
-}
-
-void DocumentWindow::updateTimeout()
-{
-	if (m_updated) {
-		m_model->flush();
-		m_ui.e_dataview->flush();
-		m_updated = false;
-	}
-}
-
-void DocumentWindow::postUpdate()
-{
-	//m_fileChanged = true;
-	m_updated = true;
 }

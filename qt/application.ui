@@ -41,7 +41,7 @@
      <number>9</number>
     </property>
     <item>
-     <widget class="DataView" name="e_dataview" native="true">
+     <widget class="QTDataView" name="e_dataview" native="true">
       <property name="minimumSize">
        <size>
         <width>15</width>
@@ -79,7 +79,7 @@
          <number>9</number>
         </property>
         <item>
-         <widget class="CodeView" name="e_assembly"/>
+         <widget class="QTCodeView" name="e_assembly"/>
         </item>
        </layout>
       </widget>
@@ -405,12 +405,12 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CodeView</class>
+   <class>QTCodeView</class>
    <extends>QTableView</extends>
    <header>codeview.h</header>
   </customwidget>
   <customwidget>
-   <class>DataView</class>
+   <class>QTDataView</class>
    <extends>QWidget</extends>
    <header>dataview.h</header>
    <container>1</container>

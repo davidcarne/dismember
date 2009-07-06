@@ -1,11 +1,10 @@
 #include "guiproxy.h"
 #include <stdexcept>
 #include <assert.h>
-#include "documentwindow.h"
 #include "codeview.h"
 
-#include "../memsegment.h"
-#include "../memlocdata.h"
+#include "memsegment.h"
+#include "memlocdata.h"
 
 GuiProxy::GuiProxy(Trace * ctx)
  : m_ctx(ctx), m_dirty(true), m_lc(0), m_last_look_set(false)

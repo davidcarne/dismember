@@ -8,10 +8,10 @@
  */
 
 #include "guiglue.h"
-#include "dummygui.h"
+#include "runtimemodel.h"
 #include "document.h"
 
-DocumentGui *setupDocumentGui(Document &)
+DocumentGui *setupDocumentGui(Document &doc)
 { 
-	return new DummyGUI();
+	return QTRuntimeModel::create(doc);
 }

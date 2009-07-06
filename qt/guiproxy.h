@@ -1,4 +1,4 @@
-#include "../dsmem_trace.h"
+#include "dsmem_trace.h"
 #include <stdint.h>
 #include <list>
 

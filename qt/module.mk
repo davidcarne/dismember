@@ -1,17 +1,20 @@
 LIBS += $(shell pkg-config QtGui --libs)
 
-QTSRC := qt/documentwindow.cpp \
+QTMOC := qt/application.cpp \
+	 qt/runtimemodel.cpp
+
+QTUI =  qt/application.ui
+
+QTSRC := qt/application.cpp \
 	 qt/guiproxy.cpp \
 	 qt/guiglue.cpp \
-	 qt/documentwindow.moc.cpp \
 	 qt/dialog.cpp \
-	 qt/dummygui.cpp \
 	 qt/codeview.cpp \
-	 qt/documentproxymodel.cpp \
+	 qt/codemodel.cpp \
 	 qt/dataview.cpp \
-	 qt/main.cpp
-
-QTUI =  qt/documentwindow.ui
+	 qt/main.cpp \
+	 $(QTMOC) \
+	 $(QTMOC:.cpp=.moc.cpp)
 
 SRC += $(QTSRC)
 

@@ -6,18 +6,23 @@
 #include <QContextMenuEvent>
 #include <QStack>
 
-class Document;
+#include "runtimemodel.h"
+#include "codemodel.h"
 
-class CodeView : public QTableView
+class QTCodeView : public QTableView, public QTRuntimeModelListener
 {
  public:
-	CodeView(QWidget *parent = NULL);
+	QTCodeView(QWidget *parent = NULL);
+
+	void setRuntimeModel(QTRuntimeModel *model);
+	void runtimeUpdated(QTRuntimeEvent *m);
 
 	void contextMenuEvent(QContextMenuEvent *event);
 	void keyPressEvent(QKeyEvent *event);
 	void mouseDoubleClickEvent(QMouseEvent *event);
 
  private:
+	QTCodeModel *m_model;
 	QStack<int> m_jumpStack;
 };
 

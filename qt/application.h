@@ -6,18 +6,15 @@
 #include <QString>
 #include "guiglue.h"
 #include "guiproxy.h"
-#include "documentwindow.ui.h"
-#include "documentproxymodel.h"
+#include "application.ui.h"
+#include "document.h"
 
-class Document;
-
-class DocumentWindow : public QMainWindow, public DocumentGui
+class QTApplication : public QMainWindow
 {
 	Q_OBJECT
  public:
-	DocumentWindow();
-	virtual ~DocumentWindow();
-	virtual void postUpdate();
+	QTApplication();
+	virtual ~QTApplication();
 	void closeEvent(QCloseEvent *);
 
  private slots:
@@ -25,19 +22,17 @@ class DocumentWindow : public QMainWindow, public DocumentGui
 	void open();
 	void save();
 	void saveas();
-	void updateTimeout();
 
  private:
 	void error(QString brief, QString err);
 	bool confirmSave();
-	void replaceDocument();
+	void replaceRuntime();
 
 	bool m_fileChanged;
 	bool m_updated;
-	Document *m_doc;
+	Document *m_runtime;
 	Ui::MainWindow m_ui;
 	QString m_filename;
-	DocumentProxyModel *m_model;
 };
 
 #endif

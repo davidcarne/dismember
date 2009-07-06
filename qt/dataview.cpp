@@ -12,33 +12,32 @@
 #define segColor  QColor(0x22,0x66,0x22)
 #define ROUND(x) ((int)((x)+0.5f))
 
-DataView::DataView(QWidget *parent)
- : QWidget(parent), m_doc(NULL), m_mouseActive(false), m_mouseInside(false)
+QTDataView::QTDataView(QWidget *parent)
+ : QWidget(parent), m_model(NULL), m_mouseActive(false), m_mouseInside(false)
 { }
 
-void DataView::setDocument(Document *doc)
+void QTDataView::setRuntimeModel(QTRuntimeModel *rt)
 {
-	m_doc = doc;
-	flush();
+	m_model = rt;
 }
 
-void DataView::flush()
+void QTDataView::runtimeUpdated(QTRuntimeEvent *m)
 {
 	update();
 }
 
-void DataView::paintEvent(QPaintEvent *event)
+void QTDataView::paintEvent(QPaintEvent *event)
 {
-	if (!m_doc) return;
+	if (!m_model) return;
 
 	QPainter painter(this);
 	QSize s = size();
 
-	Trace *t = m_doc->getTrace();
+	Trace &t = m_model->getTrace();
 
 	MemSegmentManager::memseglist_ci mi;
-	MemSegmentManager::memseglist_ci begin = t->memsegs_begin();
-	MemSegmentManager::memseglist_ci end = t->memsegs_end();
+	MemSegmentManager::memseglist_ci begin = t.memsegs_begin();
+	MemSegmentManager::memseglist_ci end = t.memsegs_end();
 	if (begin == end)
 		return;
 	
@@ -56,7 +55,7 @@ void DataView::paintEvent(QPaintEvent *event)
 	double addr = firstAddr;
 	for (int i = 0; i < s.height(); ++i) {
 		address_t normAddr = ROUND(addr);
-		MemlocData *id = t->lookup_memloc(normAddr, false);
+		MemlocData *id = t.lookup_memloc(normAddr, false);
 		if (id) {
 			if (id->is_executable())
 				painter.setPen(codeColor);
@@ -78,22 +77,23 @@ void DataView::paintEvent(QPaintEvent *event)
 	}
 }
 
-void DataView::mousePressEvent(QMouseEvent *event)
+void QTDataView::mousePressEvent(QMouseEvent *event)
 {
 	m_mouseActive = true;
 	if (m_mouseInside) {
 		if (m_paddrMap.size() > (u32)event->pos().y()) {
 			address_t addr = m_paddrMap[event->pos().y()];
+			m_model->postJump(addr);
 		}
 	}
 }
 
-void DataView::mouseReleaseEvent(QMouseEvent *event)
+void QTDataView::mouseReleaseEvent(QMouseEvent *event)
 {
 	m_mouseActive = false;
 }
 
-void DataView::mouseMoveEvent(QMouseEvent *event)
+void QTDataView::mouseMoveEvent(QMouseEvent *event)
 {
 	if (m_mouseActive && m_mouseInside) {
 		if (m_paddrMap.size() > (u32)event->pos().y()) {
@@ -102,16 +102,17 @@ void DataView::mouseMoveEvent(QMouseEvent *event)
 			snprintf(buf, 256, "0x%08x", (u32)addr);
 			QToolTip::showText(event->globalPos(),
 				QString(buf), this, rect());
+			m_model->postJump(addr);
 		}
 	}
 }
 
-void DataView::enterEvent(QEvent *event)
+void QTDataView::enterEvent(QEvent *event)
 {
 	m_mouseInside = true;
 }
 
-void DataView::leaveEvent(QEvent *event)
+void QTDataView::leaveEvent(QEvent *event)
 {
 	m_mouseInside = false;
 }
