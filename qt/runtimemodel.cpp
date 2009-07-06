@@ -5,12 +5,24 @@
 
 QTRuntimeEvent::QTRuntimeEvent(QTRuntimeModel *model, QTRuntimeEvent::Type type,
 		address_t start, address_t end)
- : m_model(model), m_type(type), m_start(start), m_end(end)
+ : m_model(model), m_type(type), m_start(start), m_end(end),
+ 	m_flags(QTRuntimeEvent::NoFlags)
+{ }
+
+
+QTRuntimeEvent::QTRuntimeEvent(QTRuntimeModel *model, QTRuntimeEvent::Type type,
+		address_t start, QTRuntimeEvent::Flags flags)
+ : m_model(model), m_type(type), m_start(start), m_end(0), m_flags(flags)
 { }
 
 QTRuntimeEvent::Type QTRuntimeEvent::type()
 {
 	return m_type;
+}
+
+QTRuntimeEvent::Flags QTRuntimeEvent::flags()
+{
+	return m_flags;
 }
 
 QTRuntimeModel *QTRuntimeEvent::model()
@@ -56,10 +68,10 @@ void QTRuntimeModel::postUpdate()
 	m_updated = true;
 }
 
-void QTRuntimeModel::postJump(address_t addr)
+void QTRuntimeModel::postJump(address_t addr, QTRuntimeEvent::Flags f)
 {
 	std::list<QTRuntimeModelListener *>::iterator it = m_listeners.begin();
-	QTRuntimeEvent ev(this, QTRuntimeEvent::RuntimeJump, addr);
+	QTRuntimeEvent ev(this, QTRuntimeEvent::RuntimeJump, addr, f);
 	for (; it != m_listeners.end(); ++it)
 		(*it)->runtimeUpdated(&ev);
 }

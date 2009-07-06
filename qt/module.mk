@@ -12,6 +12,8 @@ QTSRC := qt/application.cpp \
 	 qt/codeview.cpp \
 	 qt/codemodel.cpp \
 	 qt/dataview.cpp \
+	 qt/symbolview.cpp \
+	 qt/symbolmodel.cpp \
 	 qt/main.cpp \
 	 $(QTMOC) \
 	 $(QTMOC:.cpp=.moc.cpp)

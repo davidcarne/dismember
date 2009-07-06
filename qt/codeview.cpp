@@ -11,7 +11,7 @@
 #include "codemodel.h"
 
 QTCodeView::QTCodeView(QWidget *parent)
- : QTableView(parent), m_model(NULL)
+ : QTableView(parent), m_model(NULL), m_runtime(NULL)
 {
 	setShowGrid(false);
 	verticalHeader()->hide();
@@ -26,6 +26,7 @@ QTCodeView::QTCodeView(QWidget *parent)
 
 void QTCodeView::setRuntimeModel(QTRuntimeModel *model)
 {
+	m_runtime = model;
 	if (m_model)
 		delete m_model;
 	m_model = new QTCodeModel(model);
@@ -34,19 +35,45 @@ void QTCodeView::setRuntimeModel(QTRuntimeModel *model)
 
 void QTCodeView::runtimeUpdated(QTRuntimeEvent *evt)
 {
+	int row = selectionModel()->currentIndex().row();
 	switch (evt->type()) {
 	case QTRuntimeEvent::RuntimeJump: {
-		int row = evt->model()->getProxy().getLineAtAddr(evt->start());
-		QModelIndex idx = m_model->index(row, 0, QModelIndex());
-		scrollTo(idx);
+		if (evt->flags() & QTRuntimeEvent::Select)
+			m_jumpStack.push(row);
+		int row = m_runtime->getProxy().getLineAtAddr(evt->start());
+		scrollTo(row);
+		if (evt->flags() & QTRuntimeEvent::Select)
+			setCurrentIndex(row);
 		} break;
 	case QTRuntimeEvent::RuntimeUpdate:
 		// we don't currently know how to update a range, flush instead
-	case QTRuntimeEvent::RuntimeFlush:
-		m_model->flush();
-		break;
+	case QTRuntimeEvent::RuntimeFlush: {
+		GuiProxy &prox = m_runtime->getProxy();
+		int row = selectionModel()->currentIndex().row();
+		if (row != -1) {
+			address_t addr = prox.getLineAddr(row);
+			m_model->flush();
+			row = prox.getLineAtAddr(addr);
+			scrollTo(row);
+			setCurrentIndex(row);
+		} else
+			m_model->flush();
+
+		} break;
 	default: break;
 	}
+}
+
+void QTCodeView::scrollTo(int row)
+{
+	QModelIndex idx = m_model->index(row, 0, QModelIndex());
+	QTableView::scrollTo(idx);
+}
+
+void QTCodeView::setCurrentIndex(int row)
+{
+	QModelIndex idx = m_model->index(row, 0, QModelIndex());
+	QTableView::setCurrentIndex(idx);
 }
 
 void QTCodeView::keyPressEvent(QKeyEvent *event)
@@ -57,19 +84,17 @@ void QTCodeView::keyPressEvent(QKeyEvent *event)
 	case Qt::Key_Backspace:
 		if (!m_jumpStack.empty()) {
 			row = m_jumpStack.pop();
-			QModelIndex idx = m_model->index(row, 0, QModelIndex());
-			scrollTo(idx);
-			setCurrentIndex(idx);
+			scrollTo(row);
+			setCurrentIndex(row);
 		}
 		break;
 	case Qt::Key_Enter:
 	case Qt::Key_Return:
 	case Qt::Key_G:
 		if (row != -1 && (row = m_model->getJumpLine(row)) != -1) {
-			QModelIndex idx = m_model->index(row, 0, QModelIndex());
 			m_jumpStack.push(selectionModel()->currentIndex().row());
-			scrollTo(idx);
-			setCurrentIndex(idx);
+			scrollTo(row);
+			setCurrentIndex(row);
 		}
 		break;
 	case Qt::Key_C:
@@ -85,16 +110,8 @@ void QTCodeView::keyPressEvent(QKeyEvent *event)
 			m_model->undefine(row);
 		break;
 	case Qt::Key_S:
-		if (row != -1) {
-			bool ok;
-			QString ntext = QInputDialog::getText(this,
-					tr("Symbol"),
-					tr("Symbol name"),
-					QLineEdit::Normal,
-					m_model->getSymbol(row), &ok);
-			if (ok && !ntext.isEmpty())
-				m_model->setSymbol(row, ntext);
-		}
+		if (row != -1)
+			setSymbol(row);
 		// define symbol
 		break;
 	case Qt::Key_Semicolon:
@@ -117,10 +134,24 @@ void QTCodeView::mouseDoubleClickEvent(QMouseEvent *event)
 {
 	int row = indexAt(event->pos()).row();
 	if (row != -1 && (row = m_model->getJumpLine(row)) != -1) {
-		QModelIndex idx = m_model->index(row, 0, QModelIndex());
 		m_jumpStack.push(selectionModel()->currentIndex().row());
-		scrollTo(idx);
-		setCurrentIndex(idx);
+		scrollTo(row);
+		setCurrentIndex(row);
+	}
+}
+
+void QTCodeView::setSymbol(int row)
+{
+	bool ok;
+	QString ntext = QInputDialog::getText(this,
+			tr("Symbol"),
+			tr("Symbol name"),
+			QLineEdit::Normal,
+			m_model->getSymbol(row), &ok);
+	if (ok && !ntext.isEmpty()) {
+		m_model->setSymbol(row, ntext);
+		setCurrentIndex(row);
+		m_runtime->postUpdate();
 	}
 }
 
@@ -146,20 +177,12 @@ void QTCodeView::contextMenuEvent(QContextMenuEvent *event)
 		} else if (action->text() == tr("Undefine")) {
 			m_model->undefine(row);
 		} else if (action->text() == tr("Set Symbol")) {
-			bool ok;
-			QString ntext = QInputDialog::getText(this,
-					tr("Symbol"),
-					tr("Symbol name"),
-					QLineEdit::Normal,
-					m_model->getSymbol(row), &ok);
-			if (ok && !ntext.isEmpty())
-				m_model->setSymbol(row, ntext);
+			setSymbol(row);
 		} else if (action->text() == tr("Jump to branch")) {
 			int nrow = m_model->getJumpLine(row);
-			QModelIndex idx = m_model->index(nrow, 0, QModelIndex());
 			m_jumpStack.push(row);
-			scrollTo(idx);
-			setCurrentIndex(idx);
+			scrollTo(row);
+			setCurrentIndex(row);
 		}
 	}
 	while (!actions.isEmpty())

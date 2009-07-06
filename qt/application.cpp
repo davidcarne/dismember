@@ -81,6 +81,7 @@ void QTApplication::replaceRuntime()
 	QTRuntimeModel *n_model = (QTRuntimeModel *)n_runtime->getDocumentGui();
 	n_model->registerRuntimeModelListener(m_ui.e_assembly);
 	n_model->registerRuntimeModelListener(m_ui.e_dataview);
+	n_model->registerRuntimeModelListener(m_ui.e_symbolview);
 	if (m_runtime) delete m_runtime;
 	m_runtime = n_runtime;
 }

@@ -19,11 +19,18 @@ class QTRuntimeEvent
 		RuntimeJump    // one addr
 		// room for expansion when DocumentGui gets fleshed out
 	};
+	enum Flags {
+		NoFlags = 0,
+		Select = (1 << 0)
+	};
 
 	QTRuntimeEvent(QTRuntimeModel *model, Type type,
 			address_t start = 0, address_t end = 0);
+	QTRuntimeEvent(QTRuntimeModel *model, Type type,
+			address_t addr, Flags flags = NoFlags);
 
 	Type type();
+	Flags flags();
 	QTRuntimeModel *model();
 
 	address_t start();
@@ -34,6 +41,7 @@ class QTRuntimeEvent
 	Type m_type;
 	address_t m_start;
 	address_t m_end;
+	Flags m_flags;
 };
 
 class QTRuntimeModelListener
@@ -59,7 +67,8 @@ class QTRuntimeModel : public QObject, public DocumentGui
 
 	void postUpdate();
 
-	void postJump(address_t addr);
+	void postJump(address_t addr,
+			QTRuntimeEvent::Flags f = QTRuntimeEvent::NoFlags);
 
  public slots:
 	void updateTimeout();

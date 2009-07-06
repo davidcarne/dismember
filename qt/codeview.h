@@ -22,7 +22,12 @@ class QTCodeView : public QTableView, public QTRuntimeModelListener
 	void mouseDoubleClickEvent(QMouseEvent *event);
 
  private:
+ 	void setSymbol(int row);
+	void scrollTo(int row);
+	void setCurrentIndex(int row);
+
 	QTCodeModel *m_model;
+	QTRuntimeModel *m_runtime;
 	QStack<int> m_jumpStack;
 };
 
