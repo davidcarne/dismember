@@ -1,6 +1,8 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QAction>
+#include <QFontMetrics>
+#include <QApplication>
 #include <QInputDialog>
 #include <QAbstractItemModel>
 #include <QLineEdit>
@@ -11,11 +13,13 @@
 CodeView::CodeView(QWidget *parent)
  : QTableView(parent)
 {
-	resizeColumnsToContents();
-	resizeRowsToContents();
 	setShowGrid(false);
 	verticalHeader()->hide();
-	//horizontalHeader()->hide();
+	verticalHeader()->setDefaultSectionSize(fontMetrics().height() + 1);
+	setColumnWidth(0, fontMetrics().maxWidth() * 9);
+	setColumnWidth(1, fontMetrics().maxWidth() * 24);
+	setColumnWidth(2, fontMetrics().maxWidth() * 40);
+	setColumnWidth(3, fontMetrics().maxWidth() * 12);
 	horizontalHeader()->setStretchLastSection(true);
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 }

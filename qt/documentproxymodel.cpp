@@ -136,10 +136,6 @@ QVariant DocumentProxyModel::data(const QModelIndex &index, int role) const
 		break;
 	case Qt::FontRole:
 		break;
-	case Qt::SizeHintRole: {
-		QFontMetrics fm = QApplication::fontMetrics();
-		return QVariant(QSize(0, fm.height()));
-		} break;
 	case Qt::BackgroundRole:
 		if (index.row() & 1)
 			return QVariant(QColor(245,245,245));

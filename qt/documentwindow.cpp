@@ -21,7 +21,6 @@ DocumentWindow::DocumentWindow()
 	connect(m_ui.a_open, SIGNAL(activated()), this, SLOT(open()));
 	connect(m_ui.a_save, SIGNAL(activated()), this, SLOT(save()));
 	connect(m_ui.a_saveas, SIGNAL(activated()), this, SLOT(saveas()));
-	connect(this, SIGNAL(destroyed()), this, SLOT(quit()));
 
 	m_doc = NULL;
 	m_model = NULL;
@@ -86,6 +85,7 @@ void DocumentWindow::replaceDocument()
 	Document *n_doc = new Document();
 	DocumentProxyModel *n_model = new DocumentProxyModel(n_doc);
 	m_ui.e_assembly->setModel(n_model);
+	m_ui.e_dataview->setDocument(n_doc);
 	if (m_model) delete m_model;
 	if (m_doc) delete m_doc;
 	m_doc = n_doc;
@@ -158,6 +158,7 @@ void DocumentWindow::updateTimeout()
 {
 	if (m_updated) {
 		m_model->flush();
+		m_ui.e_dataview->flush();
 		m_updated = false;
 	}
 }

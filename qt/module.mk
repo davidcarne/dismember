@@ -8,6 +8,7 @@ QTSRC := qt/documentwindow.cpp \
 	 qt/dummygui.cpp \
 	 qt/codeview.cpp \
 	 qt/documentproxymodel.cpp \
+	 qt/dataview.cpp \
 	 qt/main.cpp
 
 QTUI =  qt/documentwindow.ui
