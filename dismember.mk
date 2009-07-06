@@ -7,11 +7,11 @@ INCDIRS := $(MODULES)
 INCPATHS := -I.
 
 LIBS :=
-SRC := 	abstractdata.cpp comment.cpp memlocdata.cpp ramops.cpp xref.cpp \
-	analysis_queue.cpp datatypereg.cpp memlocmanager.cpp run_queue.cpp xref_build.cpp \
-	app_main.cpp document.cpp memsegment.cpp stringconstant.cpp xrefmanager.cpp \
-	binaryconstant.cpp dsmem_trace.cpp memsegmentmanager.cpp symlist.cpp \
-	callback.cpp hint.cpp parameterset.cpp \
+SRC := 	abstractdata.cpp comment.cpp memlocdata.cpp xref.cpp \
+	datatypereg.cpp memlocmanager.cpp run_queue.cpp xref_build.cpp \
+	app_main.cpp document.cpp memsegment.cpp stringconstant.cpp \
+	xrefmanager.cpp binaryconstant.cpp dsmem_trace.cpp \
+	memsegmentmanager.cpp symlist.cpp callback.cpp \
 	codeblock.cpp instruction.cpp program_flow_analysis.cpp
 
 
