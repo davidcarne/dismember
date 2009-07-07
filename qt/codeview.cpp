@@ -37,13 +37,17 @@ void QTCodeView::runtimeUpdated(QTRuntimeEvent *evt)
 {
 	int row = selectionModel()->currentIndex().row();
 	switch (evt->type()) {
-	case QTRuntimeEvent::RuntimeJump: {
-		if (evt->flags() & QTRuntimeEvent::Select)
-			m_jumpStack.push(row);
-		int row = m_runtime->getProxy().getLineAtAddr(evt->start());
-		scrollTo(row);
-		if (evt->flags() & QTRuntimeEvent::Select)
-			setCurrentIndex(row);
+	case QTRuntimeEvent::RuntimeJump:
+		try {
+			int orow = row;
+			row = m_runtime->getProxy().getLineAtAddr(evt->start());
+			if (evt->flags() & QTRuntimeEvent::Select)
+				m_jumpStack.push(orow);
+			scrollTo(row);
+			if (evt->flags() & QTRuntimeEvent::Select)
+				setCurrentIndex(row);
+		} catch (std::out_of_range &) {
+			// proxy no likey addr, ignore request
 		} break;
 	case QTRuntimeEvent::RuntimeUpdate:
 		// we don't currently know how to update a range, flush instead
