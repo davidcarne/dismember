@@ -6,6 +6,7 @@
 #include "xref.h"
 #include "memlocdata.h"
 #include "program_flow_analysis.h"
+#include "symbol_analysis.h"
 
 #include "codemodel.h"
 
@@ -207,6 +208,7 @@ void QTCodeModel::analyze(int row)
 	ProgramFlowAnalysis::submitAnalysisJob(&m_model->getRuntime(),
 			m_model->getTrace().getCodeDataType(),
 			m_model->getProxy().getLineAddr(row));
+	SymbolAnalysis::submitAnalysisJob(&m_model->getRuntime());
 	//flush();
 }
 
