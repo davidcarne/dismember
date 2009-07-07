@@ -1,2 +1,2 @@
-GUI := wxwidgets
+GUI := qt
 include dismember.mk
