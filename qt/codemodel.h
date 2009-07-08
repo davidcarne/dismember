@@ -33,6 +33,9 @@ class QTCodeModel : public QAbstractItemModel
 	void setSymbol(int row, QString str);
 	QString getSymbol(int row);
 
+	void setComment(int row, QString str);
+	QString getComment(int row);
+
 	int getJumpLine(int row);
 
  private:

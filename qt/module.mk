@@ -15,6 +15,8 @@ QTSRC := qt/application.cpp \
 	 qt/symbolview.cpp \
 	 qt/symbolmodel.cpp \
 	 qt/main.cpp \
+	 qt/multilinedialog.cpp \
+	 qt/main.cpp \
 	 $(QTMOC) \
 	 $(QTMOC:.cpp=.moc.cpp)
 

@@ -2,13 +2,14 @@
 #include <QMenu>
 #include <QAction>
 #include <QFontMetrics>
-#include <QApplication>
 #include <QInputDialog>
 #include <QAbstractItemModel>
 #include <QLineEdit>
+
 #include "document.h"
 #include "codeview.h"
 #include "codemodel.h"
+#include "multilinedialog.h"
 
 QTCodeView::QTCodeView(QWidget *parent)
  : QTableView(parent), m_model(NULL), m_runtime(NULL)
@@ -119,7 +120,8 @@ void QTCodeView::keyPressEvent(QKeyEvent *event)
 		// define symbol
 		break;
 	case Qt::Key_Semicolon:
-		// define comment
+		if (row != -1)
+			setComment(row);
 		break;
 	case Qt::Key_Plus:
 		// expand
@@ -136,11 +138,41 @@ void QTCodeView::keyPressEvent(QKeyEvent *event)
 
 void QTCodeView::mouseDoubleClickEvent(QMouseEvent *event)
 {
-	int row = indexAt(event->pos()).row();
-	if (row != -1 && (row = m_model->getJumpLine(row)) != -1) {
-		m_jumpStack.push(selectionModel()->currentIndex().row());
-		scrollTo(row);
+	QModelIndex idx = indexAt(event->pos());
+	int row = idx.row();
+	if (row == -1) return;
+	switch (idx.column()) {
+	case 0:
+		break;
+	case 1:
+		setSymbol(row);
+		break;
+	case 2:
+		if ((row = m_model->getJumpLine(row)) != -1) {
+			m_jumpStack.push(selectionModel()->currentIndex().row());
+			scrollTo(row);
+			setCurrentIndex(row);
+		}
+		break;
+	case 3:
+		// todo: jump to xref if 1, else popup xref menu
+		break;
+	case 4:
+		setComment(row);
+		break;
+	}
+}
+
+void QTCodeView::setComment(int row)
+{
+	bool ok;
+	QString ntext = QTMultiLineDialog::getText(this,
+			tr("Comment"), tr("Comment:"),
+			m_model->getComment(row), &ok);
+	if (ok && !ntext.isEmpty()) {
+		m_model->setComment(row, ntext);
 		setCurrentIndex(row);
+		m_runtime->postUpdate();
 	}
 }
 
@@ -149,7 +181,7 @@ void QTCodeView::setSymbol(int row)
 	bool ok;
 	QString ntext = QInputDialog::getText(this,
 			tr("Symbol"),
-			tr("Symbol name"),
+			tr("Symbol:"),
 			QLineEdit::Normal,
 			m_model->getSymbol(row), &ok);
 	if (ok && !ntext.isEmpty()) {
@@ -165,6 +197,7 @@ void QTCodeView::contextMenuEvent(QContextMenuEvent *event)
 	if (row == -1) return;
 	QList<QAction *> actions;
 	actions.push_back(new QAction(tr("Set Symbol"), this));
+	actions.push_back(new QAction(tr("Set Comment"), this));
 	if (m_model->isDefined(row))
 		actions.push_back(new QAction(tr("Undefine"), this));
 	else
@@ -182,6 +215,8 @@ void QTCodeView::contextMenuEvent(QContextMenuEvent *event)
 			m_model->undefine(row);
 		} else if (action->text() == tr("Set Symbol")) {
 			setSymbol(row);
+		} else if (action->text() == tr("Set Comment")) {
+			setComment(row);
 		} else if (action->text() == tr("Jump to branch")) {
 			int nrow = m_model->getJumpLine(row);
 			m_jumpStack.push(row);

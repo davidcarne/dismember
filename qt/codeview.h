@@ -23,6 +23,7 @@ class QTCodeView : public QTableView, public QTRuntimeModelListener
 
  private:
  	void setSymbol(int row);
+	void setComment(int row);
 	void scrollTo(int row);
 	void setCurrentIndex(int row);
 

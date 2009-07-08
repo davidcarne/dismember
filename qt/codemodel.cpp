@@ -234,6 +234,20 @@ QString QTCodeModel::getSymbol(int row)
 	return sym ? QString(sym->get_name().c_str()) : QString();
 }
 
+void QTCodeModel::setComment(int row, QString str)
+{
+	address_t addr = m_model->getProxy().getLineAddr(row);
+	m_model->getTrace().create_comment(str.toStdString(), addr);
+	flush();
+}
+
+QString QTCodeModel::getComment(int row)
+{
+	address_t addr = m_model->getProxy().getLineAddr(row);
+	const Comment *com = m_model->getTrace().lookup_comment(addr);
+	return com ? QString(com->get_comment().c_str()) : QString();
+}
+
 int QTCodeModel::getJumpLine(int row)
 {
 	int nrow = -1;
