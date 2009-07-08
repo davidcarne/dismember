@@ -8,6 +8,7 @@
 #include "guiproxy.h"
 #include "application.ui.h"
 #include "document.h"
+#include "runqueuemonitor.h"
 
 class QTApplication : public QMainWindow
 {

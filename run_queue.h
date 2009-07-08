@@ -97,6 +97,11 @@ public:
 	 * boolean indicating if the queue is currently processing a job
 	 */
 	virtual bool taskInProgress() = 0;
+
+	/**
+	 * name of current task, or "" if none
+	 */
+	virtual const std::string &currentTaskName() = 0;
 	
 	/**
 	 * boolean indicating if the queue is currently executing jobs, or if it will execute a job immediately on submission

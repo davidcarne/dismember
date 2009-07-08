@@ -1,6 +1,7 @@
 LIBS += $(shell pkg-config QtGui --libs)
 
 QTMOC := qt/application.cpp \
+	 qt/runqueuemonitor.cpp \
 	 qt/runtimemodel.cpp
 
 QTUI =  qt/application.ui

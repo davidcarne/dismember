@@ -55,6 +55,7 @@ private:
 	} m_mythreadfunctor;
 	
 	std::priority_queue <sp_RunQueueJob> m_jobs;
+	sp_RunQueueJob m_currentTask;
 	bool m_done;
 	bool m_taskRunning;
 public:
@@ -71,6 +72,8 @@ public:
 	virtual void submit(sp_RunQueueJob job);
 	virtual void stop();
 	
+	virtual const std::string &currentTaskName();
+
 	virtual bool taskInProgress();
 	
 	virtual bool isRunning();
@@ -124,6 +127,7 @@ void RunQueueControl::operator()()
 		// Try running the job
 		if (nextjob)
 		{
+			m_currentTask = nextjob;
 			m_taskRunning = true;
 			nextjob->exec();	
 			m_taskRunning = false;
@@ -147,6 +151,14 @@ void RunQueueControl::submit(sp_RunQueueJob job)
 void RunQueueControl::stop()
 {
 	
+}
+
+const std::string &RunQueueControl::currentTaskName()
+{
+	static std::string empty = "";
+	if (!m_taskRunning)
+		return empty;
+	return m_currentTask->getName();
 }
 
 bool RunQueueControl::taskInProgress()

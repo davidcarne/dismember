@@ -4,9 +4,7 @@
 
 QTSymbolView::QTSymbolView(QWidget *parent)
  : QListView(parent), m_model(NULL), m_runtime(NULL)
-{
-	resize(size().height(), 150);
-}
+{ }
 
 void QTSymbolView::setRuntimeModel(QTRuntimeModel *model)
 {

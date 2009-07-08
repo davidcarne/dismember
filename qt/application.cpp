@@ -82,6 +82,7 @@ void QTApplication::replaceRuntime()
 	n_model->registerRuntimeModelListener(m_ui.e_assembly);
 	n_model->registerRuntimeModelListener(m_ui.e_dataview);
 	n_model->registerRuntimeModelListener(m_ui.e_symbolview);
+	n_model->registerRuntimeModelListener(m_ui.e_monitor);
 	if (m_runtime) delete m_runtime;
 	m_runtime = n_runtime;
 }
