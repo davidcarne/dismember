@@ -24,8 +24,22 @@ void ProgramFlowAnalysis::submitAnalysisJob(Document * d, DataType * dtcreate, a
 	d->getRunQueue()->submit(createAnalysisJob(d, dtcreate, start));
 }
 
-bool ProgramFlowAnalysis::undefine(Trace * t, address_t start)
+sp_RunQueueJob ProgramFlowAnalysis::createUndefineJob(Document * d, address_t start)
 {
+	FunctorRunQueueJob::jobfun_t jb = boost::bind(&ProgramFlowAnalysis::undefine, d, start);
+	return createFunctorRunQueueJob("code flow analysis..", 0, jb);
+}
+
+void ProgramFlowAnalysis::submitUndefineJob(Document * d, address_t start)
+{
+	d->getRunQueue()->submit(createUndefineJob(d, start));
+}
+
+
+bool ProgramFlowAnalysis::undefine(Document * d, address_t start)
+{
+	Trace * t = d->getTrace();
+
 	std::stack<address_t> analysis_addrs;
 	analysis_addrs.push(start);
 	
@@ -51,6 +65,7 @@ bool ProgramFlowAnalysis::undefine(Trace * t, address_t start)
 		
 		first = false;
 	}
+	d->postGuiUpdate();
 	return true;
 }
 

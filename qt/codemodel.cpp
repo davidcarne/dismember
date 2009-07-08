@@ -214,7 +214,8 @@ void QTCodeModel::analyze(int row)
 
 void QTCodeModel::undefine(int row)
 {
-	// todo: apparently Trace::undefine(addr) doesn't work
+	ProgramFlowAnalysis::submitUndefineJob(&m_model->getRuntime(),
+			m_model->getProxy().getLineAddr(row));
 	//flush();
 }
 
