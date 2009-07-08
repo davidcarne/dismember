@@ -68,7 +68,7 @@ class QTMutableCodeController : public QTCodeController
 };
 
 QTCodeView::QTCodeView(QWidget *parent)
- : QTableView(parent), m_model(NULL), m_runtime(NULL)
+ : QTableView(parent), m_model(NULL), m_controller(NULL), m_runtime(NULL)
 {
 	setShowGrid(false);
 	verticalHeader()->hide();
@@ -276,6 +276,31 @@ void QTCodeView::jump(address_t addr)
 	}
 }
 
+QList<QAction *> *QTCodeView::createXrefMenu(address_t addr)
+{
+	MemlocData *id = m_runtime->getTrace().lookup_memloc(addr);
+	if (!id || !id->has_xrefs_to())
+		return NULL;
+
+	XrefManager::xref_map_ci xr = id->begin_xref_to();
+	QList<QAction *> *ret = new QList<QAction *>();
+	for (; xr != id->end_xref_to(); ++xr) {
+		Xref *xrf = (*xr).second;
+		address_t jaddr = xrf->get_src_addr();
+		QAction *action;
+		if (xrf->get_src_inst() && xrf->get_src_inst()->get_symbol()) {
+			const Symbol *sym = xrf->get_src_inst()->get_symbol();
+			action = new QAction(QString("XREF ").append(sym->get_name().c_str()), this);
+		} else {
+			QString str; str.sprintf("XREF 0x%08x", (u32)jaddr);
+			action = new QAction(str, this);
+		}
+		action->setData(QVariant(jaddr));
+		ret->push_back(action);
+	}
+	return ret;
+}
+
 void QTCodeView::contextMenuEvent(QContextMenuEvent *event)
 {
 	bool ok;
@@ -291,6 +316,20 @@ void QTCodeView::contextMenuEvent(QContextMenuEvent *event)
 		actions.push_back(new QAction(tr("Analyze Code"), this));
 	if (hasJump(addr))
 		actions.push_back(new QAction(tr("Jump to branch"), this));
+	QMenu *xrefmenu = 0;
+	QList<QAction *> *xactions = createXrefMenu(addr);
+	if (xactions) {
+		if (xactions->count() == 1) {
+			actions.push_back(xactions->takeFirst());
+			delete xactions;
+			xactions = 0;
+		} else {
+			QMenu *xrefmenu = new QMenu("Jump to XREF...");
+			for (int i = 0; i < xactions->size(); ++i)
+				xrefmenu->addAction(xactions->at(i));
+			actions.push_back(xrefmenu->menuAction());
+		}
+	}
 
 	QAction *action = QMenu::exec(actions, event->globalPos(),
 			(QAction *)0, this);
@@ -306,8 +345,20 @@ void QTCodeView::contextMenuEvent(QContextMenuEvent *event)
 			setComment(addr);
 		} else if (action->text() == tr("Jump to branch")) {
 			jump(addr);
+		} else if (action->text().startsWith(tr("XREF"))) {
+			address_t jaddr = action->data().value<address_t>();
+			m_jumpStack.push(addr);
+			scrollTo(jaddr);
+			setCurrentIndex(jaddr);
 		}
 	}
 	while (!actions.isEmpty())
 		delete actions.takeFirst();
+
+	if (xrefmenu) {
+		delete xrefmenu;
+		while (!xactions->isEmpty())
+			delete xactions->takeFirst();
+		delete xactions;
+	}
 }

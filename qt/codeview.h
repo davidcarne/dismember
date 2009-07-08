@@ -4,7 +4,9 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QContextMenuEvent>
+#include <QMenu>
 #include <QStack>
+#include <QList>
 
 #include "runtimemodel.h"
 #include "codemodel.h"
@@ -41,6 +43,7 @@ class QTCodeView : public QTableView, public QTRuntimeModelListener
 	bool hasJump(address_t addr);
 	bool isDefined(address_t addr);
 	void jump(address_t addr);
+	QList<QAction *> *createXrefMenu(address_t addr);
 
 	QTCodeModel *m_model;
 	QTCodeController *m_controller;
