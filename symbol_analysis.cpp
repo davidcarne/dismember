@@ -12,7 +12,7 @@ sp_RunQueueJob SymbolAnalysis::createAnalysisJob(Document * d)
 {
 	FunctorRunQueueJob::jobfun_t jb =
 			boost::bind(&SymbolAnalysis::analyze, d);
-	return createFunctorRunQueueJob("symbol analysis..", 0, jb);
+	return createFunctorRunQueueJob("symbol analysis", 0, jb);
 }
 
 void SymbolAnalysis::submitAnalysisJob(Document * d)

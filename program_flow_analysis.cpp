@@ -16,7 +16,7 @@
 sp_RunQueueJob ProgramFlowAnalysis::createAnalysisJob(Document * d, DataType * dtcreate, address_t start)
 {
 	FunctorRunQueueJob::jobfun_t jb = boost::bind(&ProgramFlowAnalysis::analyze, d, dtcreate, start);
-	return createFunctorRunQueueJob("code flow analysis..", 20, jb);
+	return createFunctorRunQueueJob("code flow analysis", 20, jb);
 }
 
 void ProgramFlowAnalysis::submitAnalysisJob(Document * d, DataType * dtcreate, address_t start)
@@ -27,7 +27,7 @@ void ProgramFlowAnalysis::submitAnalysisJob(Document * d, DataType * dtcreate, a
 sp_RunQueueJob ProgramFlowAnalysis::createUndefineJob(Document * d, address_t start)
 {
 	FunctorRunQueueJob::jobfun_t jb = boost::bind(&ProgramFlowAnalysis::undefine, d, start);
-	return createFunctorRunQueueJob("code flow analysis..", 0, jb);
+	return createFunctorRunQueueJob("undefine", 0, jb);
 }
 
 void ProgramFlowAnalysis::submitUndefineJob(Document * d, address_t start)
