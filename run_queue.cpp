@@ -11,9 +11,15 @@
 #include <boost/thread.hpp>
 #include <queue>
 
-sp_RunQueueJob createFunctorRunQueueJob(std::string jobname, FunctorRunQueueJob::jobfun_t job)
+bool operator<(const sp_RunQueueJob &j1, const sp_RunQueueJob &j2)
 {
-	return sp_RunQueueJob(new FunctorRunQueueJob(jobname, job));
+	return j1->getPriority() < j2->getPriority();
+}
+
+sp_RunQueueJob createFunctorRunQueueJob(std::string jobname,
+		int priority, FunctorRunQueueJob::jobfun_t job)
+{
+	return sp_RunQueueJob(new FunctorRunQueueJob(jobname, priority, job));
 }
 
 bool FunctorRunQueueJob::exec()
@@ -21,13 +27,20 @@ bool FunctorRunQueueJob::exec()
 	return m_jobfunctor();
 }
 
-const std::string & FunctorRunQueueJob::getName()
+const std::string & FunctorRunQueueJob::getName() const
 {
 	return m_jobname;
 }
 
+int FunctorRunQueueJob::getPriority() const
+{
+	return m_priority;
+}
 
-FunctorRunQueueJob::FunctorRunQueueJob(std::string jobname, jobfun_t functor) : m_jobname(jobname), m_jobfunctor(functor)
+
+FunctorRunQueueJob::FunctorRunQueueJob(std::string jobname,
+		int priority, jobfun_t functor)
+ : m_jobname(jobname), m_priority(priority), m_jobfunctor(functor)
 {}
 
 class RunQueueControl : public IRunQueueControl {
@@ -41,7 +54,7 @@ private:
 		}
 	} m_mythreadfunctor;
 	
-	std::queue <sp_RunQueueJob> m_jobs;
+	std::priority_queue <sp_RunQueueJob> m_jobs;
 	bool m_done;
 	bool m_taskRunning;
 public:
@@ -99,7 +112,7 @@ void RunQueueControl::operator()()
 			// Fetch the next runqueue object
 			if (!m_jobs.empty())
 			{
-				nextjob = m_jobs.front();
+				nextjob = m_jobs.top();
 				m_jobs.pop();
 			}
 			if (!nextjob && !m_done)
@@ -143,12 +156,12 @@ bool RunQueueControl::taskInProgress()
 
 bool RunQueueControl::isRunning()
 {
-	
+	return m_taskRunning;
 }
 
 bool RunQueueControl::isEmpty()
 {
-	
+	return m_jobs.empty();
 }
 
 

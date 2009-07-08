@@ -16,7 +16,7 @@
 sp_RunQueueJob ProgramFlowAnalysis::createAnalysisJob(Document * d, DataType * dtcreate, address_t start)
 {
 	FunctorRunQueueJob::jobfun_t jb = boost::bind(&ProgramFlowAnalysis::analyze, d, dtcreate, start);
-	return createFunctorRunQueueJob("code flow analysis..", jb);
+	return createFunctorRunQueueJob("code flow analysis..", 20, jb);
 }
 
 void ProgramFlowAnalysis::submitAnalysisJob(Document * d, DataType * dtcreate, address_t start)

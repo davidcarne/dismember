@@ -28,11 +28,16 @@ public:
 	 * Execute the job
 	 */
 	virtual bool exec() = 0;
+
+	/**
+	 * Get the priority of the queue job
+	 */
+	virtual int getPriority() const = 0;
 	
 	/**
 	 * Get the name of the queue job
 	 */
-	virtual const std::string & getName() = 0;
+	virtual const std::string & getName() const = 0;
 };
 
 /**
@@ -46,18 +51,22 @@ public:
 	typedef boost::function<bool()> jobfun_t;
 
 	virtual bool exec();
-	virtual const std::string & getName();
+	virtual  int getPriority() const;
+	virtual const std::string & getName() const;
 	
 private:
 	std::string m_jobname;
+	int m_priority;
 	jobfun_t m_jobfunctor;
 	
-	FunctorRunQueueJob(std::string jobname, jobfun_t functor);
-	friend sp_RunQueueJob createFunctorRunQueueJob(std::string jobname, FunctorRunQueueJob::jobfun_t job);
+	FunctorRunQueueJob(std::string jobname, int priority, jobfun_t functor);
+	friend sp_RunQueueJob createFunctorRunQueueJob(std::string jobname,
+			int priority, FunctorRunQueueJob::jobfun_t job);
 };
 
 
-sp_RunQueueJob createFunctorRunQueueJob(std::string jobname, FunctorRunQueueJob::jobfun_t job);
+sp_RunQueueJob createFunctorRunQueueJob(std::string jobname,
+		int priority, FunctorRunQueueJob::jobfun_t job);
 
 /**
  * Interface to the run queue controller
