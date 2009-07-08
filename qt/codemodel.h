@@ -26,18 +26,6 @@ class QTCodeModel : public QAbstractItemModel
 
 	void flush();
 
-	bool isDefined(int row);
-	void analyze(int row);
-	void undefine(int row);
-
-	void setSymbol(int row, QString str);
-	QString getSymbol(int row);
-
-	void setComment(int row, QString str);
-	QString getComment(int row);
-
-	int getJumpLine(int row);
-
  private:
 	QString displayText(Trace &, address_t addr) const;
 	QString displayXrefs(Trace &, address_t addr) const;

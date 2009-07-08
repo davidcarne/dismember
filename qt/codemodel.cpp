@@ -5,8 +5,6 @@
 #include "document.h"
 #include "xref.h"
 #include "memlocdata.h"
-#include "program_flow_analysis.h"
-#include "symbol_analysis.h"
 
 #include "codemodel.h"
 
@@ -193,75 +191,5 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 
 void QTCodeModel::flush()
 {
-	m_model->getProxy().update();
 	reset();
-}
-
-bool QTCodeModel::isDefined(int row)
-{
-	address_t addr = m_model->getProxy().getLineAddr(row);
-	return m_model->getTrace().lookup_memloc(addr) != 0;
-}
-
-void QTCodeModel::analyze(int row)
-{
-	ProgramFlowAnalysis::submitAnalysisJob(&m_model->getRuntime(),
-			m_model->getTrace().getCodeDataType(),
-			m_model->getProxy().getLineAddr(row));
-	SymbolAnalysis::submitAnalysisJob(&m_model->getRuntime());
-	//flush();
-}
-
-void QTCodeModel::undefine(int row)
-{
-	ProgramFlowAnalysis::submitUndefineJob(&m_model->getRuntime(),
-			m_model->getProxy().getLineAddr(row));
-	//flush();
-}
-
-
-void QTCodeModel::setSymbol(int row, QString str)
-{
-	address_t addr = m_model->getProxy().getLineAddr(row);
-	m_model->getTrace().create_sym(str.toStdString(), addr);
-	flush();
-}
-
-QString QTCodeModel::getSymbol(int row)
-{
-	address_t addr = m_model->getProxy().getLineAddr(row);
-	const Symbol *sym = m_model->getTrace().lookup_symbol(addr);
-	return sym ? QString(sym->get_name().c_str()) : QString();
-}
-
-void QTCodeModel::setComment(int row, QString str)
-{
-	address_t addr = m_model->getProxy().getLineAddr(row);
-	m_model->getTrace().create_comment(str.toStdString(), addr);
-	flush();
-}
-
-QString QTCodeModel::getComment(int row)
-{
-	address_t addr = m_model->getProxy().getLineAddr(row);
-	const Comment *com = m_model->getTrace().lookup_comment(addr);
-	return com ? QString(com->get_comment().c_str()) : QString();
-}
-
-int QTCodeModel::getJumpLine(int row)
-{
-	int nrow = -1;
-	address_t addr = m_model->getProxy().getLineAddr(row);
-	MemlocData * i = m_model->getTrace().lookup_memloc(addr);
-
-	if (i && i->has_xrefs_from()) {
-		Xref * x = (*(i->begin_xref_from())).second;
-		address_t na = x->get_dst_addr();
-
-		try {
-			nrow = m_model->getProxy().getLineAtAddr(na);
-		} catch (std::out_of_range e) { }
-	}
-
-	return nrow;
 }

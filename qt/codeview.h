@@ -9,6 +9,18 @@
 #include "runtimemodel.h"
 #include "codemodel.h"
 
+class QTCodeController
+{
+ public:
+	QTCodeController(QTRuntimeModel &model) {};
+
+	virtual void update() = 0;
+	virtual void analyze(address_t addr) = 0;
+	virtual void undefine(address_t addr) = 0;
+	virtual void setComment(address_t addr, const QString &cmt) = 0;
+	virtual void setSymbol(address_t addr, const QString &sym) = 0;
+};
+
 class QTCodeView : public QTableView, public QTRuntimeModelListener
 {
  public:
@@ -22,14 +34,18 @@ class QTCodeView : public QTableView, public QTRuntimeModelListener
 	void mouseDoubleClickEvent(QMouseEvent *event);
 
  private:
- 	void setSymbol(int row);
-	void setComment(int row);
-	void scrollTo(int row);
-	void setCurrentIndex(int row);
+ 	void setSymbol(address_t addr);
+	void setComment(address_t addr);
+	void scrollTo(address_t addr);
+	void setCurrentIndex(address_t addr);
+	bool hasJump(address_t addr);
+	bool isDefined(address_t addr);
+	void jump(address_t addr);
 
 	QTCodeModel *m_model;
+	QTCodeController *m_controller;
 	QTRuntimeModel *m_runtime;
-	QStack<int> m_jumpStack;
+	QStack<address_t> m_jumpStack;
 };
 
 #endif
