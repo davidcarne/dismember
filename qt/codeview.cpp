@@ -26,6 +26,8 @@ class QTImmutableCodeController : public QTCodeController
 	virtual void undefine(address_t addr)  { }
 	virtual void setComment(address_t addr, const QString &cmt)  { }
 	virtual void setSymbol(address_t addr, const QString &sym)  { }
+	virtual void setDataType(address_t addr, DataType *dt) { }
+
 };
 
 class QTMutableCodeController : public QTCodeController
@@ -62,6 +64,12 @@ class QTMutableCodeController : public QTCodeController
 	{
 		m_model.getTrace().create_sym(sym.toStdString(), addr);
 	}
+
+	virtual void setDataType(address_t addr, DataType *dt)
+	{
+		m_model.getTrace().createMemlocDataAt(dt, addr);
+	}
+
 
  private:
 	QTRuntimeModel &m_model;
@@ -361,4 +369,20 @@ void QTCodeView::contextMenuEvent(QContextMenuEvent *event)
 			delete xactions->takeFirst();
 		delete xactions;
 	}
+}
+
+
+bool QTCodeView::getSelectionAddress(address_t *addr)
+{
+	int row = selectionModel()->currentIndex().row();
+	if (row != -1) {
+		*addr = m_runtime->getProxy().getLineAddr(row);
+		return true;
+	}
+	return false;
+}
+
+QTCodeController *QTCodeView::getController()
+{
+	return m_controller;
 }

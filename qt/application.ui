@@ -252,7 +252,7 @@
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QListView" name="e_datatypeview">
+   <widget class="QTDataTypeView" name="e_datatypeview">
     <property name="sizePolicy">
      <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
       <horstretch>0</horstretch>
@@ -398,6 +398,11 @@
    <class>QTRunQueueMonitor</class>
    <extends>QLabel</extends>
    <header>runqueuemonitor.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QTDataTypeView</class>
+   <extends>QListWidget</extends>
+   <header>datatypeview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

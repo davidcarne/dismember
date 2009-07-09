@@ -21,6 +21,7 @@ class QTCodeController
 	virtual void undefine(address_t addr) = 0;
 	virtual void setComment(address_t addr, const QString &cmt) = 0;
 	virtual void setSymbol(address_t addr, const QString &sym) = 0;
+	virtual void setDataType(address_t addr, DataType *dt) = 0;
 };
 
 class QTCodeView : public QTableView, public QTRuntimeModelListener
@@ -34,6 +35,9 @@ class QTCodeView : public QTableView, public QTRuntimeModelListener
 	void contextMenuEvent(QContextMenuEvent *event);
 	void keyPressEvent(QKeyEvent *event);
 	void mouseDoubleClickEvent(QMouseEvent *event);
+
+	bool getSelectionAddress(address_t *addr);
+	QTCodeController *getController();
 
  private:
  	void setSymbol(address_t addr);
