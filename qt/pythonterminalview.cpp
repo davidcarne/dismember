@@ -7,7 +7,7 @@
 QTPythonTerminalView::QTPythonTerminalView(QWidget *parent)
  : QPlainTextEdit(parent), m_offset(0), m_history(-1), m_modifiers(0)
 {
-	QFont font = QFont("fixed", 5);
+	QFont font = QFont("fixed", 8);
 	setFont(font);
 	setCursorWidth(fontMetrics().width(" "));
 	setTabStopWidth(fontMetrics().maxWidth()*4);
