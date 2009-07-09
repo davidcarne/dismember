@@ -9,7 +9,7 @@
  */
 
 #include "dsmem_trace.h"
-#include "../../memlocdata.h"
+#include "memlocdata.h"
 
 #include "arm_instruction.h"
 
@@ -28,10 +28,10 @@ void ARMInstruction::decode_data_refs()
 			return;
 
 		if (IPUBWL & (1 << 5)) { // I -> not an immediate
-            return;
-        } else {
-            offset = m_opcode & 0xfff;
-        }
+			return;
+		} else {
+			offset = m_opcode & 0xfff;
+		}
 
 		
 		u32 base = get_addr() + 8;
@@ -39,20 +39,20 @@ void ARMInstruction::decode_data_refs()
 		u32 taddr;
 		
 		if (IPUBWL & (1 << 4)) { // P
-            if (IPUBWL & (1 << 3)) // U
-                taddr = base + offset;
-            else
-                taddr = base - offset;
-        } else {
-            taddr = base;
-        }
+			if (IPUBWL & (1 << 3)) // U
+				taddr = base + offset;
+			else
+				taddr = base - offset;
+		} else {
+			taddr = base;
+		}
 		
 		if (IPUBWL & (1 << 0)) { // ldr
 			m_pcflags |= PCFLAG_DREF;
 
 			if (IPUBWL & (1 << 2)) // ldrb
 				m_pcflags |= PCFLAG_DSBYTE;
-            else
+			else
 				m_pcflags |= PCFLAG_DSWORD;
 			
 			m_data_ref_addr = taddr;
