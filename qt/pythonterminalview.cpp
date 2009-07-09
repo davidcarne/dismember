@@ -5,6 +5,7 @@ QTPythonTerminalView::QTPythonTerminalView(QWidget *parent)
  : QPlainTextEdit(parent), m_offset(0), m_history(-1)
 {
 	setCursorWidth(fontMetrics().maxWidth());
+	setTabStopWidth(fontMetrics().maxWidth()*4);
 }
 
 void QTPythonTerminalView::setRuntimeModel(QTRuntimeModel *model)
