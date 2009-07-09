@@ -303,7 +303,9 @@ QList<QAction *> *QTCodeView::createXrefMenu(address_t addr)
 			QString str; str.sprintf("XREF 0x%08x", (u32)jaddr);
 			action = new QAction(str, this);
 		}
-		action->setData(QVariant(jaddr));
+		QVariant v;
+		v.setValue(jaddr);
+		action->setData(v);
 		ret->push_back(action);
 	}
 	return ret;
