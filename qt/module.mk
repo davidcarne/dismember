@@ -18,6 +18,7 @@ QTSRC := qt/application.cpp \
 	 qt/main.cpp \
 	 qt/multilinedialog.cpp \
 	 qt/datatypeview.cpp \
+	 qt/pythonterminalview.cpp \
 	 qt/main.cpp \
 	 $(QTMOC) \
 	 $(QTMOC:.cpp=.moc.cpp)

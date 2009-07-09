@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>877</width>
-    <height>567</height>
+    <width>903</width>
+    <height>616</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -33,8 +33,8 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_5">
-    <item>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
      <widget class="QTDataView" name="e_dataview" native="true">
       <property name="minimumSize">
        <size>
@@ -50,7 +50,7 @@
       </property>
      </widget>
     </item>
-    <item>
+    <item row="0" column="1">
      <widget class="QTabWidget" name="T_main">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
@@ -101,7 +101,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>877</width>
+     <width>903</width>
      <height>23</height>
     </rect>
    </property>
@@ -125,6 +125,7 @@
     <addaction name="a_w_symbols"/>
     <addaction name="a_w_tools"/>
     <addaction name="a_w_datatypes"/>
+    <addaction name="a_w_terminal"/>
    </widget>
    <widget class="QMenu" name="m_file">
     <property name="title">
@@ -268,6 +269,34 @@
     <layout class="QHBoxLayout" name="horizontalLayout_3"/>
    </widget>
   </widget>
+  <widget class="QDockWidget" name="w_terminal">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="windowTitle">
+    <string>Python Terminal</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QTPythonTerminalView" name="e_terminalview">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>100</height>
+     </size>
+    </property>
+   </widget>
+  </widget>
   <action name="a_open">
    <property name="text">
     <string>&amp;Open</string>
@@ -375,6 +404,17 @@
     <enum>QAction::AboutRole</enum>
    </property>
   </action>
+  <action name="a_w_terminal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>T&amp;erminal</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -403,6 +443,11 @@
    <class>QTDataTypeView</class>
    <extends>QListWidget</extends>
    <header>datatypeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QTPythonTerminalView</class>
+   <extends>QPlainTextEdit</extends>
+   <header>pythonterminalview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -499,6 +544,38 @@
     <hint type="sourcelabel">
      <x>813</x>
      <y>427</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>a_w_terminal</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>w_terminal</receiver>
+   <slot>setShown(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>451</x>
+     <y>531</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>w_terminal</sender>
+   <signal>visibilityChanged(bool)</signal>
+   <receiver>a_w_terminal</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>451</x>
+     <y>531</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
