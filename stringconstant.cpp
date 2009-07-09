@@ -31,6 +31,8 @@ protected:
 		
 		uint8_t unitchar;
 		bool done = false;
+
+		contents += "\"";
 		
 		while (!done)
 		{
@@ -47,6 +49,9 @@ protected:
 			else{
 				switch (unitchar)
 				{
+					case '\"':
+						contents += "\\\"";
+						break;
 					case '\n':
 						contents += "\\n";
 						break;
@@ -69,6 +74,7 @@ protected:
 			addr++;
 			len++;
 		}
+		contents += "\",0";
 		
 		return new StringConstant(this, getTraceContext(), stadr, len, contents);
 	}
