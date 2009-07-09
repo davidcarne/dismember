@@ -148,11 +148,15 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 				return QVariant(QColor(0, 0, 0));
 			case 1:
 				return QVariant(QColor(0, 0, 255));
-			case 2:
-				if (m_model->getTrace().lookup_memloc(addr))
+			case 2: {
+				MemlocData *id = m_model->getTrace().lookup_memloc(addr);
+				if (id && id->is_executable())
 					return QVariant(QColor(0, 0, 200));
+				else if (id)
+					return QVariant(QColor(0, 150, 0));
 				else
 					return QVariant(QColor(125, 125, 125));
+				} break;
 			case 3:
 			case 4:
 				return QVariant(QColor(150, 150, 150));
