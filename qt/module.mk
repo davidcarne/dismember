@@ -25,7 +25,12 @@ QTSRC := qt/application.cpp \
 
 SRC += $(QTSRC)
 
+ifeq ($(OS),Darwin)
+$(QTSRC:.cpp=.o): CPPFLAGS += -Wno-deprecated -I/Library/Frameworks/QtGui.framework/Headers/ -I/Library/Frameworks/QtCore.framework/Headers/
+LDFLAGS += -framework QtGui -framework QtCore
+else
 $(QTSRC:.cpp=.o): CPPFLAGS += $(shell pkg-config QtGui --cflags) -Wno-deprecated
+endif
 
 $(QTSRC:.cpp=.o): $(QTUI:.ui=.ui.h)
 
