@@ -2,6 +2,7 @@ LIBS += $(shell pkg-config QtGui --libs)
 
 QTMOC := qt/application.cpp \
 	 qt/runqueuemonitor.cpp \
+	 qt/pythonterminalview.cpp \
 	 qt/runtimemodel.cpp
 
 QTUI =  qt/application.ui
@@ -18,7 +19,6 @@ QTSRC := qt/application.cpp \
 	 qt/main.cpp \
 	 qt/multilinedialog.cpp \
 	 qt/datatypeview.cpp \
-	 qt/pythonterminalview.cpp \
 	 qt/main.cpp \
 	 $(QTMOC) \
 	 $(QTMOC:.cpp=.moc.cpp)
