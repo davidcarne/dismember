@@ -73,6 +73,7 @@ void QTDataView::paintEvent(QPaintEvent *event)
 			painter.setPen(segColor);
 			painter.drawLine(0, i, s.width()/3, i);
 			++mi;
+			addr = (*mi)->get_start();
 		}
 	}
 }
