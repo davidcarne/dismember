@@ -25,6 +25,7 @@ void QTPythonTerminalView::setRuntimeModel(QTRuntimeModel *model)
 	lpy->getStderrRedirector()->setOutputAcceptor(this);
 	lpy->getStdoutRedirector()->setOutputAcceptor(this);
 	lpy->exec("import sys\nprint \"Python %s\" % sys.version");
+	m_prompt = ">>> ";
 	refresh(true);
 }
 
@@ -53,7 +54,7 @@ void QTPythonTerminalView::insertFromMimeData(const QMimeData *source)
 		while (!lst.isEmpty()) {
 			QString ss = lst.takeFirst();
 			m_command += ss;
-			exec(m_command);
+			exec();
 		}
 		m_command = remainder;
 		refresh(false);
@@ -66,7 +67,7 @@ void QTPythonTerminalView::insertFromMimeData(const QMimeData *source)
 void QTPythonTerminalView::refresh(bool clear)
 {
 	if (clear) {
-		textCursor().insertText(QString(">>> "));
+		textCursor().insertText(m_prompt);
 		m_cursor = textCursor();
 	}
 	while (!m_cursor.atEnd())
@@ -78,18 +79,32 @@ void QTPythonTerminalView::refresh(bool clear)
 	m_cursor.setPosition(pos);
 }
 
-void QTPythonTerminalView::exec(const QString &cmd)
+
+void QTPythonTerminalView::extend()
+{
+	m_prompt = "... ";
+	write("\n", 1);
+	m_fullCommand += m_command + "\n";
+	m_command = "";
+	m_history = -1;
+	refresh(true);
+}
+
+void QTPythonTerminalView::exec()
 {
 	LocalPythonInterpreter *lpy = m_runtime->getRuntime().getPythonInterpreter();
+	m_fullCommand += m_command;
+
 	try {
-		QByteArray ba = cmd.toLocal8Bit();
+		QByteArray ba = m_fullCommand.toLocal8Bit();
 		write("\n", 1);
-		m_commandHistory.prepend(QString(cmd));
-		boost::python::object res = lpy->execsingle(ba.constData());
+		m_commandHistory.prepend(QString(m_fullCommand));
+		boost::python::object res = lpy->exec(ba.constData());
 	} catch (boost::python::error_already_set &) {
 		PyErr_Print();
 	}
-
+	m_prompt = ">>> ";
+	m_fullCommand = "";
 	m_offset = 0;
 	m_command = "";
 	m_history = -1;
@@ -175,7 +190,12 @@ void QTPythonTerminalView::keyCommand(QTPythonTerminalView::KeyCommand kc)
 		refresh(false);
 		break;
 	case QTPythonTerminalView::Execute:
-		exec(m_command);
+		m_offset = 0;
+		refresh(false);
+		exec();
+		break;
+	case QTPythonTerminalView::Extend:
+		extend();
 		break;
 	}
 }
@@ -228,7 +248,9 @@ struct KeyBinding {
 	{Qt::Key_P, KEY_CONTROL, QTPythonTerminalView::PreviousHistory},
 	{Qt::Key_N, KEY_CONTROL, QTPythonTerminalView::NextHistory},
 	{Qt::Key_D, KEY_CONTROL, QTPythonTerminalView::DeleteChar},
-	{Qt::Key_K, KEY_CONTROL, QTPythonTerminalView::KillLine}
+	{Qt::Key_K, KEY_CONTROL, QTPythonTerminalView::KillLine},
+	{Qt::Key_Enter,  KEY_SHIFT, QTPythonTerminalView::Extend},
+	{Qt::Key_Return, KEY_SHIFT, QTPythonTerminalView::Extend}
 };
 
 void QTPythonTerminalView::keyPressEvent(QKeyEvent *ev)

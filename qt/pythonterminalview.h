@@ -35,6 +35,7 @@ class QTPythonTerminalView
 		DeleteChar,
 		BackwardDeleteChar,
 		KillLine,
+		Extend,
 		Execute
 	};
 
@@ -45,12 +46,15 @@ class QTPythonTerminalView
 	void keyPressEvent(QKeyEvent *event);
 
  private:
-	void exec(const QString &cmd);
+	void exec();
+	void extend();
 	void refresh(bool);
 	void keyCommand(KeyCommand kc);
 
 	QTRuntimeModel *m_runtime;
 	QString m_command;
+	QString m_fullCommand;
+	QString m_prompt;
 	QTextCursor m_cursor;
 	int m_offset;
 	int m_history;
