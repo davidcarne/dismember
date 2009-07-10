@@ -150,6 +150,10 @@ int parseLine(const char *line, HexFile &hf, bool pars = true)
 	}
 	
 	l.byteCount = read8(p, &p);
+	if (((strlen(line) - 1)/2 - 5) != l.byteCount) {
+		hf.error = "Incorrect record length!";
+		return 1;
+	}
 	l.address = read16(p, &p);
 	l.recordType = read8(p, &p);
 	if (l.byteCount > 0)
@@ -238,6 +242,7 @@ int HexLoader::matchToFile(FILE *fp) const
 	int i;
 	for (i = 0; i < 3; ++i) {
 		if (fgets(line, 256, fp)) {
+			line[strlen(line) - 1] = 0;
 			if (parseLine(line, dummy, false))
 				return -1;
 		} else 
@@ -254,8 +259,11 @@ bool HexLoader::loadFromFile(FILE *fp, Trace *ctx)
 
 	rewind(fp);
 	while (fgets(line, 2048, fp)) {
-		if (parseLine(line, file))
+		line[strlen(line) - 1] = 0;
+		if (parseLine(line, file)) {
+			fprintf(stderr, "%s\n", file.error);
 			return false;
+		}
 	}
 	while (!file.segments.empty()) {
 		HexSegment *hs = file.segments.top();
