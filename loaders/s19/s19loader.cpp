@@ -323,10 +323,8 @@ int S19Loader::matchToFile(FILE *fp) const
 	for (i = 0; i < 3; ++i) {
 		if (fgets(line, 256, fp)) {
 			line[strlen(line) - 1] = 0;
-			if (parseLine(line, dummy, false)) {
-				fprintf(stderr, "%s\n", dummy.error);
+			if (parseLine(line, dummy, false))
 				return -1;
-			}
 		} else 
 			break;
 	}
