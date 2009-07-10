@@ -63,9 +63,6 @@ void ARMInstruction::decode_data_refs()
 void ARMInstruction::decode_pcflow()
 {
 	const char *instrname = 0;
-	int reg_b;
-	u32 instr_regD = 0;
-	u32 instr_regA = 0;
 
 	u32 pcflags = 0;
 	u32 ddest = 0;
@@ -301,8 +298,16 @@ void ARMInstruction::decode_pcflow()
 		//int regA   = (instr >> 16) & 0xf;
 		int regD   = (instr >> 12) & 0xf;
 
-
 		int writeres = 1;
+		int req_regN = 1;
+		u32 result;
+		u32 opB;
+
+		if (instr & (1 << 25)) { // immediate
+			opB = instr & 0xff;
+			int ror = (instr & 0xf00) >> 7;
+			opB = (opB >> ror) | (opB << (32 - ror));
+		}
 
 		// do the op
 		switch (opcode) {
@@ -313,72 +318,65 @@ void ARMInstruction::decode_pcflow()
 		case 0: /* AND */
 			instrname = "and";
 			break;
-
 		case 9: /* TEQ */
 			writeres = 0;
 			instrname = "teq";
-		case 1: /* EOR */
-			if (!instrname)
-				instrname = "eor";
 			break;
-
+		case 1: /* EOR */
+			instrname = "eor";
+			break;
 		case 0xC: /* ORR */
 			instrname = "orr";
 			break;
-
 		case 0xA: /* CMP */
 			writeres = 0;
 			instrname = "cmp";
-			
-		case 6: /* SBC */
-			if (!instrname)
-				instrname = "sbc";
-			
-		case 2: /* SUB */
-			if (!instrname)
-				instrname = "sub";
 			break;
-				
-				
+		case 6: /* SBC */
+			instrname = "sbc";
+		case 2: /* SUB */
+			instrname = "sub";
+			break;
 		case 7: /* RSC */
 			instrname = "rsc";
-		case 3: /* RSB */
-			if (!instrname)
-				instrname = "rsb";
 			break;
-
+		case 3: /* RSB */
+			instrname = "rsb";
+			break;
 		case 0xB: /* CMN */
 			writeres = 0;
 			instrname = "cmn";
-		case 5: /* ADC */
-			if (!instrname)
-				instrname = "adc";
-		case 4: /* ADD */
-			if (!instrname)
-				instrname = "add";
 			break;
-
+		case 5: /* ADC */
+			instrname = "adc";
+			break;
+		case 4: /* ADD */
+			instrname = "add";
+			break;
 		case 0xD: /* MOV */
-			instr_regD = regD;
+			req_regN = 0;
+			result = opB;
 			instrname = "mov";
 			break;
-			
 		case 0xE: /* BIC */
 			instrname = "bic";
 			break;
-				
 		case 0xF: /* MVN */
+			req_regN = 0;
+			result = ~opB;
 			instrname = "mvn";
 			break;
 		}
 
 		// write result
-		if (writeres) {
-			if (regD == 15)
-			{
-				// We don't continue
-				pcflags &= ~PCFLAG_CONTINUE;
-				
+		if (writeres && regD == 15) {
+			// We don't continue
+			pcflags &= ~PCFLAG_CONTINUE;
+			if (!req_regN && (instr & (1 << 25))) { // immediate
+				// Jump location is directly determined
+				pcflags |= PCFLAG_DIRLOC;
+				ddest = result;
+			} else {
 				// Jump location is indirectly determined
 				pcflags |= PCFLAG_INDLOC;
 			}
