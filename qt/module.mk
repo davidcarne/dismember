@@ -25,17 +25,21 @@ QTSRC := qt/application.cpp \
 
 SRC += $(QTSRC)
 
+QTOBJS := $(patsubst %.cpp,$(BUILDDIR)/%.o, $(QTSRC))
+QTDEPS := $(patsubst %.cpp,$(BUILDDIR)/%.d, $(QTSRC))
+QTTARG := $(QTOBJS) $(QTDEPS)
+
 ifeq ($(OS),Darwin)
-$(QTSRC:.cpp=.o): CPPFLAGS += -Wno-deprecated -I/Library/Frameworks/QtGui.framework/Headers/ -I/Library/Frameworks/QtCore.framework/Headers/
+$(QTTARG): CPPFLAGS += -Wno-deprecated -I/Library/Frameworks/QtGui.framework/Headers/ -I/Library/Frameworks/QtCore.framework/Headers/
 LDFLAGS += -framework QtGui -framework QtCore
 else
-$(QTSRC:.cpp=.o): CPPFLAGS += $(shell pkg-config QtGui --cflags) -Wno-deprecated
+$(QTTARG): CPPFLAGS += $(shell pkg-config QtGui --cflags) -Wno-deprecated
 endif
 
-$(QTSRC:.cpp=.o): $(QTUI:.ui=.ui.h)
-
 %.ui.h: %.ui
-	uic -o $@ $<
+	@echo "UIC	$<"
+	@uic -o $@ $<
 
 %.moc.cpp: %.h
-	moc -o $@ $<
+	@echo "MOC	$@"
+	@moc -o $@ $<

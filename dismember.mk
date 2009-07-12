@@ -16,7 +16,6 @@ SRC := 	comment.cpp memlocdata.cpp xref.cpp symbol_analysis.cpp \
 
 
 BUILDDIR := build
-#DEPSFILE := $(BUILDDIR)/deps.mk
 PROG := $(BUILDDIR)/dismember
 
 # Default build target
@@ -28,7 +27,8 @@ include $(patsubst %, %/module.mk, $(MODULES))
 INCPATHS += $(patsubst %, -I%, $(INCDIRS))
 
 CPPSRCS := $(filter %.cpp, $(SRC) )
-CPPOBJS := $(patsubst %.cpp,%.o, $(CPPSRCS) )
+CPPOBJS := $(patsubst %.cpp,$(BUILDDIR)/%.o, $(CPPSRCS) )
+CPPDEPS := $(CPPOBJS:.o=.d)
 
 CPPDEFS = -DDISABLE_ADDRESS_T_HASH
 CPPFLAGS += -Wall -Wno-unused  -Wno-unknown-pragmas -Wno-reorder \
@@ -43,14 +43,25 @@ CPPFLAGS += $(INCPATHS) $(EXTCPP)
 LIBS += -lboost_python-mt -lboost_thread-mt -lboost_serialization-mt `python-config --cflags` -lpthread $(PYEXTLD)
 
 $(PROG): $(CPPOBJS)
-	mkdir -p $(BUILDDIR)
-	g++ $(LDFLAGS) $(LIBS) $^ -o $@
+	@echo "LD	$@"
+	@mkdir -p $(@D)
+	@$(CXX) $(LDFLAGS) $(LIBS) $^ -o $@
 
-#$(DEPSFILE): $(CPPSRC)
-#	gccmakedep -f $(DEPSFILE) $(CPPSRCS)
+$(BUILDDIR)/%.o: %.cpp
+	@echo "CXX	$<"
+	@mkdir -p $(@D)
+	@$(CXX) $(CPPFLAGS) -c -o $@ $<
 
-include $(DEPSFILE)
+$(BUILDDIR)/%.d: %.cpp
+	@echo "DEP	$<"
+	@mkdir -p $(@D)
+	@$(CXX) -MM -MG $(CPPFLAGS) $< | sed -e "s@^\(.*\)\.o:@$(@D)/\1.d $(@D)/\1.o:@" > $@
+
+-include $(CPPDEPS)
 
 
 clean:
-	rm -f $(DEPSFILE) $(CPPOBJS)
+	$(RM) $(CPPOBJS) $(PROG)
+
+distclean:
+	$(RM) $(CPPDEPS) $(CPPOBJS) $(PROG)
