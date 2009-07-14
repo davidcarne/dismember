@@ -6,8 +6,6 @@
  *  Copyright 2008 __MyCompanyName__. All rights reserved.
  *
  */
-#include "address_hash.h"
-
 #include "memlocmanager.h"
 
 #include "memlocdata.h"

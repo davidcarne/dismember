@@ -86,7 +86,11 @@ address_t GuiProxy::getLineAddr(line_ind_t line)
 			return look;
 		}
 		
-		printf("addr not in block - block start %x end %x len %x lca %d line %d\n", (u32)a->start, (u32)(a->start + a->lc), (u32)a->len, lca, line);
+		printf("addr not in block - block start: %s,"
+			" end: %s, len: %lx, lca: %d, line: %d\n",
+			a->start.toString().c_str(),
+			(a->start + a->lc).toString().c_str(),
+			a->len, lca, line);
 	}
 
 	throw std::out_of_range("bad line addr!\n");
@@ -122,7 +126,7 @@ line_ind_t GuiProxy::getLineAtAddr(address_t addr)
 		lca += a->lc;
 	}
 	
-	printf("Looking up invalid addr %x\n", (u32)addr);
+	printf("Looking up invalid addr %s\n", addr.toString().c_str());
 	throw std::out_of_range("bad line addr!\n");
 }
 
@@ -150,8 +154,8 @@ void GuiProxy::update(void)
 	for (MemSegmentManager::memseglist_ci mi = m_ctx->memsegs_begin(); mi != m_ctx->memsegs_end(); mi++)
 	{
 		// for each segment
-		u32 memind = (*mi)->get_start();
-		u32 memlast = (*mi)->get_length() + memind;
+		address_t memind = (*mi)->getBaseAddress();
+		address_t memlast = memind + (*mi)->get_length();
 		
 		while (memind < memlast)
 		{
@@ -188,7 +192,7 @@ void GuiProxy::update(void)
 			m_lc ++;
 			cins->lc++;
 			
-			s32 offs = memind - cins->start;
+			s32 offs = (memind - cins->start).getOffset();
 			
 			if (offs > GPROX_BLOCK_SIZE)
 			{
@@ -199,7 +203,7 @@ void GuiProxy::update(void)
 			}
 		}
 		m_lclookup[sblc] = cins;
-		cins->len =  memind - cins->start;
+		cins->len = (memind - cins->start).getOffset();
 		m_blocks.push_back(cins);
 		cins = NULL;
 	}

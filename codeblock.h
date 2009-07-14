@@ -52,7 +52,7 @@ private:
 	
 	// Hooks for change notifications
 public:
-	void codeBlockAnalysisPassAt(address_t growFrom = -1);
+	void codeBlockAnalysisPassAt(address_t growFrom = address_t());
 	CodeBlock * codeBlockAt(address_t codeBlock);
 };
 

@@ -82,8 +82,9 @@ QString QTCodeModel::displayXrefs(Trace &t, address_t addr) const
 				type = "data";
 				break;
 			}
-			snprintf(buf, 256, "xref: 0x%08x(%s)\n",
-					(u32)x->get_src_addr(), type);
+			snprintf(buf, 256, "xref: %s(%s)\n",
+					x->get_src_addr().toString().c_str(),
+					type);
 			str.append(buf);
 		}
 		str.chop(1);
@@ -103,7 +104,8 @@ QString QTCodeModel::displayXrefBrief(Trace &t, address_t addr) const
 		for (XrefManager::xref_map_ci j = id->begin_xref_to();
 				j != id->end_xref_to(); j++) {
 			Xref * x = (*j).second;
-			snprintf(buf, 256, "0x%08x,", (u32)x->get_src_addr());
+			snprintf(buf, 256, "%s,",
+				x->get_src_addr().toString().c_str());
 			str.append(buf);
 		}
 		str.chop(1);
@@ -171,7 +173,8 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 			Trace &t = m_model->getTrace();
 			switch (index.column()) {
 			case 0:
-				snprintf(data, 256, "%08x:", (u32)addr);
+				snprintf(data, 256, "%s:",
+						addr.toString().c_str() + 2);
 				return QVariant(QString(data));
 			case 1:
 				return QVariant(displaySymbol(t, addr));

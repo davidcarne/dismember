@@ -25,7 +25,8 @@ class QTRuntimeEvent
 	};
 
 	QTRuntimeEvent(QTRuntimeModel *model, Type type,
-			address_t start = 0, address_t end = 0);
+			address_t start = address_t(),
+			address_t end = address_t());
 	QTRuntimeEvent(QTRuntimeModel *model, Type type,
 			address_t addr, Flags flags = NoFlags);
 

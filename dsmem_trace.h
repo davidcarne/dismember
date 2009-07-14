@@ -77,7 +77,7 @@ public:
 	bool readBytes(address_t, u8, u8*) const;
 	MemSegmentManager::memseglist_ci memsegs_begin() const;
 	MemSegmentManager::memseglist_ci memsegs_end() const;
-	
+	address_t locateAddress(uint64_t address) const;
 	
 #pragma mark Datatype Management	
 	/*################ Datatype management ################*/
@@ -110,10 +110,10 @@ private:
 		//ar & m_arch;
 		//ar & m_commentlist;
 		//ar & m_datatypelist;
-		ar & m_memlocmanager;
+		//ar & m_memlocmanager;
 		//ar & m_symlist;
 		//ar & m_xrefmanager;
-		ar & m_memsegmentmanager;
+		//ar & m_memsegmentmanager;
 	}
 	
 	friend class boost::serialization::access;

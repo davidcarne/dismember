@@ -7,7 +7,7 @@ public:
 	StringConstantDataType(Trace * t);
 	
 	virtual const std::string getName() const;
-	virtual address_t getElemSize() const;
+	virtual u32 getElemSize() const;
 	
 	virtual void rename(std::string newname);
 	virtual bool isMutable() const;
@@ -26,7 +26,7 @@ protected:
 	{
 		address_t stadr = addr;
 		
-		address_t len = 0;
+		uint64_t len = 0;
 		std::string contents;
 		
 		uint8_t unitchar;
@@ -106,10 +106,10 @@ public:
 			}
 			
 protected:
-			StringConstant(const DataType * creator, const Trace * ctx, address_t address, address_t len, std::string data) : MemlocData(creator, ctx, address, m_len), m_len(len), m_data(data)
+			StringConstant(const DataType * creator, const Trace * ctx, address_t address, uint64_t len, std::string data) : MemlocData(creator, ctx, address, m_len), m_len(len), m_data(data)
 			{}
 			
-			address_t m_len;
+			uint64_t m_len;
 			std::string m_data;
 			friend class StringConstantDataType;	
 private:
@@ -125,7 +125,7 @@ const std::string StringConstantDataType::getName() const
 	return "ascii_string";
 }
 
-address_t StringConstantDataType::getElemSize() const
+u32 StringConstantDataType::getElemSize() const
 {
 	return 0;
 }

@@ -245,7 +245,7 @@ static bool ldw(const Trace * t, address_t addr, u32 * data)
 }
 
 
-static void write_addr (const Trace *t, char **retp, int Pre, int Up, int Writeback, int Immed, int offset, int base, u32 pc)
+static void write_addr (const Trace *t, char **retp, int Pre, int Up, int Writeback, int Immed, int offset, int base, address_t pc)
 {
 	char *p = *retp;
 	if (base == 15 && !Writeback && Immed) {
@@ -258,14 +258,15 @@ static void write_addr (const Trace *t, char **retp, int Pre, int Up, int Writeb
 	*p++ = '[';
 	write_reg (&p, base);
 	if (Immed && offset) {
+		address_t mj = pc + offset;
 		p += sprintf (p, "%s, #%s0x%x%s%s",
 				Pre? "" : "]",
 				Up? "" : "-",
             			offset,
 				Pre? "]" : "",
 				(Writeback && Pre)? "!" : "");
-		if (base == 15)
-			p += sprintf (p, "\t; %x", pc + offset);
+		if (base == 15 && mj.isValid())
+			p += sprintf (p, "\t; %s", mj.toString().c_str());
 	} else if (Immed) {
 		p += sprintf (p, "]%s", Writeback? "!" : "");
 	} else {
@@ -318,11 +319,12 @@ static void write_multireg (char **retp, int reglist)
     *retp = p;
 }
 
-static char * comment_resolve(u32 a, u32 b)
+static char * comment_resolve(address_t a, u32 b)
 {
 	return NULL;
 }
-static void write_jump (const Trace * m_ctx, char **retp, u32 jumpfield, u32 pc) 
+
+static void write_jump (const Trace * m_ctx, char **retp, u32 jumpfield, address_t pc) 
 {
     u32 jumpbytes = jumpfield << 2;
     if (jumpbytes & (1 << 25))
@@ -335,8 +337,8 @@ static void write_jump (const Trace * m_ctx, char **retp, u32 jumpfield, u32 pc)
 	
     if (s)
         *retp += sprintf(*retp, "%s", s->get_name().c_str());
-    else
-        *retp += sprintf (*retp, "0x%08x", pc + jump);
+    else if (mj.isValid())
+        *retp += sprintf (*retp, "%s", mj.toString().c_str());
 }
 
 static int bitcount(unsigned int n)
@@ -369,7 +371,7 @@ static void writeImmed(char **retp, u32 imm)
 const std::string ARMInstruction::get_textual()
 {
 	u32 instr = m_opcode;
-	u32 addr = get_addr();
+	address_t addr = get_addr();
 	
     struct arm_insn *insn;
     

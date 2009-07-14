@@ -58,7 +58,10 @@ MemSegmentManager::memseglist_ci Trace::memsegs_end() const
 	return m_memsegmentmanager.memsegs_end();
 }
 
-
+address_t Trace::locateAddress(uint64_t address) const
+{
+	return m_memsegmentmanager.locateAddress(address);
+}
 
 MemlocData * Trace::createMemlocDataAt(DataType * d, address_t addr)
 {

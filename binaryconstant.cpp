@@ -13,7 +13,7 @@ public:
 						   nparse_sign_e is_signed, u32 excessoffs = 0);
 	
 	virtual const std::string getName() const;
-	virtual address_t getElemSize() const;
+	virtual u32 getElemSize() const;
 	
 	virtual void rename(std::string newname);
 	virtual bool isMutable() const;
@@ -90,7 +90,7 @@ const std::string BinaryConstantDataType::getName() const
 	return m_name;
 }
 
-address_t BinaryConstantDataType::getElemSize() const
+u32 BinaryConstantDataType::getElemSize() const
 {
 	return m_elemsize;
 }

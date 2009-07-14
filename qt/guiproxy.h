@@ -61,7 +61,7 @@ private:
 	
 	struct addrblock {
 		address_t start;
-		address_t len;
+		uint64_t len;
 		
 		uint32_t lc;
 	};
@@ -80,7 +80,7 @@ private:
 	line_ind_t m_lc;
 	
 	bool m_last_look_set;
-	address_t m_last_look_line;
+	line_ind_t m_last_look_line;
 	address_t m_last_look_addr;
 };
 

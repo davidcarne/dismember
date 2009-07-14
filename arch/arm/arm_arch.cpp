@@ -25,7 +25,7 @@ public:
 		return "ARMInstruction";
 	}
 
-	virtual address_t getElemSize() const 
+	virtual u32 getElemSize() const 
 	{
 		return 0;
 	}

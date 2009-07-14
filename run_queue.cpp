@@ -8,6 +8,7 @@
  */
 
 #include "run_queue.h"
+#include "exception.h"
 #include <boost/thread.hpp>
 #include <queue>
 
@@ -50,7 +51,14 @@ private:
 		RunQueueControl * me;
 		void operator()()
 		{
-			(*me)();
+			try {
+				(*me)();
+			} catch (Exception &e) {
+				fprintf(stderr, "Thread error: %s\n",
+						e.getMessage());
+				e.printStackTrace();
+				// FIXME: restart run-queue
+			}
 		}
 	} m_mythreadfunctor;
 	

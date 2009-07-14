@@ -44,34 +44,35 @@ bool SymbolAnalysis::analyze(Document *d)
 
 		Instruction * aid = dynamic_cast<Instruction *>(id);
 
+		address_t addr = id->get_addr();
+		const char *saddr = addr.toString().c_str();
 		if (!id->is_executable()) {
 			sprintf(type, "data");
-			u32 addr = (u32)id->get_addr();
 			switch ((size = id->get_length())) {
 			case 4:
-				sprintf(namebuf, "_dword_%08X", addr);
+				sprintf(namebuf, "_dword_%s", saddr + 2);
 				break;
 			case 2:
-				sprintf(namebuf, "_hword_%08X", addr);
+				sprintf(namebuf, "_hword_%s", saddr + 2);
 				break;
 			case 1:
-				sprintf(namebuf, "_byte_%08X", addr);
+				sprintf(namebuf, "_byte_%s", saddr + 2);
 				break;
 			}
 		}
 		else if (aid && aid->get_pcflags() & Instruction::PCFLAG_FNENT) {
 			sprintf(type, "code");
 			subroutine = true;
-			sprintf(namebuf, "_sub_%08X", (u32)id->get_addr());
+			sprintf(namebuf, "_sub_%s", saddr + 2);
 		}
 		else {
 			sprintf(type, "unk");
-			sprintf(namebuf, "_loc_%08X", (u32)id->get_addr());
+			sprintf(namebuf, "_loc_%s", saddr + 2);
 		}
 		if (id->get_symbol() && !strcmp(id->get_symbol()->get_name().c_str(), namebuf))
 			continue;
 		
-		Symbol *sym = t->create_sym(namebuf, id->get_addr());
+		Symbol *sym = t->create_sym(namebuf, addr);
 		sym->set_property("type", new AbstractData(std::string(type)));
 		if (!id->is_executable())
 			sym->set_property("size", new AbstractData(size));

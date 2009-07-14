@@ -80,7 +80,7 @@ CodeBlock * CodeBlockManager::buildCodeBlockAt(MemlocData * growFrom)
 
 void CodeBlockManager::codeBlockAnalysisPassAt( address_t growFrom)
 {
-	if (growFrom == (address_t)-1)
+	if (growFrom == address_t())
 	{
 		return;
 	}

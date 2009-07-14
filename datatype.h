@@ -42,7 +42,7 @@ class DataType {
 	 *
 	 * @return the size of the datatype, 0 for variable
 	 */
-	virtual address_t getElemSize() const = 0;
+	virtual u32 getElemSize() const = 0;
 	
 	/**
 	 * \brief create an alias name for a datatype

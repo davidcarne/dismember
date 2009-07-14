@@ -15,3 +15,8 @@ Instruction::Instruction(const Trace * ctx, address_t addr, u32 length) : Memloc
 {
 
 }
+
+bool Instruction::logically_continues() const
+{
+	return get_pcflags() & PCFLAG_CONTINUE;
+}

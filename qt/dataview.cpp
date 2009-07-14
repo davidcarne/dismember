@@ -44,17 +44,17 @@ void QTDataView::paintEvent(QPaintEvent *event)
 	m_paddrMap.clear();
 	m_paddrMap.resize(s.height());
 
-	address_t firstAddr = (*begin)->get_start();
-	address_t memSize = 0;
+	address_t baseAddr = (*begin)->getBaseAddress();
+	uint64_t memSize = 0;
 	for (mi = begin; mi != end; ++mi)
 		memSize += (*mi)->get_length();
 
 	float bytesPerPixel = (float)memSize / s.height();
 
 	mi = begin;
-	double addr = firstAddr;
+	double off = 0.0;
 	for (int i = 0; i < s.height(); ++i) {
-		address_t normAddr = ROUND(addr);
+		address_t normAddr = baseAddr + ROUND(off);
 		MemlocData *id = t.lookup_memloc(normAddr, false);
 		if (id) {
 			if (id->is_executable())
@@ -66,16 +66,16 @@ void QTDataView::paintEvent(QPaintEvent *event)
 		painter.drawLine(0, i, s.width(), i);
 
 		m_paddrMap[i] = normAddr;
-		addr += bytesPerPixel;
+		off += bytesPerPixel;
 
-		MemSegment *mSeg = *mi;
-		if (addr > mSeg->get_start() + mSeg->get_length()) {
+		if (!normAddr.isValid()) {
 			painter.setPen(segColor);
 			painter.drawLine(0, i, s.width()/3, i);
 			++mi;
 			if (mi == end)
 				break;
-			addr = (*mi)->get_start();
+			baseAddr = (*mi)->getBaseAddress();
+			off = 0.0;
 		}
 	}
 }
@@ -101,10 +101,8 @@ void QTDataView::mouseMoveEvent(QMouseEvent *event)
 	if (m_mouseActive && m_mouseInside) {
 		if (m_paddrMap.size() > (u32)event->pos().y()) {
 			address_t addr = m_paddrMap[event->pos().y()];
-			char buf[256];
-			snprintf(buf, 256, "0x%08x", (u32)addr);
 			QToolTip::showText(event->globalPos(),
-				QString(buf), this, rect());
+				QString(addr.toString().c_str()), this, rect());
 			m_model->postJump(addr);
 		}
 	}

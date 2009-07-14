@@ -21,7 +21,7 @@ int BinaryLoader::matchToFile(FILE * f) const
 
 bool BinaryLoader::loadFromFile(FILE * loadimg, Trace * ctx)
 {
-	address_t addr = 0;
+	uint64_t addr = 0;
 	guiDialog *base = createGuiDialog("Input base address");
 	base->addTextInput("addr", "Base address:", "0x00000000");
 	base->addSubmit("OK");

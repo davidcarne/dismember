@@ -28,6 +28,9 @@ public:
 	bool readBytes(address_t, u8, u8*) const;
 	memseglist_ci memsegs_begin() const;
 	memseglist_ci memsegs_end() const;
+
+	address_t locateAddress(uint64_t address) const;
+
 private:
 	
 	template<class Archive> void serialize(Archive & ar, const unsigned int)

@@ -129,9 +129,7 @@ public:
 	 */
 	virtual pcflags_type DEPRECATED(get_pcflags() const) = 0;
 	
-	virtual bool logically_continues() const {
-		return get_pcflags() & PCFLAG_CONTINUE;
-	}
+	virtual bool logically_continues() const;
 };
 
 #endif

@@ -11,7 +11,7 @@
 #define _memlocmanager_H_
 
 #include <list>
-#include <ext/hash_map>
+#include "hash_map.h"
 #include <map>
 #include "types.h"
 #include <boost/serialization/access.hpp>
@@ -23,7 +23,7 @@ public:
 	typedef std::map<address_t, MemlocData * > memloclist_t;
 	typedef memloclist_t::const_iterator memloclist_ci;
 	
-	typedef __gnu_cxx::hash_map<address_t, MemlocData * > memlochash_t;
+	typedef std::hash_map<address_t, MemlocData * > memlochash_t;
 	typedef memlochash_t::const_iterator memlochash_ci;
 	
 	void insertMemloc(MemlocData * a);

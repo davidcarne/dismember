@@ -3,8 +3,7 @@
 #include <QDialog>
 #include <QGridLayout>
 #include <QLineEdit>
-#include <ext/hash_map>
-#include "string_hash.h"
+#include "hash_map.h"
 #include "guidialog.h"
 
 class QTDialog : public guiDialog
@@ -25,7 +24,7 @@ class QTDialog : public guiDialog
 	int m_column;
 	QDialog *m_dialog;
 	QGridLayout *m_layout;
-	__gnu_cxx::hash_map<std::string, QLineEdit *> m_map;
+	std::hash_map<std::string, QLineEdit *> m_map;
 };
 
 #endif

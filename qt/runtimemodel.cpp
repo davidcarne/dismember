@@ -12,7 +12,7 @@ QTRuntimeEvent::QTRuntimeEvent(QTRuntimeModel *model, QTRuntimeEvent::Type type,
 
 QTRuntimeEvent::QTRuntimeEvent(QTRuntimeModel *model, QTRuntimeEvent::Type type,
 		address_t start, QTRuntimeEvent::Flags flags)
- : m_model(model), m_type(type), m_start(start), m_end(0), m_flags(flags)
+ : m_model(model), m_type(type), m_start(start), m_flags(flags)
 { }
 
 QTRuntimeEvent::Type QTRuntimeEvent::type()

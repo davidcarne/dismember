@@ -14,6 +14,8 @@
 #include "program_flow_analysis.h"
 #include "symbol_analysis.h"
 
+Q_DECLARE_METATYPE(address_t);
+
 class QTImmutableCodeController : public QTCodeController
 {
  public:
@@ -300,7 +302,8 @@ QList<QAction *> *QTCodeView::createXrefMenu(address_t addr)
 			const Symbol *sym = xrf->get_src_inst()->get_symbol();
 			action = new QAction(QString("XREF ").append(sym->get_name().c_str()), this);
 		} else {
-			QString str; str.sprintf("XREF 0x%08x", (u32)jaddr);
+			QString str = QString("XREF ");
+			str.append(jaddr.toString().c_str());
 			action = new QAction(str, this);
 		}
 		QVariant v;

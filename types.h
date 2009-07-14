@@ -15,9 +15,6 @@ typedef int32_t s32;
 typedef int64_t s64;
 
 
-typedef uint64_t address_t;
-
-
 enum endian_e {
 	ENDIAN_BIG,
 	ENDIAN_LITTLE
@@ -36,6 +33,9 @@ typedef enum {
 	BSIGN_TWOS_COMP,
 	BSIGN_EXCESS_N
 } nparse_sign_e;
+
+
+#include "address.h"
 
 #define BSIGN_STD BSIGN_TWOS_COMP
 

@@ -89,7 +89,7 @@ void load_symtab(FILE * f, Trace * ctx, long start, long lcstart, uint8_t * data
 {
 	struct symtab_command * s = (struct symtab_command *)data;
 	printf("Symtab: %x %x %x %x\n", s->symoff, s->nsyms, s->stroff, s->strsize);
-	int i = 0; 
+	unsigned int i = 0; 
 	
 	struct nlist * ns = new nlist[s->nsyms];
 	char * strtab = new char[s->strsize];
@@ -106,7 +106,8 @@ void load_symtab(FILE * f, Trace * ctx, long start, long lcstart, uint8_t * data
 		{
 			// Defined symbol
 			//printf("%04d: %02x %02x %04x %08x %s\n", i, ns[i].n_type, ns[i].n_sect, ns[i].n_desc, ns[i].n_value, strtab + ns[i].n_un.n_strx);
-			ctx->create_sym(strtab + ns[i].n_un.n_strx, ns[i].n_value);
+			address_t at = ctx->locateAddress(ns[i].n_value);
+			ctx->create_sym(strtab + ns[i].n_un.n_strx, at);
 			
 			//ProgramFlowAnalysis::submitAnalysisJob(d, ctx->getCodeDataType(), curr->get_direct_jump_addr());
 		}
@@ -259,7 +260,7 @@ bool MachOLoader::loadFromFile(FILE * f, Trace * ctx)
 	fread(&head, sizeof(struct mach_header), 1, f);
 	printf("Header: %x %x %x %x %x %x\n", head.cputype, head.cpusubtype, head.filetype, head.ncmds, head.sizeofcmds, head.flags);
 	
-	int i = 0;
+	unsigned int i = 0;
 	for (i=0; i< head.ncmds; i++)
 	{
 		long lcstart = ftell(f);

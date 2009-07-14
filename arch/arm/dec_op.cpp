@@ -34,9 +34,9 @@ void ARMInstruction::decode_data_refs()
 		}
 
 		
-		u32 base = get_addr() + 8;
+		address_t base = get_addr() + 8;
 		
-		u32 taddr;
+		address_t taddr;
 		
 		if (IPUBWL & (1 << 4)) { // P
 			if (IPUBWL & (1 << 3)) // U
@@ -65,10 +65,10 @@ void ARMInstruction::decode_pcflow()
 	const char *instrname = 0;
 
 	u32 pcflags = 0;
-	u32 ddest = 0;
+	address_t ddest;
 	
 	u32 instr = m_opcode;
-	u32 addr = get_addr();
+	address_t addr = get_addr();
 	
 	/* By default, each instruction carries onto the next. Only certain don't */
 	pcflags |= PCFLAG_CONTINUE;
@@ -375,7 +375,7 @@ void ARMInstruction::decode_pcflow()
 			if (!req_regN && (instr & (1 << 25))) { // immediate
 				// Jump location is directly determined
 				pcflags |= PCFLAG_DIRLOC;
-				ddest = result;
+				ddest = get_ctx()->locateAddress(result);
 			} else {
 				// Jump location is indirectly determined
 				pcflags |= PCFLAG_INDLOC;

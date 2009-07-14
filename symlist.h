@@ -3,8 +3,7 @@
 #include "types.h"
 #include "abstractdata.h"
 
-#include <ext/hash_map>
-//#include <ext/hash_fun.h>
+#include "hash_map.h"
 #include <list>
 #include <string>
 #include <set>
@@ -13,8 +12,6 @@
 
 // Hybrid datatype allowing for fast lookups, but also maintains sorted
 class SymbolList;
-
-#include "string_hash.h"
 
 /**
  * \brief representation of a Symbol
@@ -52,7 +49,7 @@ private:
 	std::string m_name;
 	address_t m_addr;
 
-	typedef __gnu_cxx::hash_map<std::string, AbstractData *> propertymap_t;
+	typedef std::hash_map<std::string, AbstractData *> propertymap_t;
 	typedef propertymap_t::iterator propertymap_i;	
 	typedef propertymap_t::const_iterator propertymap_ci;
 	propertymap_t properties;
@@ -83,11 +80,11 @@ private:
 	
 
 	
-	typedef __gnu_cxx::hash_map<std::string, Symbol *> symnamemap_t;
+	typedef std::hash_map<std::string, Symbol *> symnamemap_t;
 	typedef symnamemap_t::iterator symnamemap_i;	
 	typedef symnamemap_t::const_iterator symnamemap_ci;
 	
-	typedef __gnu_cxx::hash_map< address_t, Symbol * > symaddrmap_t;
+	typedef std::hash_map< address_t, Symbol * > symaddrmap_t;
 	typedef symaddrmap_t::iterator symaddrmap_i;	
 	typedef symaddrmap_t::const_iterator symaddrmap_ci;
 	

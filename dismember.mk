@@ -8,10 +8,10 @@ INCPATHS := -I.
 
 LIBS :=
 SRC := 	comment.cpp memlocdata.cpp xref.cpp symbol_analysis.cpp \
-	datatypereg.cpp memlocmanager.cpp run_queue.cpp \
+	datatypereg.cpp memlocmanager.cpp run_queue.cpp exception.cpp \
 	app_main.cpp document.cpp memsegment.cpp stringconstant.cpp \
 	xrefmanager.cpp binaryconstant.cpp dsmem_trace.cpp \
-	memsegmentmanager.cpp symlist.cpp callback.cpp \
+	memsegmentmanager.cpp symlist.cpp callback.cpp address.cpp \
 	codeblock.cpp instruction.cpp program_flow_analysis.cpp
 
 
@@ -55,13 +55,15 @@ $(BUILDDIR)/%.o: %.cpp
 $(BUILDDIR)/%.d: %.cpp
 	@echo "DEP	$<"
 	@mkdir -p $(@D)
-	@$(CXX) -MM -MG $(CPPFLAGS) $< | sed -e "s@^\(.*\)\.o:@$(@D)/\1.d $(@D)/\1.o:@" > $@
+	@$(CXX) -MM $(CPPFLAGS) $< | sed -e "s@^\(.*\)\.o:@$(@D)/\1.d $(@D)/\1.o:@" > $@
 
 -include $(CPPDEPS)
 
 
 clean:
-	$(RM) $(CPPOBJS) $(PROG)
+	@echo CLEAN
+	@$(RM) $(CPPOBJS) $(PROG)
 
 distclean:
-	$(RM) $(CPPDEPS) $(CPPOBJS) $(PROG)
+	@echo DISTCLEAN
+	@$(RM) $(CPPDEPS) $(CPPOBJS) $(PROG)

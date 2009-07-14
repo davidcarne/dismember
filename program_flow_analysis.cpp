@@ -49,6 +49,8 @@ bool ProgramFlowAnalysis::undefine(Document * d, address_t start)
 	{
 		address_t addr = analysis_addrs.top();
 		analysis_addrs.pop();
+		if (!addr.isValid())
+			continue;
 		
 		MemlocData * m = t->lookup_memloc(addr);
 		if (!m)
@@ -75,13 +77,11 @@ bool ProgramFlowAnalysis::analyze(Document * d, DataType * dtcreate, address_t s
 	Trace * t = d->getTrace();
 	
 	address_t addr;
-	std::stack<address_t> analysis_addrs;
 	addr = start;
 	
-	bool done = false;
 	bool first = true;
 	
-	while (!done) {
+	while (addr.isValid()) {
 		if (t->lookup_memloc(addr))
 			break;
 		

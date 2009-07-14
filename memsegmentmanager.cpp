@@ -8,6 +8,7 @@
  */
 
 #include "memsegmentmanager.h"
+#include <assert.h>
 #include <stdexcept>
 
 MemSegmentManager::MemSegmentManager() : m_last_segment(NULL)
@@ -19,14 +20,14 @@ bool MemSegmentManager::addSegment(MemSegment * m)
 {
 	assert(m);
 	
-	address_t start = m->get_start(), end = start + m->get_length();
+	uint32_t start = m->get_start(), end = start + m->get_length();
 	
 	memseglist_ci ci = m_mem_segments.begin(),
 	endi = m_mem_segments.end();
 	for (; ci != endi; ++ci) {
 		MemSegment *mi = *ci;
-		address_t cstart = mi->get_start();
-		address_t cend = cstart + mi->get_length();
+		uint32_t cstart = mi->get_start();
+		uint32_t cend = cstart + mi->get_length();
 		if ((cstart > start && cstart < end) ||
 		    (cend > start && cend < end))
 			throw (std::out_of_range("Memory segments overlap."));
@@ -36,6 +37,18 @@ bool MemSegmentManager::addSegment(MemSegment * m)
 	return true;
 }
 
+address_t MemSegmentManager::locateAddress(uint64_t address) const
+{
+	
+	memseglist_ci ci = m_mem_segments.begin(),
+	endi = m_mem_segments.end();
+	for (ci; ci != endi; ++ci) {
+		MemSegment *m = (*ci);
+		if (m->can_resolve(address))
+			return m->getBaseAddress() + (address - m->get_start());
+	}
+	return address_t();
+}
 
 bool MemSegmentManager::readBytes(address_t addr,u8 bytes, u8 * buf) const
 {

@@ -1,5 +1,4 @@
 #include <string.h>
-#include "address_hash.h"
 #include "symlist.h"
 
 Symbol::Symbol(address_t addr, std::string name) : m_name(name), m_addr(addr)
