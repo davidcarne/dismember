@@ -45,34 +45,39 @@ bool SymbolAnalysis::analyze(Document *d)
 		Instruction * aid = dynamic_cast<Instruction *>(id);
 
 		address_t addr = id->get_addr();
-		const char *saddr = addr.toString().c_str();
+		std::string saddr_l = addr.toString();
+		const char *saddr = saddr_l.c_str();
+		if (!strncmp(saddr, "0x", 2))
+			saddr += 2;
 		if (!id->is_executable()) {
 			sprintf(type, "data");
 			switch ((size = id->get_length())) {
 			case 4:
-				sprintf(namebuf, "_dword_%s", saddr + 2);
+				sprintf(namebuf, "_dword_%s", saddr);
 				break;
 			case 2:
-				sprintf(namebuf, "_hword_%s", saddr + 2);
+				sprintf(namebuf, "_hword_%s", saddr);
 				break;
 			case 1:
-				sprintf(namebuf, "_byte_%s", saddr + 2);
+				sprintf(namebuf, "_byte_%s", saddr);
 				break;
 			}
 		}
 		else if (aid && aid->get_pcflags() & Instruction::PCFLAG_FNENT) {
 			sprintf(type, "code");
 			subroutine = true;
-			sprintf(namebuf, "_sub_%s", saddr + 2);
+			sprintf(namebuf, "_sub_%s", saddr);
 		}
 		else {
 			sprintf(type, "unk");
-			sprintf(namebuf, "_loc_%s", saddr + 2);
+			sprintf(namebuf, "_loc_%s", saddr);
 		}
 		if (id->get_symbol() && !strcmp(id->get_symbol()->get_name().c_str(), namebuf))
 			continue;
 		
 		Symbol *sym = t->create_sym(namebuf, addr);
+		if (!sym) // FIXME: something bad happened, but what?
+			continue;
 		sym->set_property("type", new AbstractData(std::string(type)));
 		if (!id->is_executable())
 			sym->set_property("size", new AbstractData(size));
