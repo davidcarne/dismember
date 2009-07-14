@@ -220,18 +220,11 @@ int ElfLoader::matchToFile(FILE * file) const {
 	/* Check if header is supported. */
 	if(IS_ELF(eh) &&
 	   eh.e_ident[EI_CLASS] == ELFCLASS32  &&
-	   //eh.e_ident[EI_DATA]  == ELFDATA2LSB &&
 	   eh.e_type            == ET_REL      &&
 	   eh.e_machine         == EM_ARM      &&
 	   eh.e_shoff){
 		return 100;
 	}
-
-	fprintf(stderr, "class: %08x\n", eh.e_ident[EI_CLASS]);
-	fprintf(stderr, "data : %08x\n", eh.e_ident[EI_DATA]);
-	fprintf(stderr, "type : %08x\n", eh.e_type);
-	fprintf(stderr, "mach : %08x\n", eh.e_machine);
-	fprintf(stderr, "shoff: %08x\n", eh.e_shoff);
 
 	return -1;
 }
@@ -261,13 +254,6 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 		
 		return false;
 	}
-#if 0
-	else if(eh.e_ident[EI_DATA] != ELFDATA2LSB){
-		fprintf(stderr, "Not an LSB ELF file (%d).\n", eh.e_ident[EI_DATA]);
-		
-		return false;
-	}
-#endif
 	else if(eh.e_type != ET_REL){
 		fprintf(stderr, "Not an ELF relocatable (%d).\n", eh.e_ident[EI_DATA]);
 		
