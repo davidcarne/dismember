@@ -46,6 +46,8 @@ class QTMutableCodeController : public QTCodeController
 
 	virtual void analyze(address_t addr)
 	{
+		if (!addr.isValid())
+			return;
 		ProgramFlowAnalysis::submitAnalysisJob(&m_model.getRuntime(),
 				m_model.getTrace().getCodeDataType(), addr);
 		SymbolAnalysis::submitAnalysisJob(&m_model.getRuntime());
@@ -53,22 +55,30 @@ class QTMutableCodeController : public QTCodeController
 
 	virtual void undefine(address_t addr)
 	{
+		if (!addr.isValid())
+			return;
 		ProgramFlowAnalysis::submitUndefineJob(&m_model.getRuntime(),
 				addr);
 	}
 
 	virtual void setComment(address_t addr, const QString &cmt)
 	{
+		if (!addr.isValid())
+			return;
 		m_model.getTrace().create_comment(cmt.toStdString(), addr);
 	}
 
 	virtual void setSymbol(address_t addr, const QString &sym)
 	{
+		if (!addr.isValid())
+			return;
 		m_model.getTrace().create_sym(sym.toStdString(), addr);
 	}
 
 	virtual void setDataType(address_t addr, DataType *dt)
 	{
+		if (!addr.isValid())
+			return;
 		m_model.getTrace().createMemlocDataAt(dt, addr);
 	}
 
