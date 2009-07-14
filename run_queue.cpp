@@ -51,14 +51,7 @@ private:
 		RunQueueControl * me;
 		void operator()()
 		{
-			try {
-				(*me)();
-			} catch (Exception &e) {
-				fprintf(stderr, "Thread error: %s\n",
-						e.getMessage());
-				e.printStackTrace();
-				// FIXME: restart run-queue
-			}
+			(*me)();
 		}
 	} m_mythreadfunctor;
 	
@@ -118,6 +111,7 @@ void RunQueueControl::operator()()
 		
 		sp_RunQueueJob nextjob;
 		{
+			// Acquire a lock on the job fifo until the end of scope
 			boost::mutex::scoped_lock lock(m_jobFifoMutex);
 			
 			// Fetch the next runqueue object
@@ -126,8 +120,13 @@ void RunQueueControl::operator()()
 				nextjob = m_jobs.top();
 				m_jobs.pop();
 			}
+			
+			// If we couldn't fetch a job and the queue should keep running....
 			if (!nextjob && !m_done)
 			{
+				// Then we block on a semaphor so we wait until a new job is added
+				//    rather than drop the thread or busy wait
+				// Wait releases the lock, and reacquires after wait
 				m_runQueueWaitCondition.wait(lock);	
 			}
 		}		
@@ -137,7 +136,14 @@ void RunQueueControl::operator()()
 		{
 			m_currentTask = nextjob;
 			m_taskRunning = true;
-			nextjob->exec();	
+			try {
+				nextjob->exec();
+			} catch (Exception &e) {
+				fprintf(stderr, "Thread error: %s\n",
+						e.getMessage());
+				e.printStackTrace();
+			}
+			
 			m_taskRunning = false;
 		}
 	}
