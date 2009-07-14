@@ -339,6 +339,8 @@ static void write_jump (const Trace * m_ctx, char **retp, u32 jumpfield, address
         *retp += sprintf(*retp, "%s", s->get_name().c_str());
     else if (mj.isValid())
         *retp += sprintf (*retp, "%s", mj.toString().c_str());
+    else if (pc.isValid() && (jump < 0 && (u32)-jump > pc.getValue()))
+        *retp += sprintf (*retp, "<stub_symbol>");
 }
 
 static int bitcount(unsigned int n)
