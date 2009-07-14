@@ -2,6 +2,7 @@
 #define _ADDRESS_H_
 #include <string>
 #include <stdint.h>
+#include "types.h"
 
 class MemSegment;
 
@@ -21,17 +22,18 @@ class address_t
 	/**
 	 * Get the actual value associated with this address.
 	 */
-	uint64_t getValue() const;
+	paddr_t getValue() const;
 
 	/**
 	 * Get the offset value associated with this address.
 	 */
-	uint64_t getOffset() const;
+	paddr_t getOffset() const;
 
 	/**
 	 * Set the value associated with this address.
+	 * This is not the function you want.
 	 */
-	void setValue(uint64_t val);
+	void setValue(paddr_t val);
 
 	/**
 	 * Returns whether we're valid and associated with a memory segment.
@@ -44,29 +46,29 @@ class address_t
 	std::string toString() const;
 
 	friend address_t operator+(const address_t &l, const address_t &r);
-	friend address_t operator+(const address_t &l, const uint64_t &r);
-	friend address_t operator+(const uint64_t &l, const address_t &r);
+	friend address_t operator+(const address_t &l, const poffset_t &r);
+	friend address_t operator+(const poffset_t &l, const address_t &r);
 	friend address_t operator-(const address_t &l, const address_t &r);
-	friend address_t operator-(const address_t &l, const uint64_t &r);
-	friend address_t operator-(const uint64_t &l, const address_t &r);
+	friend address_t operator-(const address_t &l, const poffset_t &r);
+	friend address_t operator-(const poffset_t &l, const address_t &r);
 	friend bool operator==(const address_t &l, const address_t &r);
 	friend bool operator!=(const address_t &l, const address_t &r);
 	friend bool operator> (const address_t &l, const address_t &r);
-	friend bool operator<= (const address_t &l, const address_t &r);
+	friend bool operator<=(const address_t &l, const address_t &r);
 	friend bool operator< (const address_t &l, const address_t &r);
-	friend bool operator>= (const address_t &l, const address_t &r);
-	friend bool operator==(const address_t &l, const uint64_t &r);
-	friend bool operator!=(const address_t &l, const uint64_t &r);
-	friend bool operator> (const address_t &l, const uint64_t &r);
-	friend bool operator<= (const address_t &l, const uint64_t &r);
-	friend bool operator< (const address_t &l, const uint64_t &r);
-	friend bool operator>= (const address_t &l, const uint64_t &r);
+	friend bool operator>=(const address_t &l, const address_t &r);
+	friend bool operator==(const address_t &l, const paddr_t &r);
+	friend bool operator!=(const address_t &l, const paddr_t &r);
+	friend bool operator> (const address_t &l, const paddr_t &r);
+	friend bool operator<=(const address_t &l, const paddr_t &r);
+	friend bool operator< (const address_t &l, const paddr_t &r);
+	friend bool operator>=(const address_t &l, const paddr_t &r);
 
 
 	address_t &operator+=(const address_t &r);
 	address_t &operator-=(const address_t &r);
-	address_t &operator+=(const uint64_t &r);
-	address_t &operator-=(const uint64_t &r);
+	address_t &operator+=(const poffset_t &r);
+	address_t &operator-=(const poffset_t &r);
 	address_t &operator++();
 	address_t &operator--();
 	address_t operator++(int);
@@ -79,11 +81,11 @@ class address_t
 	 * \param size bit size of actual address.
 	 * \param segment memory segment that the address is associated with
 	 */
-	address_t(uint64_t off, size_t size, const MemSegment *segment);
+	address_t(paddr_t off, size_t size, const MemSegment *segment);
 
 	friend class MemSegment;
 
-	int64_t m_offset;
+	poffset_t m_offset;
 	size_t m_size;
 	const MemSegment *m_memsegment;
 };

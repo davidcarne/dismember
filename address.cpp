@@ -21,7 +21,7 @@ address_t::address_t(const address_t &c)
 /**
  * Get the actual value associated with this address.
  */
-uint64_t address_t::getValue() const
+paddr_t address_t::getValue() const
 {
 	return m_memsegment->get_start() + m_offset;
 }
@@ -29,7 +29,7 @@ uint64_t address_t::getValue() const
 /**
  * Get the offset value associated with this address.
  */
-uint64_t address_t::getOffset() const
+paddr_t address_t::getOffset() const
 {
 	return m_offset;
 }
@@ -37,7 +37,7 @@ uint64_t address_t::getOffset() const
 /**
  * Set the value associated with this address.
  */
-void address_t::setValue(uint64_t val)
+void address_t::setValue(paddr_t val)
 {
 	m_offset = val - m_memsegment->get_start();
 }
@@ -50,7 +50,7 @@ bool address_t::isValid() const
 	if (m_memsegment != 0) {
 		return (m_size > 0) &&
 			(m_offset >= 0) &&
-			((uint64_t)m_offset < m_memsegment->get_length());
+			((paddr_t)m_offset < m_memsegment->get_length());
 	}
 	return false;
 }
@@ -80,13 +80,13 @@ address_t &address_t::operator-=(const address_t &r)
 	return *this;
 }
 
-address_t &address_t::operator+=(const uint64_t &r)
+address_t &address_t::operator+=(const poffset_t &r)
 {
 	m_offset += r;
 	return *this;
 }
 
-address_t &address_t::operator-=(const uint64_t &r)
+address_t &address_t::operator-=(const poffset_t &r)
 {
 	m_offset -= r;
 	return *this;
@@ -117,7 +117,7 @@ address_t address_t::operator--(int)
 	return ret;
 }
 
-address_t::address_t(uint64_t offset, size_t size, const MemSegment *segment)
+address_t::address_t(paddr_t offset, size_t size, const MemSegment *segment)
  : m_offset(offset), m_size(size), m_memsegment(segment)
 { }
 
@@ -129,12 +129,12 @@ address_t operator+(const address_t &l, const address_t &r)
 	return address_t(l.m_offset + r.m_offset, l.m_size, l.m_memsegment);
 }
 
-address_t operator+(const address_t &l, const uint64_t &r)
+address_t operator+(const address_t &l, const poffset_t &r)
 {
 	return address_t(l.m_offset + r, l.m_size, l.m_memsegment);
 }
 
-address_t operator+(const uint64_t &l, const address_t &r)
+address_t operator+(const poffset_t &l, const address_t &r)
 {
 	return address_t(l + r.m_offset, r.m_size, r.m_memsegment);
 }
@@ -146,12 +146,12 @@ address_t operator-(const address_t &l, const address_t &r)
 	return address_t(l.m_offset - r.m_offset, l.m_size, l.m_memsegment);
 }
 
-address_t operator-(const address_t &l, const uint64_t &r)
+address_t operator-(const address_t &l, const poffset_t &r)
 {
 	return address_t(l.m_offset - r, l.m_size, l.m_memsegment);
 }
 
-address_t operator-(const uint64_t &l, const address_t &r)
+address_t operator-(const poffset_t &l, const address_t &r)
 {
 	return address_t(l - r.m_offset, r.m_size, r.m_memsegment);
 }
@@ -199,32 +199,32 @@ bool operator>= (const address_t &l, const address_t &r)
 }
 
 
-bool operator==(const address_t &l, const uint64_t &r)
+bool operator==(const address_t &l, const paddr_t &r)
 {
 	return l.getValue() == r;
 }
 
-bool operator!=(const address_t &l, const uint64_t &r)
+bool operator!=(const address_t &l, const paddr_t &r)
 {
 	return l.getValue() != r;
 }
 
-bool operator> (const address_t &l, const uint64_t &r)
+bool operator> (const address_t &l, const paddr_t &r)
 {
 	return l.getValue() > r;
 }
 
-bool operator<= (const address_t &l, const uint64_t &r)
+bool operator<= (const address_t &l, const paddr_t &r)
 {
 	return l.getValue() <= r;
 }
 
-bool operator< (const address_t &l, const uint64_t &r)
+bool operator< (const address_t &l, const paddr_t &r)
 {
 	return l.getValue() < r;
 }
 
-bool operator>= (const address_t &l, const uint64_t &r)
+bool operator>= (const address_t &l, const paddr_t &r)
 {
 	return l.getValue() >= r;
 }
