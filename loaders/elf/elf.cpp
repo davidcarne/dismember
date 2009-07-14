@@ -36,7 +36,7 @@ typedef struct relocation {
 	unsigned int       offset;
 	unsigned int       symbolIndex;
 	unsigned int       type;
-	unsigned int       addend;
+	int32_t            addend;
 	struct symbol    *symbol;
 	struct relocation *next;
 } relocation;
@@ -49,7 +49,7 @@ typedef struct symbol {
 	unsigned int    size;
 	unsigned int    type;
 	unsigned int    binding;
-	unsigned int    sectionIndex;
+	int16_t         sectionIndex;
 	struct section *section;
 } symbol;
 
@@ -83,6 +83,130 @@ class ElfLoader : public FileLoaderMaker {
 		char      **strtabs;
 } registerElfLoader;
 
+static uint8_t read8(FILE *fp)
+{
+	return fgetc(fp);
+}
+
+static uint16_t MSB_read16(FILE *fp)
+{
+	uint16_t u = read8(fp);
+	uint16_t l = read8(fp);
+	return (uint16_t)(l << 8) | u;
+}
+
+static uint16_t LSB_read16(FILE *fp)
+{
+	uint16_t u = read8(fp);
+	uint16_t l = read8(fp);
+	return (uint16_t)(u << 8) | l;
+}
+
+static uint32_t MSB_read32(FILE *fp)
+{
+	uint16_t u = MSB_read16(fp);
+	uint16_t l = MSB_read16(fp);
+	return (uint32_t)(l << 16) | u;
+}
+
+static uint32_t LSB_read32(FILE *fp)
+{
+	uint16_t u = LSB_read16(fp);
+	uint16_t l = LSB_read16(fp);
+	return (uint32_t)(u << 16) | l;
+}
+
+struct readFnTable {
+	uint8_t  (*  read8)(FILE *fp);
+	uint16_t (* read16)(FILE *fp);
+	uint32_t (* read32)(FILE *fp);
+};
+
+struct readFnTable LSB_readFnTable = {
+	read8, LSB_read16, LSB_read32
+};
+
+struct readFnTable MSB_readFnTable = {
+	read8, MSB_read16, MSB_read32
+};
+
+struct readFnTable *getReadFnTable(Elf32_Ehdr *eh)
+{
+	int swap_endian = 0;
+#ifdef _BIG_ENDIAN
+	swap_endian = (eh->e_ident[EI_DATA] == ELFDATA2LSB);
+#else
+	// Wot? Why does this work?
+	swap_endian = (eh->e_ident[EI_DATA] == ELFDATA2LSB);
+#endif
+	return swap_endian ? &MSB_readFnTable : &LSB_readFnTable;
+}
+
+static int readFileHeader(FILE *fp, Elf32_Ehdr *eh)
+{
+	if (fread(eh->e_ident, 1, EI_NIDENT, fp) != EI_NIDENT)
+		return 1;
+	struct readFnTable *rft = getReadFnTable(eh);
+	eh->e_type      = rft->read16(fp);
+	eh->e_machine   = rft->read16(fp);
+	eh->e_version   = rft->read32(fp);
+	eh->e_entry     = rft->read32(fp);
+	eh->e_phoff     = rft->read32(fp);
+	eh->e_shoff     = rft->read32(fp);
+	eh->e_flags     = rft->read32(fp);
+	eh->e_ehsize    = rft->read16(fp);
+	eh->e_phentsize = rft->read16(fp);
+	eh->e_phnum     = rft->read16(fp);
+	eh->e_shentsize = rft->read16(fp);
+	eh->e_shnum     = rft->read16(fp);
+	eh->e_shstrndx  = rft->read16(fp);
+
+	return 0;
+}
+
+static int readSectionHeader(FILE *fp, Elf32_Shdr *sh, struct readFnTable *rft)
+{
+	sh->sh_name      = rft->read32(fp);
+	sh->sh_type      = rft->read32(fp);
+	sh->sh_flags     = rft->read32(fp);
+	sh->sh_addr      = rft->read32(fp);
+	sh->sh_offset    = rft->read32(fp);
+	sh->sh_size      = rft->read32(fp);
+	sh->sh_link      = rft->read32(fp);
+	sh->sh_info      = rft->read32(fp);
+	sh->sh_addralign = rft->read32(fp);
+	sh->sh_entsize   = rft->read32(fp);
+
+	return 0;
+}
+
+static int readRelocation(FILE *fp, Elf32_Rel *r, struct readFnTable *rft)
+{
+	r->r_offset = rft->read32(fp);
+	r->r_info   = rft->read32(fp);
+	return 0;
+}
+
+static int readRelocationAddend(FILE *fp, Elf32_Rela *r, struct readFnTable *rft)
+{
+	r->r_offset = rft->read32(fp);
+	r->r_info   = rft->read32(fp);
+	r->r_addend = rft->read32(fp);
+	return 0;
+}
+
+
+static int readSymbolEntry(FILE *fp, Elf32_Sym *st, struct readFnTable *rft)
+{
+	st->st_name  = rft->read32(fp);
+	st->st_value = rft->read32(fp);
+	st->st_size  = rft->read32(fp);
+	st->st_info  = rft->read8(fp);
+	st->st_other = rft->read8(fp);
+	st->st_shndx = rft->read16(fp);
+	return 0;
+}
+
 ElfLoader::ElfLoader() : FileLoaderMaker("ELF") {
 }
 
@@ -90,21 +214,25 @@ int ElfLoader::matchToFile(FILE * file) const {
 	Elf32_Ehdr eh;
 	
 	/* Read ELF header. */
-	fseek(file, 0, SEEK_SET);
-	if(fread(&eh, sizeof(Elf32_Ehdr), 1, file) != 1){
+	if (readFileHeader(file, &eh))
 		return -1;
-	}
 	
 	/* Check if header is supported. */
 	if(IS_ELF(eh) &&
 	   eh.e_ident[EI_CLASS] == ELFCLASS32  &&
-	   eh.e_ident[EI_DATA]  == ELFDATA2LSB &&
+	   //eh.e_ident[EI_DATA]  == ELFDATA2LSB &&
 	   eh.e_type            == ET_REL      &&
 	   eh.e_machine         == EM_ARM      &&
 	   eh.e_shoff){
 		return 100;
 	}
-	
+
+	fprintf(stderr, "class: %08x\n", eh.e_ident[EI_CLASS]);
+	fprintf(stderr, "data : %08x\n", eh.e_ident[EI_DATA]);
+	fprintf(stderr, "type : %08x\n", eh.e_type);
+	fprintf(stderr, "mach : %08x\n", eh.e_machine);
+	fprintf(stderr, "shoff: %08x\n", eh.e_shoff);
+
 	return -1;
 }
 
@@ -114,10 +242,8 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 	u32      i, j;
 	
 	/* Read ELF header. */
-	fseek(file, 0, SEEK_SET);
-	if(fread(&eh, sizeof(Elf32_Ehdr), 1, file) != 1){
+	if(readFileHeader(file, &eh)) {
 		fprintf(stderr, "Failed to read ELF header.\n");
-		
 		return false;
 	}
 	
@@ -135,11 +261,13 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 		
 		return false;
 	}
+#if 0
 	else if(eh.e_ident[EI_DATA] != ELFDATA2LSB){
 		fprintf(stderr, "Not an LSB ELF file (%d).\n", eh.e_ident[EI_DATA]);
 		
 		return false;
 	}
+#endif
 	else if(eh.e_type != ET_REL){
 		fprintf(stderr, "Not an ELF relocatable (%d).\n", eh.e_ident[EI_DATA]);
 		
@@ -156,6 +284,8 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 		return false;
 	}
 	
+	struct readFnTable *rft = getReadFnTable(&eh);
+
 	/* Allocate memory for sections. */
 	u32  shnum          = eh.e_shnum;
 	u32  shstrtabIndex  = eh.e_shstrndx;
@@ -181,9 +311,8 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 	fseek(file, eh.e_shoff, SEEK_SET);
 	
 	for(section = sections, i = 0; i < shnum; i++, section++){
-		if(fread(&sh, sizeof(Elf32_Shdr), 1, file) != 1){
+		if (readSectionHeader(file, &sh, rft)) {
 			fprintf(stderr, "Failed to read section header.\n");
-			
 			return false;
 		}
 		
@@ -294,7 +423,8 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 				fseek(file, section->offset, SEEK_SET);
 				
 				for(j = 0; j < nsyms; j++, symbol++){
-					if(fread(&st, 1, section->entsize, file) != section->entsize){
+					if (readSymbolEntry(file, &st, rft)) {
+					//if(fread(&st, 1, section->entsize, file) != section->entsize){
 						fprintf(stderr, "Failed to read symbol entry.\n");
 						
 						return false;
@@ -327,14 +457,14 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 
 				for(j = 0; j < nrels; j++){
 					if(section->type == SHT_REL){
-						if(fread(&rel, sizeof(Elf32_Rel), 1, file) != 1){
+						if(readRelocation(file, &rel, rft)) {
 							fprintf(stderr, "Failed to read relocation entry.\n");
 							
 							return false;
 						}
 					}
 					else{
-						if(fread(&rela, sizeof(Elf32_Rela), 1, file) != 1){
+						if(readRelocationAddend(file, &rela, rft)) {
 							fprintf(stderr, "Failed to read relocation entry.\n");
 							
 							return false;
