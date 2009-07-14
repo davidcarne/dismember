@@ -36,6 +36,8 @@ else
 $(QTTARG): CPPFLAGS += $(shell pkg-config QtGui --cflags) -Wno-deprecated
 endif
 
+$(QTUI:.ui=.h): $(QTUI:.ui=.ui.h)
+
 %.ui.h: %.ui
 	@echo "UIC	$<"
 	@uic -o $@ $<
