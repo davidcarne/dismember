@@ -142,6 +142,9 @@ int parseLine(const char *line, HexFile &hf, bool pars = true)
 		uint8_t *data;
 		uint8_t checksum;
 	} l;
+	
+	l.data = NULL; // Compiler warning of data uninited otherwise
+	
 	const char *p = line + 1;
 	uint8_t sum;
 	if (*line != ':') {

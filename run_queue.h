@@ -38,6 +38,8 @@ public:
 	 * Get the name of the queue job
 	 */
 	virtual const std::string & getName() const = 0;
+	
+	virtual ~IRunQueueJob() = 0;
 };
 
 /**
@@ -53,6 +55,7 @@ public:
 	virtual bool exec();
 	virtual  int getPriority() const;
 	virtual const std::string & getName() const;
+	virtual ~FunctorRunQueueJob();
 	
 private:
 	std::string m_jobname;

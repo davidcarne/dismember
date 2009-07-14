@@ -27,7 +27,7 @@ bool FileLoaderMaker::autoLoadFromFile(FILE * datasrc, Trace * ctx)
 {
 	factories_ci i = m_registry->begin();
 	int cpri = -1;
-	FileLoaderMaker * cur;
+	FileLoaderMaker * cur = NULL; // suppress spurious compiler warning
 	
 	for (; i != m_registry->end(); i++)
 	{

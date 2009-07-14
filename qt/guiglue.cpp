@@ -15,3 +15,6 @@ DocumentGui *setupDocumentGui(Document &doc)
 { 
 	return QTRuntimeModel::create(doc);
 }
+
+DocumentGui::~DocumentGui()
+{}

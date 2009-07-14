@@ -87,7 +87,7 @@ address_t GuiProxy::getLineAddr(line_ind_t line)
 		}
 		
 		printf("addr not in block - block start: %s,"
-			" end: %s, len: %lx, lca: %d, line: %d\n",
+			" end: %s, len: %llx, lca: %d, line: %d\n",
 			a->start.toString().c_str(),
 			(a->start + a->lc).toString().c_str(),
 			a->len, lca, line);

@@ -42,6 +42,7 @@ public:
 	 * Write to the Output stream acceptor
 	 */
 	virtual void write(const std::string &, int stream) = 0;
+	virtual ~LPIOutputStreamAcceptor() = 0;
 };
 
 /**

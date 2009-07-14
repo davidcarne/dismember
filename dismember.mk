@@ -35,12 +35,13 @@ CPPFLAGS += -Wall -Wno-unused  -Wno-unknown-pragmas -Wno-reorder \
 	    -Wno-non-virtual-dtor -g $(CPPDEFS)
 
 
-PYEXTCPP := $(shell python-config --cflags)
+# Some python implementations add flags they shouldn't in --cflags
+PYEXTCPP := $(shell python-config --cflags | sed s/-Wstrict-prototypes//g)
 PYEXTLD := $(shell python-config --libs)
 EXTCPP += $(PYEXTCPP)
 
 CPPFLAGS += $(INCPATHS) $(EXTCPP)
-LIBS += -lboost_python-mt -lboost_thread-mt -lboost_serialization-mt `python-config --cflags` -lpthread $(PYEXTLD)
+LIBS += -lboost_python-mt -lboost_thread-mt -lboost_serialization-mt -lpthread $(PYEXTLD)
 
 $(PROG): $(CPPOBJS)
 	@echo "LD	$@"

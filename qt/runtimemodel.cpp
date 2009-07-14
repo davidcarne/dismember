@@ -107,3 +107,7 @@ QTRuntimeModel *QTRuntimeModel::create(Document &rt)
 {
 	return new QTRuntimeModel(rt);
 }
+
+
+QTRuntimeModelListener::~QTRuntimeModelListener() 
+{}

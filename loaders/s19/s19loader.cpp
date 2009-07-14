@@ -85,7 +85,7 @@ class S19Segment
  public:
 	S19Segment()
 	 : m_addr(0), m_data(0), m_lowaddr(0xffffffff),
-	 		m_hiaddr(0), m_length(0), m_lastaddr(0)
+	 		m_hiaddr(0), m_lastaddr(0), m_length(0)
 	{ }
 
 	~S19Segment()
@@ -212,6 +212,10 @@ static int parseLine(const char *line, S19File &hf, bool pars = true)
 		uint8_t *data;
 		uint8_t checksum;
 	} l;
+	
+	l.address = 0; // suppress unitialized data compiler warning
+	l.data = NULL;
+	
 	const char *p = line + 1;
 	uint8_t sum = 0;
 	if (*line != 'S') {

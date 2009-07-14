@@ -148,7 +148,7 @@ MachOLoader::MachOLoader() : FileLoaderMaker("Mach-O")
 
 int MachOLoader::matchToFile(FILE * f) const
 {
-	long magic;
+	unsigned long magic;
 	fread(&magic, 4, 1, f);
 	
 	if (magic == MH_MAGIC ||

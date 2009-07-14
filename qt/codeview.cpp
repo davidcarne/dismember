@@ -316,7 +316,6 @@ QList<QAction *> *QTCodeView::createXrefMenu(address_t addr)
 
 void QTCodeView::contextMenuEvent(QContextMenuEvent *event)
 {
-	bool ok;
 	int row = indexAt(event->pos()).row();
 	if (row == -1) return;
 	address_t addr = m_runtime->getProxy().getLineAddr(row);
@@ -391,3 +390,5 @@ QTCodeController *QTCodeView::getController()
 {
 	return m_controller;
 }
+
+QTCodeController::~QTCodeController() {}

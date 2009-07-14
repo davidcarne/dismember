@@ -3,7 +3,7 @@
 #include "memlocdata.h"
 
 MemlocData::MemlocData(const DataType * creator, const Trace * ctx, address_t addr, u32 length)
-: m_creator(creator), m_address(addr), m_ctx(ctx)
+: m_ctx(ctx), m_address(addr), m_creator(creator)
 {
 	m_next = ctx->lookup_memloc(m_address + length, true);
 	if (m_next)

@@ -17,18 +17,18 @@ public:
 	 * @param buffer data buffer to source contents from. May be released after buffer is created
 	 * @param initLength length of the initialized data for the segment [ie, for a data segment]
 	 */
-	MemSegment(uint64_t base, uint64_t len, void * buffer = NULL, uint64_t initLength = -1);
+	MemSegment(paddr_t base, psize_t len, void * buffer = NULL, psize_t initLength = -1, const std::string & name = "");
 	
 	/** Destructor for a memory segment */
 	~MemSegment();
 	
 	/** @return the start address of the memory segment */
-	uint64_t get_start() const;
+	paddr_t get_start() const;
 
 	address_t getBaseAddress() const;
 	
 	/** @return the length of the memory segment */
-	uint64_t get_length() const;	
+	psize_t get_length() const;	
 	
 	/**
 	 * \brief retrieve length bytes from the memory segment into the dest buffer
@@ -41,13 +41,18 @@ public:
 	 * @param dest destination buffer. May be null.
 	 * @return if the copy succeeded, or would have succeeded had dest been non-null
 	 */
-	bool get_bytes(address_t addr, uint64_t length, void * dest) const;
+	bool get_bytes(address_t addr, psize_t length, void * dest) const;
+	
+	/** 
+	 * @return the name of the memory section
+	 */
+	const std::string & getName() const;
 	
 	/**
 	 * @param addr address to check
 	 * @return is addr valid within this block
 	 */
-	bool can_resolve(uint64_t addr) const;
+	bool can_resolve(paddr_t addr) const;
 
 	/**
 	 * @param addr address to check
@@ -77,9 +82,10 @@ public:
 
 private:
 	
-	uint64_t m_base;
-	uint64_t m_len;
+	paddr_t m_base;
+	psize_t m_len;
 	uint8_t * m_data;
+	std::string m_name;
 };
 
 #endif

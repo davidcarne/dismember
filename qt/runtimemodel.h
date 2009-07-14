@@ -30,6 +30,7 @@ class QTRuntimeEvent
 	QTRuntimeEvent(QTRuntimeModel *model, Type type,
 			address_t addr, Flags flags = NoFlags);
 
+	
 	Type type();
 	Flags flags();
 	QTRuntimeModel *model();
@@ -50,6 +51,7 @@ class QTRuntimeModelListener
  public:
 	virtual void setRuntimeModel(QTRuntimeModel *rt) = 0;
 	virtual void runtimeUpdated(QTRuntimeEvent *m) = 0;
+	virtual ~QTRuntimeModelListener() = 0;
 };
 
 class QTRuntimeModel : public QObject, public DocumentGui

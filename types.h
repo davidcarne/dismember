@@ -15,6 +15,11 @@ typedef int32_t s32;
 typedef int64_t s64;
 
 
+// Physical address, size + offset types
+typedef uint64_t paddr_t;
+typedef uint64_t psize_t;
+typedef int64_t  poffset_t;
+
 enum endian_e {
 	ENDIAN_BIG,
 	ENDIAN_LITTLE

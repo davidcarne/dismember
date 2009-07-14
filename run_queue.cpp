@@ -12,6 +12,10 @@
 #include <boost/thread.hpp>
 #include <queue>
 
+
+IRunQueueJob::~IRunQueueJob()
+{}
+
 bool operator<(const sp_RunQueueJob &j1, const sp_RunQueueJob &j2)
 {
 	return j1->getPriority() < j2->getPriority();
@@ -38,6 +42,9 @@ int FunctorRunQueueJob::getPriority() const
 	return m_priority;
 }
 
+
+FunctorRunQueueJob::~FunctorRunQueueJob()
+{}
 
 FunctorRunQueueJob::FunctorRunQueueJob(std::string jobname,
 		int priority, jobfun_t functor)

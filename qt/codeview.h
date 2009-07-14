@@ -22,6 +22,7 @@ class QTCodeController
 	virtual void setComment(address_t addr, const QString &cmt) = 0;
 	virtual void setSymbol(address_t addr, const QString &sym) = 0;
 	virtual void setDataType(address_t addr, DataType *dt) = 0;
+	virtual ~QTCodeController() = 0;
 };
 
 class QTCodeView : public QTableView, public QTRuntimeModelListener

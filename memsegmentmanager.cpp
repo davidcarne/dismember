@@ -42,7 +42,7 @@ address_t MemSegmentManager::locateAddress(uint64_t address) const
 	
 	memseglist_ci ci = m_mem_segments.begin(),
 	endi = m_mem_segments.end();
-	for (ci; ci != endi; ++ci) {
+	for (; ci != endi; ++ci) {
 		MemSegment *m = (*ci);
 		if (m->can_resolve(address))
 			return m->getBaseAddress() + (address - m->get_start());

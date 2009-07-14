@@ -60,10 +60,11 @@ bool address_t::isValid() const
  */
 std::string address_t::toString() const
 {
-	char fmt[12];
-	snprintf(fmt, 12, "0x%%0%lux", m_size >> 2);
-	char buf[40];
-	snprintf(buf, 40, fmt, getValue());
+	char fmt[14];
+	snprintf(fmt, 12, "%%s%s0x%%0%lux", m_memsegment->getName().length() ? ":":"", m_size >> 2);
+	char buf[100];
+	 
+	snprintf(buf, 40, fmt, m_memsegment->getName().c_str(), getValue());
 	return std::string(buf);
 }
 

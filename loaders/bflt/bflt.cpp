@@ -117,7 +117,8 @@ int FlatLoader::readHeader(FILE *fd)
 
 void FlatLoader::reloc(long base, FILE *fd)
 {
-	long i, *reloc = (long *)malloc(sizeof(u32) * header.reloc_count);
+	unsigned long i;
+	long *reloc = (long *)malloc(sizeof(u32) * header.reloc_count);
 	fseek(fd, header.reloc_start, SEEK_SET);
 	fread(reloc, sizeof(u32), header.reloc_count, fd);
 

@@ -21,7 +21,6 @@ QTDialog::~QTDialog()
 
 void QTDialog::addTextInput(std::string idx, std::string name, std::string dt)
 {
-	int frameStyle = QFrame::Sunken | QFrame::Panel;
 	QLabel *label = new QLabel(QString(name.c_str()));
 	QLineEdit *line = new QLineEdit(QString(dt.c_str()));
 	if (m_column & 1) {

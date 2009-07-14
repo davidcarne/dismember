@@ -1,5 +1,9 @@
 #include "localpythoninterpreter.h"
 
+
+LPIOutputStreamAcceptor::~LPIOutputStreamAcceptor()
+{}
+
 LocalPythonOutputRedirector::LocalPythonOutputRedirector(int x) : m_stream(x), m_dest(NULL) {
 }
 

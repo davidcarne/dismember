@@ -13,7 +13,7 @@
 #include "xref.h"
 #include "xrefmanager.h"
 
-CodeBlock::CodeBlock(Trace * t, address_t start, address_t end) : m_trace(t), m_start(start), m_end(end)
+CodeBlock::CodeBlock(Trace * t, address_t start, address_t end) :  m_start(start), m_end(end), m_trace(t)
 {
 	
 }

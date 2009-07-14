@@ -19,6 +19,7 @@ public:
 	 * Notify the gui that an update may be necessary. The gui is free to rate-limit these.
 	 */
 	virtual void postUpdate() = 0;
+	virtual ~DocumentGui() = 0;
 };
 
 class Document;

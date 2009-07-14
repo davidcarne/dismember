@@ -300,8 +300,8 @@ void ARMInstruction::decode_pcflow()
 
 		int writeres = 1;
 		int req_regN = 1;
-		u32 result;
-		u32 opB;
+		u32 result = 0;
+		u32 opB = 0;
 
 		if (instr & (1 << 25)) { // immediate
 			opB = instr & 0xff;
