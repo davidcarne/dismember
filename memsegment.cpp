@@ -49,11 +49,11 @@ bool MemSegment::get_bytes(address_t addr, psize_t length, void * dest) const
 	if (!m_data)
 		return false;
 
-	if (!addr.isValid())
+	if (!can_resolve(addr))
 		return false;
-	
+
 	paddr_t offs = addr.getOffset();
-	
+
 	memcpy(dest, m_data + offs, (size_t)length);
 	return true;
 }
