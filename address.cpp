@@ -1,8 +1,15 @@
-#include <assert.h>
-
 #include "exception.h"
 #include "memsegment.h"
 #include "address.h"
+
+#define ASSERT_TRUE(x) \
+  do { \
+    if (!(x)) {\
+      char __buf[512]; \
+      snprintf(__buf, 512, #x " at " __FILE__ ":%d (" ")", __LINE__); \
+      throw Exception(__buf); \
+    } \
+  } while (0)
 
 /**
  * Construct invalid address.
@@ -53,6 +60,15 @@ bool address_t::isValid() const
 			((paddr_t)m_offset < m_memsegment->get_length());
 	}
 	return false;
+}
+
+
+/**
+ * Returns whether we're associated to the same memory segment.
+ */
+bool address_t::comparableTo(const address_t &addr) const
+{
+	return addr.m_memsegment == m_memsegment;
 }
 
 /**
@@ -124,8 +140,8 @@ address_t::address_t(paddr_t offset, size_t size, const MemSegment *segment)
 
 address_t operator+(const address_t &l, const address_t &r)
 {
-	assert(l.m_size == r.m_size);
-	assert(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_size == r.m_size);
+	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
 	return address_t(l.m_offset + r.m_offset, l.m_size, l.m_memsegment);
 }
 
@@ -141,8 +157,8 @@ address_t operator+(const poffset_t &l, const address_t &r)
 
 address_t operator-(const address_t &l, const address_t &r)
 {
-	assert(l.m_size == r.m_size);
-	assert(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_size == r.m_size);
+	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
 	return address_t(l.m_offset - r.m_offset, l.m_size, l.m_memsegment);
 }
 
@@ -172,29 +188,29 @@ bool operator!=(const address_t &l, const address_t &r)
 
 bool operator> (const address_t &l, const address_t &r)
 {
-	assert(l.m_size == r.m_size);
-	assert(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_size == r.m_size);
+	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
 	return l.m_offset > r.m_offset;
 }
 
 bool operator<= (const address_t &l, const address_t &r)
 {
-	assert(l.m_size == r.m_size);
-	assert(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_size == r.m_size);
+	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
 	return l.m_offset <= r.m_offset;
 }
 
 bool operator< (const address_t &l, const address_t &r)
 {
-	assert(l.m_size == r.m_size);
-	assert(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_size == r.m_size);
+	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
 	return l.m_offset < r.m_offset;
 }
 
 bool operator>= (const address_t &l, const address_t &r)
 {
-	assert(l.m_size == r.m_size);
-	assert(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_size == r.m_size);
+	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
 	return l.m_offset >= r.m_offset;
 }
 
@@ -227,4 +243,9 @@ bool operator< (const address_t &l, const paddr_t &r)
 bool operator>= (const address_t &l, const paddr_t &r)
 {
 	return l.getValue() >= r;
+}
+
+bool address_t::less::operator()(const address_t &l, const address_t &r) const
+{
+	return l.getValue() < r.getValue();
 }

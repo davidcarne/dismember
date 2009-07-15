@@ -41,6 +41,11 @@ class address_t
 	bool isValid() const;
 
 	/**
+	 * Returns whether we're associated to the same memory segment.
+	 */
+	bool comparableTo(const address_t &addr) const;
+
+	/**
 	 * Convert address to printable string, obeying size.
 	 */
 	std::string toString() const;
@@ -73,6 +78,10 @@ class address_t
 	address_t &operator--();
 	address_t operator++(int);
 	address_t operator--(int);
+
+	struct less {
+		bool operator()(const address_t &l, const address_t &r) const;
+	};
 
  protected:
  	/**
