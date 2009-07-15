@@ -28,7 +28,7 @@ public:
 	virtual bool loadFromFile(FILE * f, Trace * ctx);
 private:
 	struct flat_hdr header;
-	void reloc(long base, FILE *fd);
+	void reloc(u8 *data, u32 base, FILE *fd);
 	int readHeader(FILE *fd);
 } registerFlatLoader;
 
@@ -48,7 +48,7 @@ int FlatLoader::matchToFile(FILE * f) const
 
 bool FlatLoader::loadFromFile(FILE * loadimg, Trace * ctx)
 {
-
+	const u32 loadAddress = 0;
 	/* Load the image */
 	if (readHeader(loadimg) < 0)
 		return false;
@@ -61,19 +61,15 @@ bool FlatLoader::loadFromFile(FILE * loadimg, Trace * ctx)
 	int bss_size = header.bss_end - header.data_end;
 	memset(data + header.data_end, 0, bss_size);
 
-	reloc((long)data, loadimg);
+	reloc(data, loadAddress, loadimg);
 
 	MemSegment *ms;
-#if MULTIPLE_MEM_SEGMENTS_WORK
-	ctx->addSegment(ms = new MemSegment(0, header.data_end, data)); /* code */
-	ctx->addSegment(new MemSegment(header.data_end, header.bss_end,
-			data + header.data_end)); /* bss */
-	ctx->addSegment(new MemSegment(header.bss_end, header.stack_size,
-			data + header.bss_end)); /* stack */
-#else
-	ctx->addSegment(ms = new MemSegment(0,
-			header.bss_end + header.stack_size, data));
-#endif
+	ctx->addSegment(ms = new MemSegment(loadAddress, header.data_end,
+			data, -1, "TXT"));
+	ctx->addSegment(new MemSegment(loadAddress + header.data_end,
+			bss_size, data + header.data_end, -1, "BSS"));
+	ctx->addSegment(new MemSegment(loadAddress + header.bss_end,
+			header.stack_size, data + header.bss_end, -1, "STK"));
 	free(data);
 
 	ctx->create_sym("_start", ms->getBaseAddress() + header.entry);
@@ -115,19 +111,18 @@ int FlatLoader::readHeader(FILE *fd)
 	return 0;
 }
 
-void FlatLoader::reloc(long base, FILE *fd)
+void FlatLoader::reloc(u8 *data, u32 base, FILE *fd)
 {
-	unsigned long i;
-	long *reloc = (long *)malloc(sizeof(u32) * header.reloc_count);
+	u32 *reloc = (u32 *)malloc(sizeof(u32) * header.reloc_count);
 	fseek(fd, header.reloc_start, SEEK_SET);
 	fread(reloc, sizeof(u32), header.reloc_count, fd);
 
 	/* we don't relocate zero entries because they are tested against zero,
 	 * which causes an endless loop. no known side effects */
-	for (i = 0; i < header.reloc_count; ++i) {
-		u32 addr = base + ntohl(reloc[i]);
-		u32 n = ntohl(*((u32 *)addr));
-		if (n) *((u32 *)addr) = n + base;
+	for (u32 i = 0; i < header.reloc_count; ++i) {
+		u32 *addr = (u32 *)(data + ntohl(reloc[i]));
+		u32 n = ntohl(*addr);
+		if (n) *addr = n + base;
 	}
 	free(reloc);
 }
