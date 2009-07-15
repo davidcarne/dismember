@@ -87,10 +87,10 @@ address_t GuiProxy::getLineAddr(line_ind_t line)
 		}
 		
 		printf("addr not in block - block start: %s,"
-			" end: %s, len: %llx, lca: %d, line: %d\n",
+			" end: %s, len: %lx, lca: %d, line: %d\n",
 			a->start.toString().c_str(),
 			(a->start + a->lc).toString().c_str(),
-			a->len, lca, line);
+			(long)a->len, lca, line);
 	}
 
 	throw std::out_of_range("bad line addr!\n");
@@ -104,7 +104,8 @@ line_ind_t GuiProxy::getLineAtAddr(address_t addr)
 	{
 		struct addrblock * a = *it;
 		
-		if (a->start <= addr &&  a->start + a->len > addr)
+		if (a->start.comparableTo(addr) &&
+				a->start <= addr &&  a->start + a->len > addr)
 		{
 			address_t look = a->start;
 			
@@ -167,22 +168,23 @@ void GuiProxy::update(void)
 				sblc = m_lc;
 			}
 			
-			while (li != m_ctx->memloc_list_end() && (*li).first < memind)
+			while (li != m_ctx->memloc_list_end())
 			{
+				if ((*li).first.comparableTo(memind))
+					if ((*li).first >= memind)
+						break;
 				li++;
 			}
 			
-			if (li != m_ctx->memloc_list_end() && (*li).first == memind)
-			{
-				
-				MemlocData * d = NULL;
-				d = (*li).second;
+			if (li != m_ctx->memloc_list_end() &&
+					(*li).first.comparableTo(memind) &&
+					(*li).first == memind) {
+				MemlocData * d = (*li).second;
 				if (d != NULL)
 					memind += d->get_length();
 				else
 					// HACK HACK HACK - gui + this need to be integrated based on the size of the default view.
 					memind ++;
-				
 			} else {
 				memind += 1;
 			}
@@ -192,7 +194,7 @@ void GuiProxy::update(void)
 			m_lc ++;
 			cins->lc++;
 			
-			s32 offs = (memind - cins->start).getOffset();
+			s32 offs = memind.getValue() - cins->start.getValue();
 			
 			if (offs > GPROX_BLOCK_SIZE)
 			{
@@ -203,7 +205,7 @@ void GuiProxy::update(void)
 			}
 		}
 		m_lclookup[sblc] = cins;
-		cins->len = (memind - cins->start).getOffset();
+		cins->len = memind.getValue() - cins->start.getValue();
 		m_blocks.push_back(cins);
 		cins = NULL;
 	}
