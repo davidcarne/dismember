@@ -36,7 +36,7 @@ void QTApplication::open()
 			tr("Open File.."), QString(),
 			tr("Binary Files (*.bin *.hex *.s19);;"
 			   "Dismember Compressed Files (*.dcf);;"
-			   "All Files (*.*)"));
+			   "All Files (*)"));
 	if (fileName == QString()) // cancelled
 		return;
 
