@@ -149,6 +149,8 @@ void RunQueueControl::operator()()
 				fprintf(stderr, "Thread error: %s\n",
 						e.getMessage());
 				e.printStackTrace();
+			} catch (std::exception &e) {
+				fprintf(stderr, "Thread error: %s\n", e.what());
 			}
 			
 			m_taskRunning = false;
