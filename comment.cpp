@@ -44,7 +44,7 @@ CommentList::CommentList()
 
 Comment *CommentList::set_comment(address_t addr, std::string comment)
 {
-	std::map<address_t, Comment *>::iterator it = commentmap.find(addr);
+	commentlist_t::iterator it = commentmap.find(addr);
 	if (it != commentmap.end())
 		delete (*it).second;
 	return commentmap[addr] = new Comment(comment, addr);
@@ -52,7 +52,7 @@ Comment *CommentList::set_comment(address_t addr, std::string comment)
 
 Comment *CommentList::get_comment(address_t addr) const
 {
-	std::map<address_t, Comment *>::const_iterator it = commentmap.find(addr);
+	commentlist_t::const_iterator it = commentmap.find(addr);
 	if (it != commentmap.end())
 		return (*it).second;
 	return NULL;

@@ -20,7 +20,7 @@ class MemlocData;
 
 class MemlocManager {
 public:
-	typedef std::map<address_t, MemlocData * > memloclist_t;
+	typedef std::map<address_t, MemlocData *, address_t::less> memloclist_t;
 	typedef memloclist_t::const_iterator memloclist_ci;
 	
 	typedef std::hash_map<address_t, MemlocData * > memlochash_t;

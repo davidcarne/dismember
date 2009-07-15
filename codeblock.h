@@ -44,8 +44,9 @@ class CodeBlockManager {
 private:
 	void linkCodeBlocks(CodeBlock * pre, CodeBlock * post);
 	void unlinkCodeBlocks(CodeBlock * pre, CodeBlock * post);
-	typedef std::map<address_t, CodeBlock *>::iterator blockiterator;
-	std::map<address_t, CodeBlock *> m_blocks;
+	typedef std::map<address_t, CodeBlock *, address_t::less> blocklist_t;
+	typedef blocklist_t::iterator blockiterator;
+	blocklist_t m_blocks;
 	
 	CodeBlock * buildCodeBlockAt(MemlocData * growFrom);
 	Trace * m_trace;

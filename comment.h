@@ -71,7 +71,8 @@ class CommentList
 	Comment *get_comment(address_t addr) const;
 
  private:
-	std::map<address_t, Comment *> commentmap;
+	typedef std::map<address_t, Comment *, address_t::less> commentlist_t;
+	commentlist_t commentmap;
 };
 
 #endif

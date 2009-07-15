@@ -20,7 +20,7 @@ public:
 	
 	Xref * createXref(address_t srcaddr, address_t destaddr, Xref::xref_type_e type);
 	
-	typedef std::multimap<address_t, Xref *> xref_map;
+	typedef std::multimap<address_t, Xref *, address_t::less> xref_map;
 	typedef xref_map::iterator xref_map_i;
 	typedef xref_map::const_iterator xref_map_ci;
 	
