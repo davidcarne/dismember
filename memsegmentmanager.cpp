@@ -9,7 +9,7 @@
 
 #include "memsegmentmanager.h"
 #include <assert.h>
-#include <stdexcept>
+#include "exception.h"
 
 MemSegmentManager::MemSegmentManager() : m_last_segment(NULL)
 {
@@ -20,17 +20,17 @@ bool MemSegmentManager::addSegment(MemSegment * m)
 {
 	assert(m);
 	
-	uint32_t start = m->get_start(), end = start + m->get_length();
+	paddr_t start = m->get_start(), end = start + m->get_length();
 	
 	memseglist_ci ci = m_mem_segments.begin(),
 	endi = m_mem_segments.end();
 	for (; ci != endi; ++ci) {
 		MemSegment *mi = *ci;
-		uint32_t cstart = mi->get_start();
-		uint32_t cend = cstart + mi->get_length();
+		paddr_t cstart = mi->get_start();
+		paddr_t cend = cstart + mi->get_length();
 		if ((cstart > start && cstart < end) ||
 		    (cend > start && cend < end))
-			throw (std::out_of_range("Memory segments overlap."));
+			throw Exception("Memory segments overlap.");
 	}
 	
 	m_mem_segments.insert(m);
