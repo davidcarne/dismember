@@ -7,7 +7,7 @@
  *
  */
 #include "memlocmanager.h"
-
+#include "exception.h"
 #include "memlocdata.h"
 
 void MemlocManager::insertMemloc(MemlocData * a)
@@ -25,7 +25,7 @@ void MemlocManager::insertMemloc(MemlocData * a)
 	}
 	MemlocData *ov = findMemloc(addr, false);
 	if (ov)
-		throw std::out_of_range("fixme: Overlapping memlocds.");
+		throw Exception("fixme: Overlapping memlocds.");
 	
 	// insert into both lookup tables
 	m_memdata_hash[addr] = a;
@@ -50,7 +50,9 @@ MemlocData * MemlocManager::findMemloc(address_t addr, bool exactmatch) const
 		{
 			ib--;
 			MemlocData * d = (*ib).second;
-			if (d->get_addr() <= addr && d->get_addr() + d->get_length() > addr)
+			address_t daddr = d->get_addr();
+			if (addr.comparableTo(daddr) && daddr <= addr
+				&& daddr + d->get_length() > addr)
 				return d;
 		}
 	}
