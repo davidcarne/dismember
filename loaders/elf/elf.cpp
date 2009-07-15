@@ -180,6 +180,21 @@ static int readSectionHeader(FILE *fp, Elf32_Shdr *sh, struct readFnTable *rft)
 	return 0;
 }
 
+static int readProgramHeader(FILE *fp, Elf32_Phdr *p, struct readFnTable *rft)
+{
+	p->p_type      = rft->read32(fp);
+	p->p_offset    = rft->read32(fp);
+	p->p_vaddr     = rft->read32(fp);
+	p->p_paddr     = rft->read32(fp);
+	p->p_filesz    = rft->read32(fp);
+	p->p_memsz     = rft->read32(fp);
+	p->p_flags     = rft->read32(fp);
+	p->p_align     = rft->read32(fp);
+
+	return 0;
+}
+
+
 static int readRelocation(FILE *fp, Elf32_Rel *r, struct readFnTable *rft)
 {
 	r->r_offset = rft->read32(fp);
@@ -221,7 +236,7 @@ int ElfLoader::matchToFile(FILE * file) const {
 	if(IS_ELF(eh) &&
 	   eh.e_ident[EI_CLASS] == ELFCLASS32  &&
 	   (eh.e_type           == ET_REL      ||
-	    eh.e_type		== ET_EXEC)    &&
+	    eh.e_type           == ET_EXEC)    &&
 	   eh.e_machine         == EM_ARM      &&
 	   eh.e_shoff){
 		return 100;
@@ -233,7 +248,9 @@ int ElfLoader::matchToFile(FILE * file) const {
 bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 	Elf32_Ehdr eh;
 	Elf32_Shdr sh;
+	Elf32_Phdr ph;
 	u32      i, j;
+	paddr_t loadAddress = 0;
 	
 	/* Read ELF header. */
 	if(readFileHeader(file, &eh)) {
@@ -275,6 +292,7 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 
 	/* Allocate memory for sections. */
 	u32  shnum          = eh.e_shnum;
+	u32  phnum          = eh.e_phnum;
 	u32  shstrtabIndex  = eh.e_shstrndx;
 	u32  symstrtabIndex = 0;
 	u32  nsyms          = 0;
@@ -292,6 +310,23 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 		strtabs[i] = 0;
 	}
 	
+	/* Read program headers. */
+	fseek(file, eh.e_phoff, SEEK_SET);
+
+	for(i = 0; i < phnum; ++i) {
+		if (readProgramHeader(file, &ph, rft)) {
+			fprintf(stderr, "Failed to read program header.\n");
+			return false;
+		}
+		if (ph.p_type == PT_LOAD) {
+			// this is the only type we really care about,
+			// hopefully there's only one.
+			if (loadAddress != 0 && loadAddress != ph.p_vaddr)
+				fprintf(stderr, "Warning: multiple loadable program header segments.\n");
+			loadAddress = ph.p_vaddr;
+		}
+	}
+
 	/* Read section headers. */
 	section *section;
 	
@@ -419,6 +454,11 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 					
 					symbol->nameIndex    = st.st_name;
 					symbol->value        = st.st_value;
+					// FIXME: hack! Do this the right way,
+					// whatever that is.
+					if (eh.e_type == ET_EXEC) {
+						symbol->value -= loadAddress;
+					}
 					symbol->size         = st.st_size;
 					symbol->binding      = st.st_info >> 4;
 					symbol->type         = st.st_info & 0xf;
@@ -558,7 +598,7 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 		
 		s32 A = 0;
 		u32 At, S, P;
-		
+
 		S = (paddr_t)(reloc->symbol->section->addr + reloc->symbol->value);
 		P = (paddr_t)(reloc->section->addr + reloc->offset);
 		
@@ -743,7 +783,7 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 	}
 	
 	/* Add segment to trace. */
-	MemSegment *segment = new MemSegment(0, size, data);
+	MemSegment *segment = new MemSegment(loadAddress, size, data);
 	
 	trace->addSegment(segment);
 	
