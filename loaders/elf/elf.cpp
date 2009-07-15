@@ -220,7 +220,8 @@ int ElfLoader::matchToFile(FILE * file) const {
 	/* Check if header is supported. */
 	if(IS_ELF(eh) &&
 	   eh.e_ident[EI_CLASS] == ELFCLASS32  &&
-	   eh.e_type            == ET_REL      &&
+	   (eh.e_type           == ET_REL      ||
+	    eh.e_type		== ET_EXEC)    &&
 	   eh.e_machine         == EM_ARM      &&
 	   eh.e_shoff){
 		return 100;
@@ -254,8 +255,8 @@ bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
 		
 		return false;
 	}
-	else if(eh.e_type != ET_REL){
-		fprintf(stderr, "Not an ELF relocatable (%d).\n", eh.e_ident[EI_DATA]);
+	else if(eh.e_type != ET_REL && eh.e_type != ET_EXEC){
+		fprintf(stderr, "Not an ELF relocatable/executable (%d).\n", eh.e_ident[EI_DATA]);
 		
 		return false;
 	}
