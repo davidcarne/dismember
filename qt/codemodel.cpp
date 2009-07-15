@@ -125,7 +125,6 @@ QString QTCodeModel::displaySymbol(Trace &t, address_t addr) const
 QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 {
 	GuiProxy &gprox = m_model->getProxy();
-	char data[256];
 	switch (role) {
 	case Qt::ToolTipRole:
 		if (index.column() == 3) {
@@ -172,10 +171,13 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 			address_t addr = gprox.getLineAddr(index.row());
 			Trace &t = m_model->getTrace();
 			switch (index.column()) {
-			case 0:
-				snprintf(data, 256, "%s:",
-						addr.toString().c_str() + 2);
-				return QVariant(QString(data));
+			case 0: {
+				std::string str = addr.toString();
+				const char *c_str = str.c_str();
+				if (!strncmp(c_str, "0x", 2))
+					c_str += 2;
+				return QVariant(QString(c_str).append(":"));
+				}
 			case 1:
 				return QVariant(displaySymbol(t, addr));
 			case 2:
