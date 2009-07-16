@@ -10,6 +10,8 @@
 #include "run_queue.h"
 #include "exception.h"
 #include <boost/thread.hpp>
+#include <boost/thread/condition.hpp>
+#include <cstdio> // work around bug in boost < 1.38
 #include <queue>
 
 
