@@ -4,6 +4,7 @@
 #include <QFontMetrics>
 #include <QInputDialog>
 #include <QAbstractItemModel>
+#include <QItemSelectionModel>
 #include <QLineEdit>
 
 #include "document.h"
@@ -88,7 +89,8 @@ class QTMutableCodeController : public QTCodeController
 };
 
 QTCodeView::QTCodeView(QWidget *parent)
- : QTableView(parent), m_model(NULL), m_controller(NULL), m_runtime(NULL)
+ : QTableView(parent), m_model(NULL), m_controller(NULL), m_runtime(NULL),
+		m_modifiers(0)
 {
 	setShowGrid(false);
 	verticalHeader()->hide();
@@ -152,16 +154,56 @@ void QTCodeView::setCurrentIndex(address_t addr)
 	try {
 		int row = m_runtime->getProxy().getLineAtAddr(addr);
 		QModelIndex idx = m_model->index(row, 0, QModelIndex());
+		selectionModel()->select(idx, QItemSelectionModel::Clear);
 		QTableView::setCurrentIndex(idx);
 	} catch (std::out_of_range &) { }
+}
+
+#define KEY_CONTROL (1 << 0)
+#define KEY_SHIFT   (1 << 1)
+#define KEY_ALT     (1 << 2)
+#define KEY_META    (1 << 3)
+
+void QTCodeView::keyReleaseEvent(QKeyEvent *ev)
+{
+	switch (ev->key()) {
+	case Qt::Key_Control:
+		m_modifiers &= ~KEY_CONTROL;
+		break;
+	case Qt::Key_Shift:
+		m_modifiers &= ~KEY_SHIFT;
+		break;
+	case Qt::Key_Alt:
+		m_modifiers &= ~KEY_ALT;
+		break;
+	case Qt::Key_Meta:
+		m_modifiers &= ~KEY_META;
+		break;
+	}
+	QTableView::keyReleaseEvent(ev);
 }
 
 void QTCodeView::keyPressEvent(QKeyEvent *event)
 {
 	int row = selectionModel()->currentIndex().row();
 
-	if (event->modifiers() != Qt::NoModifier)
-		QTableView::keyPressEvent(event);
+	switch (event->key()) {
+	case Qt::Key_Control:
+		m_modifiers |= KEY_CONTROL;
+		return;
+	case Qt::Key_Shift:
+		m_modifiers |= KEY_SHIFT;
+		return;
+	case Qt::Key_Alt:
+		m_modifiers |= KEY_ALT;
+		return;
+	case Qt::Key_Meta:
+		m_modifiers |= KEY_META;
+		return;
+	}
+
+	if (m_modifiers & ~KEY_SHIFT)
+		return;
 
 	switch (event->key()) {
 	case Qt::Key_Escape:

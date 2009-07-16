@@ -36,6 +36,7 @@ class QTCodeView : public QTableView, public QTRuntimeModelListener
 
 	void showEvent(QShowEvent *event);
 	void contextMenuEvent(QContextMenuEvent *event);
+	void keyReleaseEvent(QKeyEvent *event);
 	void keyPressEvent(QKeyEvent *event);
 	void mouseDoubleClickEvent(QMouseEvent *event);
 
@@ -55,6 +56,7 @@ class QTCodeView : public QTableView, public QTRuntimeModelListener
 	QTCodeModel *m_model;
 	QTCodeController *m_controller;
 	QTRuntimeModel *m_runtime;
+	u8 m_modifiers;
 	QStack<address_t> m_jumpStack;
 };
 
