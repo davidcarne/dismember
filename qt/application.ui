@@ -298,11 +298,15 @@
    </widget>
   </widget>
   <action name="a_open">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/action_open</normaloff>:/icons/action_open</iconset>
+   </property>
    <property name="text">
     <string>&amp;Open</string>
    </property>
    <property name="shortcut">
-    <string/>
+    <string>Ctrl+O</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -312,24 +316,45 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/action_save</normaloff>:/icons/action_save</iconset>
+   </property>
    <property name="text">
     <string>&amp;Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="a_saveas">
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/action_saveas</normaloff>:/icons/action_saveas</iconset>
+   </property>
    <property name="text">
     <string>Save &amp;As...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="a_quit">
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/action_quit</normaloff>:/icons/action_quit</iconset>
+   </property>
    <property name="text">
     <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
    <property name="menuRole">
     <enum>QAction::QuitRole</enum>
@@ -341,6 +366,9 @@
    </property>
    <property name="text">
     <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
    </property>
   </action>
   <action name="a_w_symbols">
@@ -389,13 +417,24 @@
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/action_help</normaloff>:/icons/action_help</iconset>
+   </property>
    <property name="text">
     <string>&amp;Manual</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
   <action name="a_about">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/action_about</normaloff>:/icons/action_about</iconset>
    </property>
    <property name="text">
     <string>&amp;About</string>
@@ -453,7 +492,9 @@
  <tabstops>
   <tabstop>T_main</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>a_w_symbols</sender>

@@ -1,0 +1,14 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/icons">
+ <file alias="action_open">icons/folder_page.png</file>
+ <file alias="action_quit">icons/door_in.png</file>
+ <file alias="action_save">icons/disk.png</file>
+ <file alias="action_saveas">icons/drive_disk.png</file>
+ <file alias="action_help">icons/help.png</file>
+ <file alias="action_about">icons/cake.png</file>
+
+ <file alias="search_next">icons/resultset_next.png</file>
+ <file alias="search_prev">icons/resultset_previous.png</file>
+ <file alias="search_wrap">icons/arrow_refresh.png</file>
+</qresource>
+</RCC>

@@ -6,6 +6,7 @@ QTMOC := qt/application.cpp \
 	 qt/runtimemodel.cpp
 
 QTUI =  qt/application.ui
+QTRC =  qt/resources.qrc
 
 QTSRC := qt/application.cpp \
 	 qt/guiproxy.cpp \
@@ -21,6 +22,7 @@ QTSRC := qt/application.cpp \
 	 qt/datatypeview.cpp \
 	 qt/main.cpp \
 	 $(QTMOC) \
+	 $(QTRC:.qrc=.rcc.cpp) \
 	 $(QTMOC:.cpp=.moc.cpp)
 
 SRC += $(QTSRC)
@@ -45,3 +47,7 @@ $(QTUI:.ui=.h): $(QTUI:.ui=.ui.h)
 %.moc.cpp: %.h
 	@echo "MOC	$@"
 	@moc -o $@ $<
+
+%.rcc.cpp: %.qrc
+	@echo "RCC	$@"
+	@rcc -o $@ $<
