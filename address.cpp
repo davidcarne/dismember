@@ -76,11 +76,13 @@ bool address_t::comparableTo(const address_t &addr) const
  */
 std::string address_t::toString() const
 {
-	char fmt[14];
-	snprintf(fmt, 12, "%%s%s%%0%lux", m_memsegment->getName().length() ? ":":"0x", m_size >> 2);
+	char fmt[16];
+	snprintf(fmt, 16, "%%s%s%%0%u%s",
+			m_memsegment->getName().length() ? ":":"0x", (u32)(m_size >> 2),
+			(sizeof(unsigned long) == sizeof(paddr_t)) ? "lx" : "llx");
+
 	char buf[100];
-	 
-	snprintf(buf, 40, fmt, m_memsegment->getName().c_str(), getValue());
+	snprintf(buf, 100, fmt, m_memsegment->getName().c_str(), getValue());
 	return std::string(buf);
 }
 
