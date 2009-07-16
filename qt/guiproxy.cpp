@@ -204,10 +204,12 @@ void GuiProxy::update(void)
 				cins = NULL;
 			}
 		}
-		m_lclookup[sblc] = cins;
-		cins->len = memind.getValue() - cins->start.getValue();
-		m_blocks.push_back(cins);
-		cins = NULL;
+		if (cins) {
+			m_lclookup[sblc] = cins;
+			cins->len = memind.getValue() - cins->start.getValue();
+			m_blocks.push_back(cins);
+			cins = NULL;
+		}
 	}
 	m_dirty = false;
 }
