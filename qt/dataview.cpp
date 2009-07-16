@@ -86,6 +86,8 @@ void QTDataView::mousePressEvent(QMouseEvent *event)
 	if (m_mouseInside) {
 		if (m_paddrMap.size() > (u32)event->pos().y()) {
 			address_t addr = m_paddrMap[event->pos().y()];
+			if (!addr.isValid())
+				return;
 			m_model->postJump(addr);
 		}
 	}
