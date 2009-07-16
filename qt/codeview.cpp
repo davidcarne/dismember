@@ -121,7 +121,7 @@ void QTCodeView::runtimeUpdated(QTRuntimeEvent *evt)
 		if (row != -1 && evt->flags() & QTRuntimeEvent::Select)
 			m_jumpStack.push(addr);
 		scrollTo(evt->start());
-		if (row != -1 && evt->flags() & QTRuntimeEvent::Select)
+		if (evt->flags() & QTRuntimeEvent::Select)
 			setCurrentIndex(evt->start());
 		break;
 	case QTRuntimeEvent::RuntimeUpdate:

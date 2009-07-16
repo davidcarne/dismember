@@ -77,6 +77,8 @@ bool address_t::comparableTo(const address_t &addr) const
 std::string address_t::toString() const
 {
 	char fmt[16];
+	if (!isValid())
+		throw Exception("Invalid address!");
 	snprintf(fmt, 16, "%%s%s%%0%u%s",
 			m_memsegment->getName().length() ? ":":"0x", (u32)(m_size >> 2),
 			(sizeof(unsigned long) == sizeof(paddr_t)) ? "lx" : "llx");

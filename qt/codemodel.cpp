@@ -170,6 +170,8 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 		try {
 			address_t addr = gprox.getLineAddr(index.row());
 			Trace &t = m_model->getTrace();
+			if (!addr.isValid())
+				return QVariant();
 			switch (index.column()) {
 			case 0: {
 				std::string str = addr.toString();

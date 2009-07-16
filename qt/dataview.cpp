@@ -101,6 +101,8 @@ void QTDataView::mouseMoveEvent(QMouseEvent *event)
 	if (m_mouseActive && m_mouseInside) {
 		if (m_paddrMap.size() > (u32)event->pos().y()) {
 			address_t addr = m_paddrMap[event->pos().y()];
+			if (!addr.isValid()) // whoops.
+				return;
 			QToolTip::showText(event->globalPos(),
 				QString(addr.toString().c_str()), this, rect());
 			m_model->postJump(addr);
