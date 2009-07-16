@@ -3,6 +3,7 @@
 #include <QTableView>
 #include <QKeyEvent>
 #include <QMouseEvent>
+#include <QShowEvent>
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QStack>
@@ -33,6 +34,7 @@ class QTCodeView : public QTableView, public QTRuntimeModelListener
 	void setRuntimeModel(QTRuntimeModel *model);
 	void runtimeUpdated(QTRuntimeEvent *m);
 
+	void showEvent(QShowEvent *event);
 	void contextMenuEvent(QContextMenuEvent *event);
 	void keyPressEvent(QKeyEvent *event);
 	void mouseDoubleClickEvent(QMouseEvent *event);

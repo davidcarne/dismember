@@ -93,10 +93,6 @@ QTCodeView::QTCodeView(QWidget *parent)
 	setShowGrid(false);
 	verticalHeader()->hide();
 	verticalHeader()->setDefaultSectionSize(fontMetrics().height() + 1);
-	setColumnWidth(0, fontMetrics().maxWidth() * 9);
-	setColumnWidth(1, fontMetrics().maxWidth() * 24);
-	setColumnWidth(2, fontMetrics().maxWidth() * 40);
-	setColumnWidth(3, fontMetrics().maxWidth() * 12);
 	horizontalHeader()->setStretchLastSection(true);
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 }
@@ -322,6 +318,16 @@ QList<QAction *> *QTCodeView::createXrefMenu(address_t addr)
 		ret->push_back(action);
 	}
 	return ret;
+}
+
+void QTCodeView::showEvent(QShowEvent *event)
+{
+	QTableView::showEvent(event);
+	int charWidth = fontMetrics().maxWidth();
+	setColumnWidth(0, charWidth * 9);
+	setColumnWidth(1, charWidth * 15);
+	setColumnWidth(2, charWidth * 35);
+	setColumnWidth(3, charWidth * 20);
 }
 
 void QTCodeView::contextMenuEvent(QContextMenuEvent *event)
