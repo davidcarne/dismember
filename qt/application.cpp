@@ -43,6 +43,7 @@ void QTApplication::open()
 	QString fileName = QFileDialog::getOpenFileName(this,
 			tr("Open File.."), QString(),
 			tr("Binary Files (*.bin *.hex *.s19);;"
+			   "Object Files (*.o *.so);;"
 			   "Dismember Compressed Files (*.dcf);;"
 			   "All Files (*)"));
 	if (fileName == QString()) // cancelled
