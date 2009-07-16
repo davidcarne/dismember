@@ -6,6 +6,8 @@
  <file alias="action_saveas">icons/drive_disk.png</file>
  <file alias="action_help">icons/help.png</file>
  <file alias="action_about">icons/cake.png</file>
+ <file alias="action_close">icons/cross.png</file>
+ <file alias="action_find">icons/page_white_magnify.png</file>
 
  <file alias="search_next">icons/resultset_next.png</file>
  <file alias="search_prev">icons/resultset_previous.png</file>

@@ -10,7 +10,7 @@ LIBS :=
 SRC := 	comment.cpp memlocdata.cpp xref.cpp symbol_analysis.cpp \
 	datatypereg.cpp memlocmanager.cpp run_queue.cpp exception.cpp \
 	app_main.cpp document.cpp memsegment.cpp stringconstant.cpp \
-	xrefmanager.cpp binaryconstant.cpp dsmem_trace.cpp \
+	xrefmanager.cpp binaryconstant.cpp dsmem_trace.cpp search.cpp \
 	memsegmentmanager.cpp symlist.cpp callback.cpp address.cpp \
 	codeblock.cpp instruction.cpp program_flow_analysis.cpp
 
@@ -31,14 +31,15 @@ CPPOBJS := $(patsubst %.cpp,$(BUILDDIR)/%.o, $(CPPSRCS) )
 CPPDEPS := $(CPPOBJS:.o=.d)
 
 CPPDEFS = -DDISABLE_ADDRESS_T_HASH
-CPPFLAGS += -Wall -Wno-unused  -Wno-unknown-pragmas -Wno-reorder \
-	    -Wno-non-virtual-dtor -g $(CPPDEFS)
-
 
 # Some python implementations add flags they shouldn't in --cflags
-PYEXTCPP := $(shell python-config --cflags | sed s/-Wstrict-prototypes//g)
+PYEXTCPP := $(shell python-config --includes)
 PYEXTLD := $(shell python-config --libs)
 EXTCPP += $(PYEXTCPP)
+
+CPPFLAGS += $(INCPATHS) $(EXTCPP) -Wall -Wno-unknown-pragmas -Wno-reorder \
+	    -g $(CPPDEFS)
+
 
 CPPFLAGS += $(INCPATHS) $(EXTCPP)
 LIBS += -lboost_python-mt -lboost_thread-mt -lboost_serialization-mt -lpthread $(PYEXTLD)

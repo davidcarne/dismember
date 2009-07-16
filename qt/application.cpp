@@ -20,6 +20,14 @@ QTApplication::QTApplication()
 	connect(m_ui.a_open, SIGNAL(activated()), this, SLOT(open()));
 	connect(m_ui.a_save, SIGNAL(activated()), this, SLOT(save()));
 	connect(m_ui.a_saveas, SIGNAL(activated()), this, SLOT(saveas()));
+	connect(m_ui.a_find, SIGNAL(activated()),
+			m_ui.e_searchwidget, SLOT(show()));
+	connect(m_ui.a_find, SIGNAL(activated()),
+			m_ui.e_searchwidget, SLOT(setFocus()));
+	connect(m_ui.a_findnext, SIGNAL(activated()),
+			m_ui.e_searchwidget, SLOT(nextResult()));
+	connect(m_ui.a_findprev, SIGNAL(activated()),
+			m_ui.e_searchwidget, SLOT(prevResult()));
 
 	m_runtime = NULL;
 	replaceRuntime();
@@ -85,7 +93,9 @@ void QTApplication::replaceRuntime()
 	n_model->registerRuntimeModelListener(m_ui.e_datatypeview);
 	n_model->registerRuntimeModelListener(m_ui.e_terminalview);
 	n_model->registerRuntimeModelListener(m_ui.e_monitor);
+	n_model->registerRuntimeModelListener(m_ui.e_searchwidget);
 	m_ui.e_datatypeview->setCodeview(m_ui.e_assembly);
+	m_ui.e_searchwidget->hide();
 	if (m_runtime) delete m_runtime;
 	m_runtime = n_runtime;
 }
