@@ -16,7 +16,7 @@
 class XrefManager {
 public:
 	
-	XrefManager(Trace * ctx);
+	XrefManager(ProjectModel * ctx);
 	
 	Xref * createXref(address_t srcaddr, address_t destaddr, Xref::xref_type_e type);
 	
@@ -45,7 +45,7 @@ private:
 	xref_map m_xrefs_to;
 	xref_map m_xrefs_from;
 	
-	Trace * m_ctx;
+	ProjectModel * m_ctx;
 };
 
 

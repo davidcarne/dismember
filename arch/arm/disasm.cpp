@@ -229,7 +229,7 @@ static void write_barrelshift (char **retp, int bsh)
     *retp = p;
 }
 
-static bool ldw(const Trace * t, address_t addr, u32 * data)
+static bool ldw(const ProjectModel * t, address_t addr, u32 * data)
 {
 	u8 dataar[4];
 	if (!t->readBytes(addr, 4, dataar))
@@ -245,7 +245,7 @@ static bool ldw(const Trace * t, address_t addr, u32 * data)
 }
 
 
-static void write_addr (const Trace *t, char **retp, int Pre, int Up, int Writeback, int Immed, int offset, int base, address_t pc)
+static void write_addr (const ProjectModel *t, char **retp, int Pre, int Up, int Writeback, int Immed, int offset, int base, address_t pc)
 {
 	char *p = *retp;
 	if (base == 15 && !Writeback && Immed) {
@@ -324,7 +324,7 @@ static char * comment_resolve(address_t a, u32 b)
 	return NULL;
 }
 
-static void write_jump (const Trace * m_ctx, char **retp, u32 jumpfield, address_t pc) 
+static void write_jump (const ProjectModel * m_ctx, char **retp, u32 jumpfield, address_t pc) 
 {
     u32 jumpbytes = jumpfield << 2;
     if (jumpbytes & (1 << 25))

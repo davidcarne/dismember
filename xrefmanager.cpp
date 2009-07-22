@@ -9,7 +9,7 @@
 
 #include "xrefmanager.h"
 
-XrefManager::XrefManager(Trace * ctx) : m_ctx(ctx)
+XrefManager::XrefManager(ProjectModel * ctx) : m_ctx(ctx)
 {
 	
 }

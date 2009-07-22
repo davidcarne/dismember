@@ -9,7 +9,7 @@
 class BinaryConstantDataType : public DataType {
 public:
 	
-	BinaryConstantDataType(Trace * t, std::string name, nparse_e type, u32 len, bool big_endian, 
+	BinaryConstantDataType(ProjectModel * t, std::string name, nparse_e type, u32 len, bool big_endian, 
 						   nparse_sign_e is_signed, u32 excessoffs = 0);
 	
 	virtual const std::string getName() const;
@@ -48,7 +48,7 @@ public:
 			
 			
 protected:
-				BinaryConstant(const DataType * creator, const Trace * ctx, address_t address, u32 elemsize, 
+				BinaryConstant(const DataType * creator, const ProjectModel * ctx, address_t address, u32 elemsize, 
 							enum endian_e endian = ENDIAN_LITTLE);
 			
 			friend class BinaryConstantDataType;	
@@ -79,7 +79,7 @@ const DataType * datatype_s64_le = NULL;
 /**
  * \brief Create a new BinaryConstantDataType
  */
-BinaryConstantDataType::BinaryConstantDataType(Trace * t, std::string name, nparse_e type, 
+BinaryConstantDataType::BinaryConstantDataType(ProjectModel * t, std::string name, nparse_e type, 
 											   u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs) : 
 	DataType(t), m_name(name), m_elemsize(len)
 {
@@ -108,11 +108,11 @@ bool BinaryConstantDataType::isMutable() const
 
 MemlocData * BinaryConstantDataType::instantiate(address_t addr) const
 {
-	return new BinaryConstant(this, getTraceContext(), addr, m_elemsize);
+	return new BinaryConstant(this, getProjectModelContext(), addr, m_elemsize);
 }
 
 BinaryConstantDataType::BinaryConstant::BinaryConstant(const DataType * creator, 
-													   const Trace * ctx, address_t address, 
+													   const ProjectModel * ctx, address_t address, 
 													   u32 elemsize, enum endian_e endian) : 
 	MemlocData(creator, ctx, address, elemsize), m_elemsize(elemsize), m_endian(endian)
 {
@@ -190,15 +190,15 @@ bool BinaryConstantDataType::BinaryConstant::logically_continues() const {
 
 #include <boost/python.hpp>
 void bindBinaryConstantDataTypes()
-{//BinaryConstantDataType(Trace * t, std::string name, nparse_e type, u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs = 0);
+{//BinaryConstantDataType(ProjectModel * t, std::string name, nparse_e type, u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs = 0);
 	boost::python::class_<BinaryConstantDataType, boost::python::bases<DataType>,  boost::shared_ptr<BinaryConstantDataType> >
-	("BinaryConstantDataType", boost::python::init<Trace *, std::string, nparse_e, u32, bool, nparse_sign_e>());
+	("BinaryConstantDataType", boost::python::init<ProjectModel *, std::string, nparse_e, u32, bool, nparse_sign_e>());
 	
 }
 
 // HACK HACK HACK
 /*
-void createBinaryConstantDataTypes(Trace * t)
+void createBinaryConstantDataTypes(ProjectModel * t)
 {
 	if (!datatype_u8_le) datatype_u8_le = new BinaryConstantDataType(t, "u8_le", BTYPE_PLAIN, 1, false, BSIGN_NONE);
 	if (!datatype_u16_le) datatype_u16_le = new BinaryConstantDataType(t, "u16_le", BTYPE_PLAIN, 2, false, BSIGN_NONE);

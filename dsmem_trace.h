@@ -1,5 +1,5 @@
-#ifndef _TRACE_H_
-#define _TRACE_H_
+#ifndef _ProjectModel_H_
+#define _ProjectModel_H_
 
 #include <list>
 #include <string>
@@ -9,7 +9,7 @@
 
 // Forward Declarations to reduce compile times
 class MemlocData;
-class Trace;
+class ProjectModel;
 class Instruction;
 class DataType;
 class Symbol;
@@ -27,7 +27,7 @@ class Xref;
 #include "memlocmanager.h"
 #include "memsegmentmanager.h"
 
-class Trace : boost::noncopyable
+class ProjectModel : boost::noncopyable
 {	
 public:
 #pragma mark Hacks	
@@ -37,8 +37,8 @@ public:
 	
 #pragma mark Constructor/Destructor
 	/*################ Constructor / Destructor ################*/
-	Trace(Architecture * arch);
-	~Trace();
+	ProjectModel(Architecture * arch);
+	~ProjectModel();
 	
 #pragma mark Comment Management		
 	/*################ Comment Management ################*/

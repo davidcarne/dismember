@@ -6,7 +6,7 @@ class BinaryLoader : public FileLoaderMaker {
 public:
 	BinaryLoader();
 	virtual int matchToFile(FILE * f) const;
-	virtual bool loadFromFile(FILE * f, Trace * ctx);
+	virtual bool loadFromFile(FILE * f, ProjectModel * ctx);
 } registerBinaryLoader;
 
 BinaryLoader::BinaryLoader() : FileLoaderMaker("Binary")
@@ -19,7 +19,7 @@ int BinaryLoader::matchToFile(FILE * f) const
 	return 0;
 }
 
-bool BinaryLoader::loadFromFile(FILE * loadimg, Trace * ctx)
+bool BinaryLoader::loadFromFile(FILE * loadimg, ProjectModel * ctx)
 {
 	uint64_t addr = 0;
 	guiDialog *base = createGuiDialog("Input base address");

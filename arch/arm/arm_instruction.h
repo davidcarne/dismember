@@ -15,7 +15,7 @@ public:
 	 * \deprecated - should only be created through the appropriate datatype that doesn't exist yet
 	 * \todo protect me
 	 */
-	ARMInstruction(const Trace * ctx, address_t address, u32 opcode);
+	ARMInstruction(const ProjectModel * ctx, address_t address, u32 opcode);
 	
 	virtual u32			get_length() const;
 	

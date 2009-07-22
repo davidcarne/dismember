@@ -22,7 +22,7 @@ void LocalPythonOutputRedirector::write(std::string data)
 		printf("emerg: ::%d:>>> %s <<<\n", m_stream, data.c_str());
 }
 
-LocalPythonInterpreter::LocalPythonInterpreter(Document * doc) : m_doc(doc),
+LocalPythonInterpreter::LocalPythonInterpreter(Workspace * doc) : m_doc(doc),
 	m_stdout_dest(new LocalPythonOutputRedirector(1)), m_stderr_dest(new LocalPythonOutputRedirector(2))
 {
 	m_gbl = GlobalPythonInterpreter::getGlobalInterpreter();

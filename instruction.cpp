@@ -11,7 +11,7 @@
 
 
 
-Instruction::Instruction(const Trace * ctx, address_t addr, u32 length) : MemlocData(NULL, ctx,  addr, length)
+Instruction::Instruction(const ProjectModel * ctx, address_t addr, u32 length) : MemlocData(NULL, ctx,  addr, length)
 {
 
 }

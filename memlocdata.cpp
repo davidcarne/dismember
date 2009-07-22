@@ -2,7 +2,7 @@
 
 #include "memlocdata.h"
 
-MemlocData::MemlocData(const DataType * creator, const Trace * ctx, address_t addr, u32 length)
+MemlocData::MemlocData(const DataType * creator, const ProjectModel * ctx, address_t addr, u32 length)
 : m_ctx(ctx), m_address(addr), m_creator(creator)
 {
 	m_next = ctx->lookup_memloc(m_address + length, true);
@@ -139,7 +139,7 @@ bool MemlocData::get_explicit() const
 }
 
 
-const Trace * MemlocData::get_ctx() const
+const ProjectModel * MemlocData::get_ctx() const
 {
 	return m_ctx;
 }

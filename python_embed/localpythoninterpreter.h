@@ -70,7 +70,7 @@ private:
 };
 
 /**
- * Document specific python interpreter. Plays tricks with python state to make it seem local
+ * Workspace specific python interpreter. Plays tricks with python state to make it seem local
  */
 class LocalPythonInterpreter
 {
@@ -80,7 +80,7 @@ public:
 	/**
 	 * 
 	 */
-	LocalPythonInterpreter(Document * doc);
+	LocalPythonInterpreter(Workspace * doc);
 	python::object exec(python::str code);
 	python::object eval(python::str code);
 	python::object execsingle(python::str code);
@@ -89,7 +89,7 @@ public:
 	LocalPythonOutputRedirector * getStderrRedirector();
 	
 private:
-	Document * m_doc;
+	Workspace * m_doc;
 	
 	friend class GlobalPythonInterpreter;
 	static void setupPythonClasses();

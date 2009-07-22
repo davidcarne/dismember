@@ -1,5 +1,5 @@
 /*
- *  document.h
+ *  Workspace.h
  *  dismember
  *
  *  Created by David Carne on 14/02/08.
@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _document_H_
-#define _document_H_
+#ifndef _WORKSPACE_H_
+#define _WORKSPACE_H_
 
 #include <string>
 #include <boost/serialization/utility.hpp>
@@ -17,35 +17,35 @@
 
 // This has to be included for serialization deps.
 
-class Trace;
+class ProjectModel;
 class LocalPythonInterpreter;
-class DocumentGui;
+class WorkspaceGui;
 class IRunQueueControl;
 
 /**
- * \brief Document encapsulates the entire state of a Dismember document
+ * \brief Workspace encapsulates the entire state of a Dismember Workspace
  */
-class Document {
+class Workspace {
 public: 
 	/**
-	 * Instantiate a new document - this will go away once the document manager is introduced
+	 * Instantiate a new Workspace - this will go away once the Workspace manager is introduced
 	 */
-	Document();
+	Workspace();
 	
 	/**
-	 * Get the trace associated with the document
-	 * @return the trace associated with the document
+	 * Get the trace associated with the Workspace
+	 * @return the trace associated with the Workspace
 	 */
-	Trace * getTrace();
+	ProjectModel * getProjectModel();
 	
 	/**
-	 * Get the name of the document
-	 * @return the name of the document
+	 * Get the name of the Workspace
+	 * @return the name of the Workspace
 	 */
 	const std::string & getName();
 	
 	/**
-	 * Get the python interpreter for the document
+	 * Get the python interpreter for the Workspace
 	 * @return the python interpreter for the doc
 	 */
 	LocalPythonInterpreter * getPythonInterpreter();
@@ -56,9 +56,9 @@ public:
 	IRunQueueControl * getRunQueue();
 	
 	/**
-	 * Get the document's gui
+	 * Get the Workspace's gui
 	 */
-	DocumentGui * getDocumentGui();
+	WorkspaceGui * getWorkspaceGui();
 
 	/**
 	 * Post an update notification to the gui 
@@ -66,7 +66,7 @@ public:
 	void postGuiUpdate();
 	
 	/**
-	 * Save the document to a file
+	 * Save the Workspace to a file
 	 */
 	void saveTo(const std::string & filename);
 
@@ -79,14 +79,14 @@ private:
 	}
 	
 	IRunQueueControl * m_runQueue;
-	DocumentGui * m_docgui;
+	WorkspaceGui * m_docgui;
 	std::string m_name;
-	Trace * m_trace;
+	ProjectModel * m_trace;
 	LocalPythonInterpreter * m_pyInterpreter;
 };
 
-BOOST_CLASS_VERSION(Document, 1)
-BOOST_CLASS_TRACKING(Document, boost::serialization::track_never)
+BOOST_CLASS_VERSION(Workspace, 1)
+BOOST_CLASS_TRACKING(Workspace, boost::serialization::track_never)
 
 
 #endif

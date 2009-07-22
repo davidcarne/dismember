@@ -40,8 +40,8 @@ address_t QTRuntimeEvent::end()
 	return m_end;
 }
 
-QTRuntimeModel::QTRuntimeModel(Document &runtime)
- : m_runtime(runtime), m_gproxy(runtime.getTrace()), m_updated(false)
+QTRuntimeModel::QTRuntimeModel(Workspace &runtime)
+ : m_runtime(runtime), m_gproxy(runtime.getProjectModel()), m_updated(false)
 {
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
@@ -87,7 +87,7 @@ void QTRuntimeModel::unregisterRuntimeModelListener(QTRuntimeModelListener *l)
 	m_listeners.remove(l);
 }
 
-Document &QTRuntimeModel::getRuntime()
+Workspace &QTRuntimeModel::getRuntime()
 {
 	return m_runtime;
 }
@@ -97,13 +97,13 @@ GuiProxy &QTRuntimeModel::getProxy()
 	return m_gproxy;
 }
 
-Trace &QTRuntimeModel::getTrace()
+ProjectModel &QTRuntimeModel::getProjectModel()
 {
-	return *m_runtime.getTrace();
+	return *m_runtime.getProjectModel();
 }
 
 
-QTRuntimeModel *QTRuntimeModel::create(Document &rt)
+QTRuntimeModel *QTRuntimeModel::create(Workspace &rt)
 {
 	return new QTRuntimeModel(rt);
 }

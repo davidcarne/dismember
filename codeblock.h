@@ -24,10 +24,10 @@ private:
 	typedef std::set< CodeBlock * > codeblockset_t;
 	codeblockset_t m_pre;
 	codeblockset_t m_post;
-	Trace * m_trace;
+	ProjectModel * m_trace;
 	
 	
-	CodeBlock(Trace * t, address_t start, address_t end);
+	CodeBlock(ProjectModel * t, address_t start, address_t end);
 	friend class CodeBlockManager;
 	
 public:
@@ -49,7 +49,7 @@ private:
 	blocklist_t m_blocks;
 	
 	CodeBlock * buildCodeBlockAt(MemlocData * growFrom);
-	Trace * m_trace;
+	ProjectModel * m_trace;
 	
 	// Hooks for change notifications
 public:

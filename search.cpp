@@ -52,7 +52,7 @@ void SearchResults::setJobFinished(bool fin)
 	m_jobFinished = fin;
 }
 
-sp_RunQueueJob Search::createSearchJob(Document *d, uint8_t *b,
+sp_RunQueueJob Search::createSearchJob(Workspace *d, uint8_t *b,
 		psize_t len, SearchResults **res)
 {
 	SearchResults *sr = new SearchResults();
@@ -62,16 +62,16 @@ sp_RunQueueJob Search::createSearchJob(Document *d, uint8_t *b,
 			boost::bind(&Search::search, d, b, len, sr);
 	return createFunctorRunQueueJob("search", -1, jb);
 }
-SearchResults *Search::submitSearchJob(Document *d, uint8_t *b, psize_t len)
+SearchResults *Search::submitSearchJob(Workspace *d, uint8_t *b, psize_t len)
 {
 	SearchResults *res;
 	d->getRunQueue()->submit(createSearchJob(d, b, len, &res));
 	return res;
 }
 
-bool Search::search(Document * d, uint8_t *b, psize_t len, SearchResults *sr)
+bool Search::search(Workspace * d, uint8_t *b, psize_t len, SearchResults *sr)
 {
-	Trace *t = d->getTrace();
+	ProjectModel *t = d->getProjectModel();
 
 	MemSegmentManager::memseglist_ci mi;
 	MemSegmentManager::memseglist_ci begin = t->memsegs_begin();

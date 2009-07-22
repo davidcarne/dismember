@@ -13,17 +13,17 @@
 /**
  * Empty class that is the interface between the core logic and the gui
  */
-class DocumentGui {
+class WorkspaceGui {
 public:
 	/**
 	 * Notify the gui that an update may be necessary. The gui is free to rate-limit these.
 	 */
 	virtual void postUpdate() = 0;
-	virtual ~DocumentGui() = 0;
+	virtual ~WorkspaceGui() = 0;
 };
 
-class Document;
-DocumentGui * setupDocumentGui(Document & doc);
+class Workspace;
+WorkspaceGui * setupWorkspaceGui(Workspace & doc);
 
 #endif
 

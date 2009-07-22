@@ -8,13 +8,13 @@
 import dismember;
 from dismember.datatype_builtins import *;
 
-def newDocumentSetup(thedoc):
-	setupDocumentDefaultDataTypes(thedoc)
+def newWorkspaceSetup(theworkspace):
+	setupWorkspaceDefaultDataTypes(theworkspace)
 	
 	
-def setupDocumentDefaultDataTypes(thedoc):
+def setupWorkspaceDefaultDataTypes(theworkspace):
 	
-	trce = thedoc.trace;
+	trce = theworkspace.trace;
 	
 	# Unsigned 8 bit int
 	x = BinaryConstantDataType(trce, "u8_le", dismember.nparse.BTYPE_PLAIN, 1, False, dismember.nparse_sign.BSIGN_NONE)

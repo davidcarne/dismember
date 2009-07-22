@@ -37,7 +37,7 @@ QModelIndex QTCodeModel::index(int row, int column,
 	return createIndex(row, column);
 }
 
-QString QTCodeModel::displayText(Trace &t, address_t addr) const
+QString QTCodeModel::displayText(ProjectModel &t, address_t addr) const
 {
 	MemlocData *id = t.lookup_memloc(addr);
 	u8 ch;
@@ -53,7 +53,7 @@ QString QTCodeModel::displayText(Trace &t, address_t addr) const
 	return QString();
 }
 
-QString QTCodeModel::displayComment(Trace &t, address_t addr) const
+QString QTCodeModel::displayComment(ProjectModel &t, address_t addr) const
 {
 	const Comment *cmt = t.lookup_comment(addr);
 	if (cmt)
@@ -61,7 +61,7 @@ QString QTCodeModel::displayComment(Trace &t, address_t addr) const
 	return QString();
 }
 
-QString QTCodeModel::displayXrefs(Trace &t, address_t addr) const
+QString QTCodeModel::displayXrefs(ProjectModel &t, address_t addr) const
 {
 	MemlocData *id = t.lookup_memloc(addr);
 	if (id && id->has_xrefs_to()) {
@@ -93,7 +93,7 @@ QString QTCodeModel::displayXrefs(Trace &t, address_t addr) const
 	return QString();
 }
 
-QString QTCodeModel::displayXrefBrief(Trace &t, address_t addr) const
+QString QTCodeModel::displayXrefBrief(ProjectModel &t, address_t addr) const
 {
 	MemlocData *id = t.lookup_memloc(addr);
 	if (id && id->has_xrefs_to()) {
@@ -114,7 +114,7 @@ QString QTCodeModel::displayXrefBrief(Trace &t, address_t addr) const
 	return QString();
 }
 
-QString QTCodeModel::displaySymbol(Trace &t, address_t addr) const
+QString QTCodeModel::displaySymbol(ProjectModel &t, address_t addr) const
 {
 	const Symbol *sym = t.lookup_symbol(addr);
 	if (sym)
@@ -129,7 +129,7 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 	case Qt::ToolTipRole:
 		if (index.column() == 3) {
 			address_t addr = gprox.getLineAddr(index.row());
-			Trace &t = m_model->getTrace();
+			ProjectModel &t = m_model->getProjectModel();
 			return QVariant(displayXrefs(t, addr));
 		}
 		return QVariant();
@@ -150,7 +150,7 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 			case 1:
 				return QVariant(QColor(0, 0, 255));
 			case 2: {
-				MemlocData *id = m_model->getTrace().lookup_memloc(addr);
+				MemlocData *id = m_model->getProjectModel().lookup_memloc(addr);
 				if (id && id->is_executable())
 					return QVariant(QColor(0, 0, 200));
 				else if (id)
@@ -169,7 +169,7 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 	case Qt::DisplayRole:
 		try {
 			address_t addr = gprox.getLineAddr(index.row());
-			Trace &t = m_model->getTrace();
+			ProjectModel &t = m_model->getProjectModel();
 			if (!addr.isValid())
 				return QVariant();
 			switch (index.column()) {

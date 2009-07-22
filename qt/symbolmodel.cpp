@@ -19,7 +19,7 @@ QTSymbolModel::~QTSymbolModel()
 
 int QTSymbolModel::rowCount(const QModelIndex &parent) const
 {
-	return m_model->getTrace().get_symbol_count();
+	return m_model->getProjectModel().get_symbol_count();
 }
 
 int QTSymbolModel::columnCount(const QModelIndex & parent) const
@@ -48,7 +48,7 @@ QVariant QTSymbolModel::data(const QModelIndex &index, int role) const
 			return QVariant(QColor(255,255,255));
 		break;
 	case Qt::DisplayRole: {
-		const Symbol *sym = m_model->getTrace().find_ordered_symbol(
+		const Symbol *sym = m_model->getProjectModel().find_ordered_symbol(
 				index.row(), SymbolList::SYMORDER_NAME);
 		if (!sym) return QVariant();
 		return QVariant(QString(sym->get_name().c_str()));
@@ -62,7 +62,7 @@ QVariant QTSymbolModel::data(const QModelIndex &index, int role) const
 
 address_t QTSymbolModel::getAddress(int row)
 {
-	const Symbol *sym = m_model->getTrace().find_ordered_symbol(
+	const Symbol *sym = m_model->getProjectModel().find_ordered_symbol(
 			row, SymbolList::SYMORDER_NAME);
 	return sym->get_addr();
 }

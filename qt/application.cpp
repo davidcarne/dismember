@@ -64,7 +64,7 @@ void QTApplication::open()
 		}
 		replaceRuntime();
 		if (!FileLoaderMaker::autoLoadFromFile(fp,
-				m_runtime->getTrace())) {
+				m_runtime->getProjectModel())) {
 			error(tr("Open failed"),
 				fileName
 				.append(": ")
@@ -86,8 +86,8 @@ void QTApplication::closeEvent(QCloseEvent *event)
 
 void QTApplication::replaceRuntime()
 {
-	Document *n_runtime = new Document();
-	QTRuntimeModel *n_model = (QTRuntimeModel *)n_runtime->getDocumentGui();
+	Workspace *n_runtime = new Workspace();
+	QTRuntimeModel *n_model = (QTRuntimeModel *)n_runtime->getWorkspaceGui();
 	n_model->registerRuntimeModelListener(m_ui.e_assembly);
 	n_model->registerRuntimeModelListener(m_ui.e_dataview);
 	n_model->registerRuntimeModelListener(m_ui.e_symbolview);

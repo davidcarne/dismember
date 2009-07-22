@@ -31,7 +31,7 @@ class QTApplication : public QMainWindow
 
 	bool m_fileChanged;
 	bool m_updated;
-	Document *m_runtime;
+	Workspace *m_runtime;
 	Ui::MainWindow m_ui;
 	QString m_filename;
 };

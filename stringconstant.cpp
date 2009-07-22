@@ -4,7 +4,7 @@
 class StringConstantDataType : public DataType {
 public:
 	
-	StringConstantDataType(Trace * t);
+	StringConstantDataType(ProjectModel * t);
 	
 	virtual const std::string getName() const;
 	virtual u32 getElemSize() const;
@@ -36,7 +36,7 @@ protected:
 		
 		while (!done)
 		{
-			if (!getTraceContext()->readByte(addr, &unitchar))
+			if (!getProjectModelContext()->readByte(addr, &unitchar))
 			{
 				break;
 			}
@@ -76,7 +76,7 @@ protected:
 		}
 		contents += "\",0";
 		
-		return new StringConstant(this, getTraceContext(), stadr, len, contents);
+		return new StringConstant(this, getProjectModelContext(), stadr, len, contents);
 	}
 	
 private:
@@ -106,7 +106,7 @@ public:
 			}
 			
 protected:
-			StringConstant(const DataType * creator, const Trace * ctx, address_t address, uint64_t len, std::string data) : MemlocData(creator, ctx, address, m_len), m_len(len), m_data(data)
+			StringConstant(const DataType * creator, const ProjectModel * ctx, address_t address, uint64_t len, std::string data) : MemlocData(creator, ctx, address, m_len), m_len(len), m_data(data)
 			{}
 			
 			uint64_t m_len;
@@ -116,7 +116,7 @@ private:
 		};
 };
 
-StringConstantDataType::StringConstantDataType(Trace * t) : DataType(t)
+StringConstantDataType::StringConstantDataType(ProjectModel * t) : DataType(t)
 {
 }
 
@@ -144,5 +144,5 @@ bool StringConstantDataType::isMutable() const
 void bindStringConstantDataType()
 {
 	boost::python::class_<StringConstantDataType, boost::python::bases<DataType>,  boost::shared_ptr<StringConstantDataType> >
-	("StringConstantDataType", boost::python::init<Trace *>());
+	("StringConstantDataType", boost::python::init<ProjectModel *>());
 }

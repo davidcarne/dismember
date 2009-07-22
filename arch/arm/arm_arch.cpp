@@ -42,7 +42,7 @@ public:
 	bool ldw(address_t addr, u32 * data) const
 	{
 		u8 dataar[4];
-		if (!getTraceContext()->readBytes(addr, 4, dataar))
+		if (!getProjectModelContext()->readBytes(addr, 4, dataar))
 			return false;
 		*data = dataar[3];
 		*data <<= 8;
@@ -57,7 +57,7 @@ public:
 	/**
 	 * \brief Default constructor for the datatype class - cannot fully construct a datatype.
 	 */
-	ARMInstructionDataType(Trace * t) : DataType(t) {
+	ARMInstructionDataType(ProjectModel * t) : DataType(t) {
 	};
 
 	/**
@@ -68,7 +68,7 @@ public:
 	virtual MemlocData * instantiate(address_t addr) const {
 		u32 data;
 		if (ldw(addr, &data) )
-			return new ARMInstruction(getTraceContext(), addr, data);
+			return new ARMInstruction(getProjectModelContext(), addr, data);
 		
 		return NULL;
 	};
@@ -81,10 +81,10 @@ void ARMArchitecture::bind_type()
 	 ("ARMArchitecture");
 	 */
 	boost::python::class_<ARMInstructionDataType, boost::python::bases<DataType>,  boost::shared_ptr<ARMInstructionDataType> >
-	("ARMInstructionDataType", boost::python::init<Trace *>());
+	("ARMInstructionDataType", boost::python::init<ProjectModel *>());
 }
 
-DataType * ARMArchitecture::getDataType(Trace *t) const
+DataType * ARMArchitecture::getDataType(ProjectModel *t) const
 {
 	if (!m_adt)
 		m_adt = new ARMInstructionDataType(t);
@@ -93,7 +93,7 @@ DataType * ARMArchitecture::getDataType(Trace *t) const
 }
 	
 /*
-Instruction * ARMArchitecture::create_instruction(Trace * ctx, address_t addr)
+Instruction * ARMArchitecture::create_instruction(ProjectModel * ctx, address_t addr)
 {
 	return new ARMInstruction(ctx, addr, ctx->ldw(addr));
 }*/

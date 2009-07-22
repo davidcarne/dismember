@@ -42,13 +42,13 @@ class SearchResults
 class Search
 {
  public:
-	static sp_RunQueueJob createSearchJob(Document * d,
+	static sp_RunQueueJob createSearchJob(Workspace * d,
 			uint8_t *bytes, psize_t len, SearchResults **res);
-	static SearchResults *submitSearchJob(Document * d,
+	static SearchResults *submitSearchJob(Workspace * d,
 			uint8_t *bytes, psize_t len);
 
  private:
-	static bool search(Document * d, uint8_t *bytes,
+	static bool search(Workspace * d, uint8_t *bytes,
 			psize_t len, SearchResults *sr);
 };
 

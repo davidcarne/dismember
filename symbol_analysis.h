@@ -7,11 +7,11 @@
 class SymbolAnalysis
 {
  public:
-	static sp_RunQueueJob createAnalysisJob(Document * d);
-	static void submitAnalysisJob(Document * d);
+	static sp_RunQueueJob createAnalysisJob(Workspace * d);
+	static void submitAnalysisJob(Workspace * d);
 
  private:
-	static bool analyze(Document * d);
+	static bool analyze(Workspace * d);
 };
 
 #endif

@@ -7,7 +7,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-class Trace;
+class ProjectModel;
 class MemlocData;
 
 /**
@@ -62,7 +62,7 @@ class DataType {
 	/**
 	 * @return the trace context that this datatype belongs to
 	 */
-	const Trace * getTraceContext() const {
+	const ProjectModel * getProjectModelContext() const {
 		return m_ctx;
 	}
 	
@@ -72,7 +72,7 @@ class DataType {
 	/**
 	 * \brief Default constructor for the datatype class - cannot fully construct a datatype.
 	 */
-	DataType(Trace * t) : m_ctx(t) {
+	DataType(ProjectModel * t) : m_ctx(t) {
 	};
 	
 	/**
@@ -83,8 +83,8 @@ class DataType {
 	virtual MemlocData * instantiate(address_t addr) const = 0;
 	
 private:
-	friend class Trace;
-	Trace * m_ctx;
+	friend class ProjectModel;
+	ProjectModel * m_ctx;
 	std::string m_displayname;
 	
 };

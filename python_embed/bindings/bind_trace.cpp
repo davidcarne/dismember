@@ -18,7 +18,7 @@
 using namespace boost::python;
 
 // Make sure we retain ownership for this object
-void addDataType_wrap(Trace & t, boost::shared_ptr<DataType> a)
+void addDataType_wrap(ProjectModel & t, boost::shared_ptr<DataType> a)
 {
     t.addDataType(a);
 }
@@ -26,9 +26,9 @@ void addDataType_wrap(Trace & t, boost::shared_ptr<DataType> a)
 
 void bind_trace()
 {
-	class_<Trace, boost::noncopyable>("Trace", no_init)
-	//.def("undefine", &Trace::undefine)
-	//.def("createMemlocDataAt", &Trace::createMemlocDataAt)
-	.add_property("defdatatype", make_function(&Trace::getCodeDataType, return_internal_reference<>() ))
+	class_<ProjectModel, boost::noncopyable>("ProjectModel", no_init)
+	//.def("undefine", &ProjectModel::undefine)
+	//.def("createMemlocDataAt", &ProjectModel::createMemlocDataAt)
+	.add_property("defdatatype", make_function(&ProjectModel::getCodeDataType, return_internal_reference<>() ))
 	.def("addDataType", &addDataType_wrap);
 }

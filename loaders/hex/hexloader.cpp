@@ -12,7 +12,7 @@ class HexLoader : public FileLoaderMaker
  public:
 	HexLoader();
 
-	virtual bool loadFromFile(FILE *file, Trace *ctx);
+	virtual bool loadFromFile(FILE *file, ProjectModel *ctx);
 	virtual int matchToFile(FILE *file) const;
 } registerHexLoader;
 
@@ -254,7 +254,7 @@ int HexLoader::matchToFile(FILE *fp) const
 	return i*25;
 }
 
-bool HexLoader::loadFromFile(FILE *fp, Trace *ctx)
+bool HexLoader::loadFromFile(FILE *fp, ProjectModel *ctx)
 {
 	char line[2048];
 

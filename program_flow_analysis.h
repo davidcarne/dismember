@@ -16,15 +16,15 @@
 
 class ProgramFlowAnalysis {
 public:
-	static sp_RunQueueJob createAnalysisJob(Document * d, DataType * dtcreate, address_t start);
-	static void submitAnalysisJob(Document * d, DataType * dtcreate, address_t start);
+	static sp_RunQueueJob createAnalysisJob(Workspace * d, DataType * dtcreate, address_t start);
+	static void submitAnalysisJob(Workspace * d, DataType * dtcreate, address_t start);
 
-	static sp_RunQueueJob createUndefineJob(Document * d, address_t start);
-	static void submitUndefineJob(Document * d, address_t start);
+	static sp_RunQueueJob createUndefineJob(Workspace * d, address_t start);
+	static void submitUndefineJob(Workspace * d, address_t start);
 	
 private:
-	static bool undefine(Document * d, address_t start);
-	static bool analyze(Document * d, DataType * dtcreate, address_t start);
+	static bool undefine(Workspace * d, address_t start);
+	static bool analyze(Workspace * d, DataType * dtcreate, address_t start);
 };
 
 #endif

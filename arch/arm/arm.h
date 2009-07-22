@@ -16,11 +16,11 @@ public:
 	virtual std::string get_short_name() const; 
 	
 	static void bind_type();
-	virtual DataType * getDataType(Trace *) const;
+	virtual DataType * getDataType(ProjectModel *) const;
 private:
 	mutable ARMInstructionDataType * m_adt;
 	
-	//virtual Instruction * create_instruction(Trace * ctx, address_t addr);
+	//virtual Instruction * create_instruction(ProjectModel * ctx, address_t addr);
 	//virtual endian_e getArchEndian(void);
 	// also here we have the create from serializer factory method
 };

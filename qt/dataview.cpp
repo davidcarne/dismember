@@ -33,7 +33,7 @@ void QTDataView::paintEvent(QPaintEvent *event)
 	QPainter painter(this);
 	QSize s = size();
 
-	Trace &t = m_model->getTrace();
+	ProjectModel &t = m_model->getProjectModel();
 
 	MemSegmentManager::memseglist_ci mi;
 	MemSegmentManager::memseglist_ci begin = t.memsegs_begin();

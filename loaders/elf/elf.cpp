@@ -75,7 +75,7 @@ class ElfLoader : public FileLoaderMaker {
 	public:
 		ElfLoader();
 		virtual int matchToFile(FILE * f) const;
-		virtual bool loadFromFile(FILE * f, Trace * ctx);
+		virtual bool loadFromFile(FILE * f, ProjectModel * ctx);
 	private:
 		symbol    *symbols;
 		section    *sections;
@@ -245,7 +245,7 @@ int ElfLoader::matchToFile(FILE * file) const {
 	return -1;
 }
 
-bool ElfLoader::loadFromFile(FILE *file, Trace *trace){
+bool ElfLoader::loadFromFile(FILE *file, ProjectModel *trace){
 	Elf32_Ehdr eh;
 	Elf32_Shdr sh;
 	Elf32_Phdr ph;

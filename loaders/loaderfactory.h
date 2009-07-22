@@ -23,7 +23,7 @@ public:
 	 * @param datasrc the data source
 	 * @param ctx the context to load the data source to
 	 */
-	static bool loadFromFile(std::string loader, FILE * datasrc, Trace * ctx);
+	static bool loadFromFile(std::string loader, FILE * datasrc, ProjectModel * ctx);
 	
 	/**
 	 * \brief automatically load a given FILE to the trace
@@ -35,7 +35,7 @@ public:
 	 * @param datasrc - file data source
 	 * @param ctx context to load the datasource to
 	 */
-	static bool autoLoadFromFile(FILE * datasrc, Trace * ctx);
+	static bool autoLoadFromFile(FILE * datasrc, ProjectModel * ctx);
 
 	/**
 	 * get the loader data map. This needs a fixup.
@@ -54,7 +54,7 @@ protected:
 	/**
 	 * All inheriting factories must implement - load the given file to the given trace
 	 */
-	virtual bool loadFromFile(FILE * f, Trace * ctx) = 0;
+	virtual bool loadFromFile(FILE * f, ProjectModel * ctx) = 0;
 	
 	/**
 	 * Constructor for the pluggable factory used in auto-registration

@@ -8,21 +8,21 @@
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
-sp_RunQueueJob SymbolAnalysis::createAnalysisJob(Document * d)
+sp_RunQueueJob SymbolAnalysis::createAnalysisJob(Workspace * d)
 {
 	FunctorRunQueueJob::jobfun_t jb =
 			boost::bind(&SymbolAnalysis::analyze, d);
 	return createFunctorRunQueueJob("symbol analysis", 0, jb);
 }
 
-void SymbolAnalysis::submitAnalysisJob(Document * d)
+void SymbolAnalysis::submitAnalysisJob(Workspace * d)
 {
 	d->getRunQueue()->submit(createAnalysisJob(d));
 }
 
-bool SymbolAnalysis::analyze(Document *d)
+bool SymbolAnalysis::analyze(Workspace *d)
 {
-	Trace *t = d->getTrace();
+	ProjectModel *t = d->getProjectModel();
 	char namebuf[128];
 	char type[16];
 	int size;

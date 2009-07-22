@@ -21,7 +21,7 @@ class GuiProxy {
 	/**
 	 * \brief Instantiate a new gui proxy for the given trace/document
 	 */
-	GuiProxy(Trace * ctx);
+	GuiProxy(ProjectModel * ctx);
 	
 	/**
 	 * \brief Get the number of lines in the display
@@ -57,7 +57,7 @@ class GuiProxy {
 	void update(void);
 private:
 	
-	Trace * m_ctx;
+	ProjectModel * m_ctx;
 	
 	struct addrblock {
 		address_t start;

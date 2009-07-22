@@ -13,32 +13,32 @@
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
-sp_RunQueueJob ProgramFlowAnalysis::createAnalysisJob(Document * d, DataType * dtcreate, address_t start)
+sp_RunQueueJob ProgramFlowAnalysis::createAnalysisJob(Workspace * d, DataType * dtcreate, address_t start)
 {
 	FunctorRunQueueJob::jobfun_t jb = boost::bind(&ProgramFlowAnalysis::analyze, d, dtcreate, start);
 	return createFunctorRunQueueJob("code flow analysis", 20, jb);
 }
 
-void ProgramFlowAnalysis::submitAnalysisJob(Document * d, DataType * dtcreate, address_t start)
+void ProgramFlowAnalysis::submitAnalysisJob(Workspace * d, DataType * dtcreate, address_t start)
 {
 	d->getRunQueue()->submit(createAnalysisJob(d, dtcreate, start));
 }
 
-sp_RunQueueJob ProgramFlowAnalysis::createUndefineJob(Document * d, address_t start)
+sp_RunQueueJob ProgramFlowAnalysis::createUndefineJob(Workspace * d, address_t start)
 {
 	FunctorRunQueueJob::jobfun_t jb = boost::bind(&ProgramFlowAnalysis::undefine, d, start);
 	return createFunctorRunQueueJob("undefine", 0, jb);
 }
 
-void ProgramFlowAnalysis::submitUndefineJob(Document * d, address_t start)
+void ProgramFlowAnalysis::submitUndefineJob(Workspace * d, address_t start)
 {
 	d->getRunQueue()->submit(createUndefineJob(d, start));
 }
 
 
-bool ProgramFlowAnalysis::undefine(Document * d, address_t start)
+bool ProgramFlowAnalysis::undefine(Workspace * d, address_t start)
 {
-	Trace * t = d->getTrace();
+	ProjectModel * t = d->getProjectModel();
 
 	std::stack<address_t> analysis_addrs;
 	analysis_addrs.push(start);
@@ -72,9 +72,9 @@ bool ProgramFlowAnalysis::undefine(Document * d, address_t start)
 }
 
 
-bool ProgramFlowAnalysis::analyze(Document * d, DataType * dtcreate, address_t start)
+bool ProgramFlowAnalysis::analyze(Workspace * d, DataType * dtcreate, address_t start)
 {
-	Trace * t = d->getTrace();
+	ProjectModel * t = d->getProjectModel();
 	
 	address_t addr;
 	addr = start;

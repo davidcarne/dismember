@@ -11,10 +11,10 @@
 #include "runtimemodel.h"
 #include "document.h"
 
-DocumentGui *setupDocumentGui(Document &doc)
+WorkspaceGui *setupWorkspaceGui(Workspace &doc)
 { 
 	return QTRuntimeModel::create(doc);
 }
 
-DocumentGui::~DocumentGui()
+WorkspaceGui::~WorkspaceGui()
 {}

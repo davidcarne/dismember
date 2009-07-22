@@ -1,5 +1,5 @@
 /*
- *  document.cpp
+ *  Workspace.cpp
  *  dismember
  *
  *  Created by David Carne on 14/02/08.
@@ -34,55 +34,55 @@
 #include "guiglue.h"
 #include "run_queue.h"
 
-Document::Document()
+Workspace::Workspace()
 {
-	// Create all the constituent parts of the document
-	m_trace = new Trace(new ARMArchitecture());
+	// Create all the constituent parts of the Workspace
+	m_trace = new ProjectModel(new ARMArchitecture());
 	m_pyInterpreter = new LocalPythonInterpreter(this);
-	m_docgui = setupDocumentGui(*this);
+	m_docgui = setupWorkspaceGui(*this);
 	m_runQueue = createRunQueueControl();
 	
-	// Setup the new document
-	m_pyInterpreter->exec("dismemauto.newDocumentSetup(doc)");
+	// Setup the new Workspace
+	m_pyInterpreter->exec("dismemauto.newWorkspaceSetup(doc)");
 	
 	postGuiUpdate();
 	
 }
 
-Trace * Document::getTrace()
+ProjectModel * Workspace::getProjectModel()
 {
 	return m_trace;
 }
 
-const std::string & Document::getName()
+const std::string & Workspace::getName()
 {
 	return m_name;
 }
 
 
-LocalPythonInterpreter * Document::getPythonInterpreter()
+LocalPythonInterpreter * Workspace::getPythonInterpreter()
 {
 	return m_pyInterpreter;
 }
 
 
-IRunQueueControl * Document::getRunQueue()
+IRunQueueControl * Workspace::getRunQueue()
 {
 	return m_runQueue;
 }
 
-DocumentGui * Document::getDocumentGui()
+WorkspaceGui * Workspace::getWorkspaceGui()
 {
 	return m_docgui;
 }
 
-void Document::postGuiUpdate()
+void Workspace::postGuiUpdate()
 {
 	
 	m_docgui->postUpdate();
 }
 
-void Document::saveTo(const std::string & filename)
+void Workspace::saveTo(const std::string & filename)
 {
 	std::ofstream ofs(filename.c_str(), std::ios::binary);
 	boost::archive::text_oarchive oa(ofs);

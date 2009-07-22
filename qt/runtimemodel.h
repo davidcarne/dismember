@@ -8,7 +8,7 @@
 #include <list>
 
 class QTRuntimeModel;
-class Document;
+class Workspace;
 
 class QTRuntimeEvent
 {
@@ -17,7 +17,7 @@ class QTRuntimeEvent
 		RuntimeUpdate, // range
 		RuntimeFlush,  // everything
 		RuntimeJump    // one addr
-		// room for expansion when DocumentGui gets fleshed out
+		// room for expansion when WorkspaceGui gets fleshed out
 	};
 	enum Flags {
 		NoFlags = 0,
@@ -54,19 +54,19 @@ class QTRuntimeModelListener
 	virtual ~QTRuntimeModelListener() = 0;
 };
 
-class QTRuntimeModel : public QObject, public DocumentGui
+class QTRuntimeModel : public QObject, public WorkspaceGui
 {
 	Q_OBJECT
  public:
- 	static QTRuntimeModel *create(Document &rt);
+ 	static QTRuntimeModel *create(Workspace &rt);
 	~QTRuntimeModel();
 
 	void registerRuntimeModelListener(QTRuntimeModelListener *listener);
 	void unregisterRuntimeModelListener(QTRuntimeModelListener *listener);
 
-	Document &getRuntime();
+	Workspace &getRuntime();
 	GuiProxy &getProxy();
-	Trace &getTrace(); // convienience
+	ProjectModel &getProjectModel(); // convienience
 
 	void postUpdate();
 
@@ -77,9 +77,9 @@ class QTRuntimeModel : public QObject, public DocumentGui
 	void updateTimeout();
 
  private:
-	QTRuntimeModel(Document &runtime);
+	QTRuntimeModel(Workspace &runtime);
 
-	Document &m_runtime;
+	Workspace &m_runtime;
 	GuiProxy m_gproxy;
 	bool m_updated;
  	std::list<QTRuntimeModelListener *> m_listeners;

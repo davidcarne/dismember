@@ -25,7 +25,7 @@ class FlatLoader : public FileLoaderMaker {
 public:
 	FlatLoader();
 	virtual int matchToFile(FILE * f) const;
-	virtual bool loadFromFile(FILE * f, Trace * ctx);
+	virtual bool loadFromFile(FILE * f, ProjectModel * ctx);
 private:
 	struct flat_hdr header;
 	void reloc(u8 *data, u32 base, FILE *fd);
@@ -46,7 +46,7 @@ int FlatLoader::matchToFile(FILE * f) const
 	return 54;
 }
 
-bool FlatLoader::loadFromFile(FILE * loadimg, Trace * ctx)
+bool FlatLoader::loadFromFile(FILE * loadimg, ProjectModel * ctx)
 {
 	const u32 loadAddress = 0;
 	/* Load the image */

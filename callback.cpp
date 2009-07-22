@@ -1,18 +1,18 @@
 #include "dsmem_trace.h"
 #include "callback.h"
 
-void Trace::registerMemlocHook(CallbackBase<MemlocData *> *cb)
+void ProjectModel::registerMemlocHook(CallbackBase<MemlocData *> *cb)
 { memloc_hooks.push_back(cb); }
-void Trace::registerXrefHook(CallbackBase<Xref *> *cb)
+void ProjectModel::registerXrefHook(CallbackBase<Xref *> *cb)
 { xref_hooks.push_back(cb); }
-void Trace::registerSymbolHook(CallbackBase<Symbol *> *cb)
+void ProjectModel::registerSymbolHook(CallbackBase<Symbol *> *cb)
 { symbol_hooks.push_back(cb); }
 
-void Trace::unregisterMemlocHook(CallbackBase<MemlocData *> *cb)
+void ProjectModel::unregisterMemlocHook(CallbackBase<MemlocData *> *cb)
 { memloc_hooks.remove(cb); }
-void Trace::unregisterXrefHook(CallbackBase<Xref *> *cb)
+void ProjectModel::unregisterXrefHook(CallbackBase<Xref *> *cb)
 { xref_hooks.remove(cb); }
-void Trace::unregisterSymbolHook(CallbackBase<Symbol *> *cb)
+void ProjectModel::unregisterSymbolHook(CallbackBase<Symbol *> *cb)
 { symbol_hooks.remove(cb); }
 
 
@@ -21,9 +21,9 @@ void Trace::unregisterSymbolHook(CallbackBase<Symbol *> *cb)
   for (; i != a##_hooks.end(); ++i) \
     (*(i))->callback(b, c);
 
-void Trace::notifyMemlocChange(MemlocData *data, HookChange ch)
+void ProjectModel::notifyMemlocChange(MemlocData *data, HookChange ch)
 { NOTIFY_MACRO(memloc, data, ch) }
-void Trace::notifyXrefChange(Xref *data, HookChange ch)
+void ProjectModel::notifyXrefChange(Xref *data, HookChange ch)
 { NOTIFY_MACRO(xref, data, ch) }
-void Trace::notifySymbolChange(Symbol *data, HookChange ch)
+void ProjectModel::notifySymbolChange(Symbol *data, HookChange ch)
 { NOTIFY_MACRO(symbol, data, ch) }

@@ -7,7 +7,7 @@
 #include "runtimemodel.h"
 #include "guiproxy.h"
 
-class Document;
+class Workspace;
 
 class QTCodeModel : public QAbstractItemModel
 {
@@ -27,11 +27,11 @@ class QTCodeModel : public QAbstractItemModel
 	void flush();
 
  private:
-	QString displayText(Trace &, address_t addr) const;
-	QString displayXrefs(Trace &, address_t addr) const;
-	QString displaySymbol(Trace &, address_t addr) const;
-	QString displayComment(Trace &, address_t addr) const;
-	QString displayXrefBrief(Trace &, address_t addr) const;
+	QString displayText(ProjectModel &, address_t addr) const;
+	QString displayXrefs(ProjectModel &, address_t addr) const;
+	QString displaySymbol(ProjectModel &, address_t addr) const;
+	QString displayComment(ProjectModel &, address_t addr) const;
+	QString displayXrefBrief(ProjectModel &, address_t addr) const;
 
 	QTRuntimeModel *m_model;
 };

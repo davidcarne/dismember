@@ -21,15 +21,15 @@
 
 #define ASSERT_RESOLVE(addr) assert(readByte(addr, NULL))
 
-Trace::Trace(Architecture * arch) : m_arch(arch), m_xrefmanager(this)
+ProjectModel::ProjectModel(Architecture * arch) : m_arch(arch), m_xrefmanager(this)
 {}
 
-DataType * Trace::getCodeDataType() {
+DataType * ProjectModel::getCodeDataType() {
 	return m_arch->getDataType(this);
 }
 
 
-bool Trace::addSegment(MemSegment * m)
+bool ProjectModel::addSegment(MemSegment * m)
 {
 	/** \todo notifications need to be reworked, a global notification is a bit of a hack. Also, a dedicated memory segment cat would be good */
 	notifyMemlocChange(NULL, HOOK_MODIFY);
@@ -37,33 +37,33 @@ bool Trace::addSegment(MemSegment * m)
 }
 
 
-bool Trace::readByte(address_t taddr, uint8_t * data) const
+bool ProjectModel::readByte(address_t taddr, uint8_t * data) const
 {
 	return m_memsegmentmanager.readByte(taddr, data);
 }
 
-bool Trace::readBytes(address_t taddr, u8 len, u8* data) const
+bool ProjectModel::readBytes(address_t taddr, u8 len, u8* data) const
 {
 	
 	return m_memsegmentmanager.readBytes(taddr, len, data);
 }
 
-MemSegmentManager::memseglist_ci Trace::memsegs_begin() const
+MemSegmentManager::memseglist_ci ProjectModel::memsegs_begin() const
 {
 	return m_memsegmentmanager.memsegs_begin();
 }
 
-MemSegmentManager::memseglist_ci Trace::memsegs_end() const
+MemSegmentManager::memseglist_ci ProjectModel::memsegs_end() const
 {
 	return m_memsegmentmanager.memsegs_end();
 }
 
-address_t Trace::locateAddress(uint64_t address) const
+address_t ProjectModel::locateAddress(uint64_t address) const
 {
 	return m_memsegmentmanager.locateAddress(address);
 }
 
-MemlocData * Trace::createMemlocDataAt(DataType * d, address_t addr)
+MemlocData * ProjectModel::createMemlocDataAt(DataType * d, address_t addr)
 {
 	assert(d);
 	MemlocData * i = d->instantiate(addr);
@@ -90,60 +90,60 @@ MemlocData * Trace::createMemlocDataAt(DataType * d, address_t addr)
 	return i;
 }
 
-Trace::~Trace()
+ProjectModel::~ProjectModel()
 {
 }
 
 /* Symbol accessors */
-SymbolList::symname_ci Trace::sym_begin_name() const
+SymbolList::symname_ci ProjectModel::sym_begin_name() const
 {
 	return m_symlist.begin_name();
 }
 
-SymbolList::symname_ci Trace::sym_end_name() const
+SymbolList::symname_ci ProjectModel::sym_end_name() const
 {
 	return m_symlist.end_name();
 }
 
-SymbolList::symaddr_ci Trace::sym_begin_addr() const
+SymbolList::symaddr_ci ProjectModel::sym_begin_addr() const
 {
 	return m_symlist.begin_addr();
 }
 
-SymbolList::symaddr_ci Trace::sym_end_addr() const
+SymbolList::symaddr_ci ProjectModel::sym_end_addr() const
 {
 	return m_symlist.end_addr();
 }
 
-Symbol * Trace::find_ordered_symbol(uint32_t index, SymbolList::symsortorder_e order) const
+Symbol * ProjectModel::find_ordered_symbol(uint32_t index, SymbolList::symsortorder_e order) const
 {
 	return m_symlist.find_ordered_symbol(index, order);
 }
 
-uint32_t Trace::get_symbol_count(void) const
+uint32_t ProjectModel::get_symbol_count(void) const
 {
 	return  m_symlist.get_symbol_count();
 }
 
-const Symbol * Trace::lookup_symbol(const std::string & symname) const
+const Symbol * ProjectModel::lookup_symbol(const std::string & symname) const
 {
 	const Symbol *sy = m_symlist.get_symbol(symname);
 	return sy;
 }
 
-const Symbol * Trace::lookup_symbol(address_t addr) const
+const Symbol * ProjectModel::lookup_symbol(address_t addr) const
 {
 	const Symbol *sy = m_symlist.get_symbol(addr);
 	return sy;
 }
 
 
-MemlocData * Trace::lookup_memloc(address_t addr, bool exactmatch) const
+MemlocData * ProjectModel::lookup_memloc(address_t addr, bool exactmatch) const
 {	
 	return m_memlocmanager.findMemloc(addr, exactmatch);
 }
 
-void Trace::remove_memloc(address_t addr)
+void ProjectModel::remove_memloc(address_t addr)
 {
 	MemlocData * a = m_memlocmanager.findMemloc(addr, true);
 	if (!a)
@@ -157,27 +157,27 @@ void Trace::remove_memloc(address_t addr)
 	delete a;
 }
 
-MemlocManager::memloclist_ci Trace::memloc_list_begin() const
+MemlocManager::memloclist_ci ProjectModel::memloc_list_begin() const
 {
 	return m_memlocmanager.memloc_list_begin();
 }
 
-MemlocManager::memloclist_ci Trace::memloc_list_end() const
+MemlocManager::memloclist_ci ProjectModel::memloc_list_end() const
 {
 	return m_memlocmanager.memloc_list_end();
 }
 
-Comment *Trace::create_comment(std::string cmt, address_t addr)
+Comment *ProjectModel::create_comment(std::string cmt, address_t addr)
 {
 	return m_commentlist.set_comment(addr, cmt);
 }
 
-Comment *Trace::lookup_comment(address_t addr) const
+Comment *ProjectModel::lookup_comment(address_t addr) const
 {
 	return m_commentlist.get_comment(addr);
 }
 
-Symbol *Trace::create_sym(const std::string & name, address_t addr)
+Symbol *ProjectModel::create_sym(const std::string & name, address_t addr)
 {
 
 	//MemlocData * memd = lookup_memloc(addr);
@@ -190,22 +190,22 @@ Symbol *Trace::create_sym(const std::string & name, address_t addr)
 }
 
 
-DataTypeReg::datatypereg_ci Trace::getDataTypeBegin() const
+DataTypeReg::datatypereg_ci ProjectModel::getDataTypeBegin() const
 {
 	return m_datatypelist.getBegin();
 }
 
-DataTypeReg::datatypereg_ci Trace::getDataTypeEnd() const
+DataTypeReg::datatypereg_ci ProjectModel::getDataTypeEnd() const
 {
 	return m_datatypelist.getEnd();
 }
 	
-sp_DataType Trace::lookupDataType(std::string name) const
+sp_DataType ProjectModel::lookupDataType(std::string name) const
 {
 	return m_datatypelist.lookupDataType(name);
 }
 
-void Trace::addDataType(sp_DataType d)
+void ProjectModel::addDataType(sp_DataType d)
 {
 	assert(d);
 	assert(d->getName().size() > 0);
@@ -213,7 +213,7 @@ void Trace::addDataType(sp_DataType d)
 }
 
 
-Xref *Trace::create_xref(address_t srcaddr, address_t dstaddr, Xref::xref_type_e type)
+Xref *ProjectModel::create_xref(address_t srcaddr, address_t dstaddr, Xref::xref_type_e type)
 {
 	
 	MemlocData * src = lookup_memloc(srcaddr);

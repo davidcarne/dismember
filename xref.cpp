@@ -26,7 +26,7 @@ u32 Xref::get_type() const
 	return m_type;
 }
 
-Xref::Xref(Trace * lookupsrc, address_t srcaddr, address_t dstaddr, xref_type_e type):
+Xref::Xref(ProjectModel * lookupsrc, address_t srcaddr, address_t dstaddr, xref_type_e type):
 	m_srcaddr(srcaddr), m_dstaddr(dstaddr), m_type(type), m_lookuptrace(lookupsrc)
 {
 	

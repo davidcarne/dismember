@@ -6,9 +6,9 @@
 #include "xrefmanager.h"
 
 
-class Trace;
+class ProjectModel;
 /**
- * \brief MemlocData is the data the Trace class has on a location specified by an address_t
+ * \brief MemlocData is the data the ProjectModel class has on a location specified by an address_t
  *
  * Each analyzed memory location is associated with an instantiation of a subclass of MemlocData.
  * MemlocData is an interface and cannot be used directly
@@ -120,7 +120,7 @@ public:
 	/**
 	 * @return the trace that this ctx belongs to
 	 */
-	const Trace * get_ctx() const;
+	const ProjectModel * get_ctx() const;
 
 	/** 
 	 * \brief Create a new memoryloc
@@ -129,12 +129,12 @@ public:
 	 * @param addr the star address of this memory location info
 	 * @param length the length of this memory location info
 	 */
-	MemlocData(const DataType * creator, const Trace * ctx, address_t addr, u32 length);
+	MemlocData(const DataType * creator, const ProjectModel * ctx, address_t addr, u32 length);
 protected:
 	
 private:
 	
-	const Trace * m_ctx;
+	const ProjectModel * m_ctx;
 	
 	MemlocData * m_prev;
 	MemlocData * m_next;
@@ -147,7 +147,7 @@ private:
 
 	const DataType * m_creator;
 	
-	friend class Trace;
+	friend class ProjectModel;
 
 };
 
