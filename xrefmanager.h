@@ -23,7 +23,7 @@
 class XrefManager {
 public:
 	
-	XrefManager(ProjectModel * ctx);
+	XrefManager(I_ProjectModel * ctx);
 	
 	Xref * createXref(address_t srcaddr, address_t destaddr, Xref::xref_type_e type);
 	
@@ -52,7 +52,7 @@ private:
 	xref_map m_xrefs_to;
 	xref_map m_xrefs_from;
 	
-	ProjectModel * m_ctx;
+	I_ProjectModel * m_ctx;
 };
 
 

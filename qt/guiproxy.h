@@ -14,7 +14,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "dsmem_trace.h"
+#include "i_projectmodel.h"
 #include <stdint.h>
 #include <list>
 
@@ -37,7 +37,7 @@ class GuiProxy {
 	/**
 	 * \brief Instantiate a new gui proxy for the given trace/document
 	 */
-	GuiProxy(ProjectModel * ctx);
+	GuiProxy(I_ProjectModel * ctx);
 	
 	/**
 	 * \brief Get the number of lines in the display
@@ -73,7 +73,7 @@ class GuiProxy {
 	void update(void);
 private:
 	
-	ProjectModel * m_ctx;
+	I_ProjectModel * m_ctx;
 	
 	struct addrblock {
 		address_t start;

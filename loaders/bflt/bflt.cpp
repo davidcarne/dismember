@@ -41,7 +41,7 @@ class FlatLoader : public FileLoaderMaker {
 public:
 	FlatLoader();
 	virtual int matchToFile(FILE * f) const;
-	virtual bool loadFromFile(FILE * f, ProjectModel * ctx);
+	virtual bool loadFromFile(FILE * f, I_ProjectModel * ctx);
 private:
 	struct flat_hdr header;
 	void reloc(u8 *data, u32 base, FILE *fd);
@@ -62,7 +62,7 @@ int FlatLoader::matchToFile(FILE * f) const
 	return 54;
 }
 
-bool FlatLoader::loadFromFile(FILE * loadimg, ProjectModel * ctx)
+bool FlatLoader::loadFromFile(FILE * loadimg, I_ProjectModel * ctx)
 {
 	const u32 loadAddress = 0;
 	/* Load the image */
@@ -81,11 +81,11 @@ bool FlatLoader::loadFromFile(FILE * loadimg, ProjectModel * ctx)
 
 	MemSegment *ms;
 	ctx->addSegment(ms = new MemSegment(loadAddress, header.data_end,
-			data, -1, "TXT"));
+			data, MemSegment::c_unitialized_segment, "TXT"));
 	ctx->addSegment(new MemSegment(loadAddress + header.data_end,
-			bss_size, data + header.data_end, -1, "BSS"));
+			bss_size, data + header.data_end, MemSegment::c_unitialized_segment, "BSS"));
 	ctx->addSegment(new MemSegment(loadAddress + header.bss_end,
-			header.stack_size, data + header.bss_end, -1, "STK"));
+			header.stack_size, data + header.bss_end, MemSegment::c_unitialized_segment, "STK"));
 	free(data);
 
 	ctx->create_sym("_start", ms->getBaseAddress() + header.entry);

@@ -29,7 +29,7 @@ protected:
 	 * \brief Create a new Instruction
 	 * \todo Need to pass the datatype
 	 */
-	Instruction(const ProjectModel * ctx, address_t addr, u32 length);
+	Instruction(const I_ProjectModel * ctx, address_t addr, u32 length);
 	
 public:
 	/**

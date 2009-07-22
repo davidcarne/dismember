@@ -17,7 +17,7 @@
 #ifndef _architecture_H_
 #define _architecture_H_
 class DataType;
-class ProjectModel;
+class I_ProjectModel;
 
 /**
  * Architecture is an abstract base class that provides the interface through which architecture specific details can be queried
@@ -30,7 +30,7 @@ public:
 	
 	// HACK HACK
 	/** get the datatype that will instantiate an instruction of this architecture. needs rethinking */
-	virtual DataType * getDataType(ProjectModel * t) const = 0;
+	virtual DataType * getDataType(const I_ProjectModel * t) const = 0;
 	
 	/** Create an instruction for the architecture at address addr */
 	//virtual Instruction * create_instruction(Trace * ctx, address_t addr) = 0;

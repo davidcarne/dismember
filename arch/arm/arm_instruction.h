@@ -16,7 +16,7 @@
 
 #ifndef _ARM_INSTRUCTION_H_
 #define _ARM_INSTRUCTION_H_
-#include "../../dsmem_trace.h"
+#include "../../i_projectmodel.h"
 
 #include "../../instruction.h"
 
@@ -31,7 +31,7 @@ public:
 	 * \deprecated - should only be created through the appropriate datatype that doesn't exist yet
 	 * \todo protect me
 	 */
-	ARMInstruction(const ProjectModel * ctx, address_t address, u32 opcode);
+	ARMInstruction(const I_ProjectModel * ctx, address_t address, u32 opcode);
 	
 	virtual u32			get_length() const;
 	

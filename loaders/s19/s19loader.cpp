@@ -28,7 +28,7 @@ class S19Loader : public FileLoaderMaker
  public:
 	S19Loader();
 
-	virtual bool loadFromFile(FILE *file, ProjectModel *ctx);
+	virtual bool loadFromFile(FILE *file, I_ProjectModel *ctx);
 	virtual int matchToFile(FILE *file) const;
 } registerS19Loader;
 
@@ -199,7 +199,7 @@ class S19File
 		}
 	}
 
-	void map(ProjectModel *ctx)
+	void map(I_ProjectModel *ctx)
 	{
 		while (!m_segments.empty()) {
 			S19Segment *hs = m_segments.top();
@@ -351,7 +351,7 @@ int S19Loader::matchToFile(FILE *fp) const
 	return i*25;
 }
 
-bool S19Loader::loadFromFile(FILE *fp, ProjectModel *ctx)
+bool S19Loader::loadFromFile(FILE *fp, I_ProjectModel *ctx)
 {
 	char line[516];
 

@@ -58,7 +58,7 @@ public:
 	bool ldw(address_t addr, u32 * data) const
 	{
 		u8 dataar[4];
-		if (!getProjectModelContext()->readBytes(addr, 4, dataar))
+		if (!getI_ProjectModelContext()->readBytes(addr, 4, dataar))
 			return false;
 		*data = dataar[3];
 		*data <<= 8;
@@ -73,7 +73,7 @@ public:
 	/**
 	 * \brief Default constructor for the datatype class - cannot fully construct a datatype.
 	 */
-	ARMInstructionDataType(ProjectModel * t) : DataType(t) {
+	ARMInstructionDataType(const I_ProjectModel * t) : DataType(t) {
 	};
 
 	/**
@@ -84,7 +84,7 @@ public:
 	virtual MemlocData * instantiate(address_t addr) const {
 		u32 data;
 		if (ldw(addr, &data) )
-			return new ARMInstruction(getProjectModelContext(), addr, data);
+			return new ARMInstruction(getI_ProjectModelContext(), addr, data);
 		
 		return NULL;
 	};
@@ -97,10 +97,10 @@ void ARMArchitecture::bind_type()
 	 ("ARMArchitecture");
 	 */
 	boost::python::class_<ARMInstructionDataType, boost::python::bases<DataType>,  boost::shared_ptr<ARMInstructionDataType> >
-	("ARMInstructionDataType", boost::python::init<ProjectModel *>());
+	("ARMInstructionDataType", boost::python::init<I_ProjectModel *>());
 }
 
-DataType * ARMArchitecture::getDataType(ProjectModel *t) const
+DataType * ARMArchitecture::getDataType(const I_ProjectModel *t) const
 {
 	if (!m_adt)
 		m_adt = new ARMInstructionDataType(t);
@@ -109,7 +109,7 @@ DataType * ARMArchitecture::getDataType(ProjectModel *t) const
 }
 	
 /*
-Instruction * ARMArchitecture::create_instruction(ProjectModel * ctx, address_t addr)
+Instruction * ARMArchitecture::create_instruction(I_ProjectModel * ctx, address_t addr)
 {
 	return new ARMInstruction(ctx, addr, ctx->ldw(addr));
 }*/

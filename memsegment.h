@@ -26,6 +26,9 @@
  */
 class MemSegment {
 public:
+	
+	static const psize_t c_unitialized_segment = -1;
+	
 	/**
 	 * \brief Initialize a new memory segment.
 	 * @param base base address of the new memory segment

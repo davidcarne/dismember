@@ -23,7 +23,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-class ProjectModel;
+class I_ProjectModel;
 class MemlocData;
 
 /**
@@ -78,29 +78,32 @@ class DataType {
 	/**
 	 * @return the trace context that this datatype belongs to
 	 */
-	const ProjectModel * getProjectModelContext() const {
+	const I_ProjectModel * getI_ProjectModelContext() const {
 		return m_ctx;
 	}
 	
 	virtual ~DataType() {
 	};
+	
+	
+	/**
+	 * \brief instantiate a new instance of the datatype
+	 * @param addr The start address
+	 * @return the instantiated object, NULL on error
+	 */
+	virtual MemlocData * instantiate(address_t addr) const = 0;
+	
 	protected:
 	/**
 	 * \brief Default constructor for the datatype class - cannot fully construct a datatype.
 	 */
-	DataType(ProjectModel * t) : m_ctx(t) {
+	DataType(const I_ProjectModel * t) : m_ctx(t) {
 	};
 	
-	/**
-	* \brief instantiate a new instance of the datatype
-	* @param addr The start address
-	* @return the instantiated object, NULL on error
-	*/
-	virtual MemlocData * instantiate(address_t addr) const = 0;
 	
 private:
-	friend class ProjectModel;
-	ProjectModel * m_ctx;
+	friend class I_ProjectModel;
+	const I_ProjectModel * m_ctx;
 	std::string m_displayname;
 	
 };

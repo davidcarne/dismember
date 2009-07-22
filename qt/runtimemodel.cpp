@@ -57,7 +57,7 @@ address_t QTRuntimeEvent::end()
 }
 
 QTRuntimeModel::QTRuntimeModel(Workspace &runtime)
- : m_runtime(runtime), m_gproxy(runtime.getProjectModel()), m_updated(false)
+ : m_runtime(runtime), m_gproxy(runtime.getI_ProjectModel()), m_updated(false)
 {
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
@@ -113,9 +113,9 @@ GuiProxy &QTRuntimeModel::getProxy()
 	return m_gproxy;
 }
 
-ProjectModel &QTRuntimeModel::getProjectModel()
+I_ProjectModel &QTRuntimeModel::getI_ProjectModel()
 {
-	return *m_runtime.getProjectModel();
+	return *m_runtime.getI_ProjectModel();
 }
 
 

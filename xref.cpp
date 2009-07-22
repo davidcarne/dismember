@@ -14,7 +14,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "dsmem_trace.h"
+#include "i_projectmodel.h"
 #include "xref.h"
 
 address_t Xref::get_src_addr() const
@@ -42,7 +42,7 @@ u32 Xref::get_type() const
 	return m_type;
 }
 
-Xref::Xref(ProjectModel * lookupsrc, address_t srcaddr, address_t dstaddr, xref_type_e type):
+Xref::Xref(I_ProjectModel * lookupsrc, address_t srcaddr, address_t dstaddr, xref_type_e type):
 	m_srcaddr(srcaddr), m_dstaddr(dstaddr), m_type(type), m_lookuptrace(lookupsrc)
 {
 	

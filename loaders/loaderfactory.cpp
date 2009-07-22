@@ -30,7 +30,7 @@ FileLoaderMaker::FileLoaderMaker(std::string loader_name)
 	m_registry->operator[](loader_name) = this;
 }
 
-bool FileLoaderMaker::loadFromFile(std::string loader, FILE * datasrc, ProjectModel * ctx)
+bool FileLoaderMaker::loadFromFile(std::string loader, FILE * datasrc, I_ProjectModel * ctx)
 {
 	factories_ci i = m_registry->find(loader);
 	if (i == m_registry->end())
@@ -39,7 +39,7 @@ bool FileLoaderMaker::loadFromFile(std::string loader, FILE * datasrc, ProjectMo
 	return (*i).second->loadFromFile(datasrc, ctx);
 }
 
-bool FileLoaderMaker::autoLoadFromFile(FILE * datasrc, ProjectModel * ctx)
+bool FileLoaderMaker::autoLoadFromFile(FILE * datasrc, I_ProjectModel * ctx)
 {
 	factories_ci i = m_registry->begin();
 	int cpri = -1;

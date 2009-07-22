@@ -37,15 +37,15 @@
 
 #define ASSERT_RESOLVE(addr) assert(readByte(addr, NULL))
 
-ProjectModel::ProjectModel(Architecture * arch) : m_arch(arch), m_xrefmanager(this)
+MemoryBackedProjectModel::MemoryBackedProjectModel(Architecture * arch) : m_arch(arch), m_xrefmanager(this)
 {}
 
-DataType * ProjectModel::getCodeDataType() {
+DataType * MemoryBackedProjectModel::getCodeDataType() const {
 	return m_arch->getDataType(this);
 }
 
 
-bool ProjectModel::addSegment(MemSegment * m)
+bool MemoryBackedProjectModel::addSegment(MemSegment * m)
 {
 	/** \todo notifications need to be reworked, a global notification is a bit of a hack. Also, a dedicated memory segment cat would be good */
 	notifyMemlocChange(NULL, HOOK_MODIFY);
@@ -53,33 +53,33 @@ bool ProjectModel::addSegment(MemSegment * m)
 }
 
 
-bool ProjectModel::readByte(address_t taddr, uint8_t * data) const
+bool MemoryBackedProjectModel::readByte(address_t taddr, uint8_t * data) const
 {
 	return m_memsegmentmanager.readByte(taddr, data);
 }
 
-bool ProjectModel::readBytes(address_t taddr, u8 len, u8* data) const
+bool MemoryBackedProjectModel::readBytes(address_t taddr, u8 len, u8* data) const
 {
 	
 	return m_memsegmentmanager.readBytes(taddr, len, data);
 }
 
-MemSegmentManager::memseglist_ci ProjectModel::memsegs_begin() const
+MemSegmentManager::memseglist_ci MemoryBackedProjectModel::memsegs_begin() const
 {
 	return m_memsegmentmanager.memsegs_begin();
 }
 
-MemSegmentManager::memseglist_ci ProjectModel::memsegs_end() const
+MemSegmentManager::memseglist_ci MemoryBackedProjectModel::memsegs_end() const
 {
 	return m_memsegmentmanager.memsegs_end();
 }
 
-address_t ProjectModel::locateAddress(uint64_t address) const
+address_t MemoryBackedProjectModel::locateAddress(uint64_t address) const
 {
 	return m_memsegmentmanager.locateAddress(address);
 }
 
-MemlocData * ProjectModel::createMemlocDataAt(DataType * d, address_t addr)
+MemlocData * MemoryBackedProjectModel::createMemlocDataAt(DataType * d, address_t addr)
 {
 	assert(d);
 	MemlocData * i = d->instantiate(addr);
@@ -106,60 +106,60 @@ MemlocData * ProjectModel::createMemlocDataAt(DataType * d, address_t addr)
 	return i;
 }
 
-ProjectModel::~ProjectModel()
+MemoryBackedProjectModel::~MemoryBackedProjectModel()
 {
 }
 
 /* Symbol accessors */
-SymbolList::symname_ci ProjectModel::sym_begin_name() const
+SymbolList::symname_ci MemoryBackedProjectModel::sym_begin_name() const
 {
 	return m_symlist.begin_name();
 }
 
-SymbolList::symname_ci ProjectModel::sym_end_name() const
+SymbolList::symname_ci MemoryBackedProjectModel::sym_end_name() const
 {
 	return m_symlist.end_name();
 }
 
-SymbolList::symaddr_ci ProjectModel::sym_begin_addr() const
+SymbolList::symaddr_ci MemoryBackedProjectModel::sym_begin_addr() const
 {
 	return m_symlist.begin_addr();
 }
 
-SymbolList::symaddr_ci ProjectModel::sym_end_addr() const
+SymbolList::symaddr_ci MemoryBackedProjectModel::sym_end_addr() const
 {
 	return m_symlist.end_addr();
 }
 
-Symbol * ProjectModel::find_ordered_symbol(uint32_t index, SymbolList::symsortorder_e order) const
+Symbol * MemoryBackedProjectModel::find_ordered_symbol(uint32_t index, SymbolList::symsortorder_e order) const
 {
 	return m_symlist.find_ordered_symbol(index, order);
 }
 
-uint32_t ProjectModel::get_symbol_count(void) const
+uint32_t MemoryBackedProjectModel::get_symbol_count(void) const
 {
 	return  m_symlist.get_symbol_count();
 }
 
-const Symbol * ProjectModel::lookup_symbol(const std::string & symname) const
+const Symbol * MemoryBackedProjectModel::lookup_symbol(const std::string & symname) const
 {
 	const Symbol *sy = m_symlist.get_symbol(symname);
 	return sy;
 }
 
-const Symbol * ProjectModel::lookup_symbol(address_t addr) const
+const Symbol * MemoryBackedProjectModel::lookup_symbol(address_t addr) const
 {
 	const Symbol *sy = m_symlist.get_symbol(addr);
 	return sy;
 }
 
 
-MemlocData * ProjectModel::lookup_memloc(address_t addr, bool exactmatch) const
+MemlocData * MemoryBackedProjectModel::lookup_memloc(address_t addr, bool exactmatch) const
 {	
 	return m_memlocmanager.findMemloc(addr, exactmatch);
 }
 
-void ProjectModel::remove_memloc(address_t addr)
+void MemoryBackedProjectModel::remove_memloc(address_t addr)
 {
 	MemlocData * a = m_memlocmanager.findMemloc(addr, true);
 	if (!a)
@@ -173,27 +173,27 @@ void ProjectModel::remove_memloc(address_t addr)
 	delete a;
 }
 
-MemlocManager::memloclist_ci ProjectModel::memloc_list_begin() const
+MemlocManager::memloclist_ci MemoryBackedProjectModel::memloc_list_begin() const
 {
 	return m_memlocmanager.memloc_list_begin();
 }
 
-MemlocManager::memloclist_ci ProjectModel::memloc_list_end() const
+MemlocManager::memloclist_ci MemoryBackedProjectModel::memloc_list_end() const
 {
 	return m_memlocmanager.memloc_list_end();
 }
 
-Comment *ProjectModel::create_comment(std::string cmt, address_t addr)
+Comment *MemoryBackedProjectModel::create_comment(std::string cmt, address_t addr)
 {
 	return m_commentlist.set_comment(addr, cmt);
 }
 
-Comment *ProjectModel::lookup_comment(address_t addr) const
+Comment *MemoryBackedProjectModel::lookup_comment(address_t addr) const
 {
 	return m_commentlist.get_comment(addr);
 }
 
-Symbol *ProjectModel::create_sym(const std::string & name, address_t addr)
+Symbol *MemoryBackedProjectModel::create_sym(const std::string & name, address_t addr)
 {
 
 	//MemlocData * memd = lookup_memloc(addr);
@@ -206,22 +206,22 @@ Symbol *ProjectModel::create_sym(const std::string & name, address_t addr)
 }
 
 
-DataTypeReg::datatypereg_ci ProjectModel::getDataTypeBegin() const
+DataTypeReg::datatypereg_ci MemoryBackedProjectModel::getDataTypeBegin() const
 {
 	return m_datatypelist.getBegin();
 }
 
-DataTypeReg::datatypereg_ci ProjectModel::getDataTypeEnd() const
+DataTypeReg::datatypereg_ci MemoryBackedProjectModel::getDataTypeEnd() const
 {
 	return m_datatypelist.getEnd();
 }
 	
-sp_DataType ProjectModel::lookupDataType(std::string name) const
+sp_DataType MemoryBackedProjectModel::lookupDataType(std::string name) const
 {
 	return m_datatypelist.lookupDataType(name);
 }
 
-void ProjectModel::addDataType(sp_DataType d)
+void MemoryBackedProjectModel::addDataType(sp_DataType d)
 {
 	assert(d);
 	assert(d->getName().size() > 0);
@@ -229,7 +229,7 @@ void ProjectModel::addDataType(sp_DataType d)
 }
 
 
-Xref *ProjectModel::create_xref(address_t srcaddr, address_t dstaddr, Xref::xref_type_e type)
+Xref *MemoryBackedProjectModel::create_xref(address_t srcaddr, address_t dstaddr, Xref::xref_type_e type)
 {
 	
 	MemlocData * src = lookup_memloc(srcaddr);

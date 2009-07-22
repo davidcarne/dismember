@@ -14,7 +14,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "dsmem_trace.h"
+#include "i_projectmodel.h"
 #include "memlocdata.h"
 #include "instruction.h"
 #include "binaryconstant.h"
@@ -38,7 +38,7 @@ void SymbolAnalysis::submitAnalysisJob(Workspace * d)
 
 bool SymbolAnalysis::analyze(Workspace *d)
 {
-	ProjectModel *t = d->getProjectModel();
+	I_ProjectModel *t = d->getI_ProjectModel();
 	char namebuf[128];
 	char type[16];
 	int size;

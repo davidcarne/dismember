@@ -20,7 +20,7 @@
 
 #include <set>
 #include "types.h"
-#include "dsmem_trace.h"
+#include "i_projectmodel.h"
 
 class CodeBlock;
 
@@ -31,10 +31,10 @@ private:
 	typedef std::set< CodeBlock * > codeblockset_t;
 	codeblockset_t m_pre;
 	codeblockset_t m_post;
-	ProjectModel * m_trace;
+	I_ProjectModel * m_trace;
 	
 	
-	CodeBlock(ProjectModel * t, address_t start, address_t end);
+	CodeBlock(I_ProjectModel * t, address_t start, address_t end);
 	friend class CodeBlockManager;
 	
 public:
@@ -56,7 +56,7 @@ private:
 	blocklist_t m_blocks;
 	
 	CodeBlock * buildCodeBlockAt(MemlocData * growFrom);
-	ProjectModel * m_trace;
+	I_ProjectModel * m_trace;
 	
 	// Hooks for change notifications
 public:

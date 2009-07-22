@@ -30,6 +30,7 @@
 #include "multilinedialog.h"
 #include "program_flow_analysis.h"
 #include "symbol_analysis.h"
+#include "comment.h"
 
 Q_DECLARE_METATYPE(address_t);
 
@@ -66,7 +67,7 @@ class QTMutableCodeController : public QTCodeController
 		if (!addr.isValid())
 			return;
 		ProgramFlowAnalysis::submitAnalysisJob(&m_model.getRuntime(),
-				m_model.getProjectModel().getCodeDataType(), addr);
+				m_model.getI_ProjectModel().getCodeDataType(), addr);
 		SymbolAnalysis::submitAnalysisJob(&m_model.getRuntime());
 	}
 
@@ -82,21 +83,21 @@ class QTMutableCodeController : public QTCodeController
 	{
 		if (!addr.isValid())
 			return;
-		m_model.getProjectModel().create_comment(cmt.toStdString(), addr);
+		m_model.getI_ProjectModel().create_comment(cmt.toStdString(), addr);
 	}
 
 	virtual void setSymbol(address_t addr, const QString &sym)
 	{
 		if (!addr.isValid())
 			return;
-		m_model.getProjectModel().create_sym(sym.toStdString(), addr);
+		m_model.getI_ProjectModel().create_sym(sym.toStdString(), addr);
 	}
 
 	virtual void setDataType(address_t addr, DataType *dt)
 	{
 		if (!addr.isValid())
 			return;
-		m_model.getProjectModel().createMemlocDataAt(dt, addr);
+		m_model.getI_ProjectModel().createMemlocDataAt(dt, addr);
 	}
 
 
@@ -299,7 +300,7 @@ void QTCodeView::mouseDoubleClickEvent(QMouseEvent *event)
 void QTCodeView::setComment(address_t addr)
 {
 	bool ok;
-	const Comment *com = m_runtime->getProjectModel().lookup_comment(addr);
+	const Comment *com = m_runtime->getI_ProjectModel().lookup_comment(addr);
 	QString text = com ? QString(com->get_comment().c_str()) : QString();
 
 	QString ntext = QTMultiLineDialog::getText(this,
@@ -314,7 +315,7 @@ void QTCodeView::setComment(address_t addr)
 void QTCodeView::setSymbol(address_t addr)
 {
 	bool ok;
-	const Symbol *sym = m_runtime->getProjectModel().lookup_symbol(addr);
+	const Symbol *sym = m_runtime->getI_ProjectModel().lookup_symbol(addr);
 	QString text = sym ? QString(sym->get_name().c_str()) : QString();
 
 	QString ntext = QInputDialog::getText(this,
@@ -329,18 +330,18 @@ void QTCodeView::setSymbol(address_t addr)
 
 bool QTCodeView::hasJump(address_t addr)
 {
-	MemlocData * i = m_runtime->getProjectModel().lookup_memloc(addr);
+	MemlocData * i = m_runtime->getI_ProjectModel().lookup_memloc(addr);
 	return (i && i->has_xrefs_from());
 }
 
 bool QTCodeView::isDefined(address_t addr)
 {
-	return m_runtime->getProjectModel().lookup_memloc(addr) != 0;
+	return m_runtime->getI_ProjectModel().lookup_memloc(addr) != 0;
 }
 
 void QTCodeView::jump(address_t addr)
 {
-	MemlocData * i = m_runtime->getProjectModel().lookup_memloc(addr);
+	MemlocData * i = m_runtime->getI_ProjectModel().lookup_memloc(addr);
 	if (i && i->has_xrefs_from()) {
 		Xref * x = (*(i->begin_xref_from())).second;
 		address_t naddr = x->get_dst_addr();
@@ -352,7 +353,7 @@ void QTCodeView::jump(address_t addr)
 
 QList<QAction *> *QTCodeView::createXrefMenu(address_t addr)
 {
-	MemlocData *id = m_runtime->getProjectModel().lookup_memloc(addr);
+	MemlocData *id = m_runtime->getI_ProjectModel().lookup_memloc(addr);
 	if (!id || !id->has_xrefs_to())
 		return NULL;
 

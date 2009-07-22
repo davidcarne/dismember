@@ -19,7 +19,7 @@
 #include <stdexcept>
 
 
-#include "dsmem_trace.h"
+#include "i_projectmodel.h"
 #include "memlocdata.h"
 #include "instruction.h"
 #include "architecture.h"
@@ -54,7 +54,7 @@ void ProgramFlowAnalysis::submitUndefineJob(Workspace * d, address_t start)
 
 bool ProgramFlowAnalysis::undefine(Workspace * d, address_t start)
 {
-	ProjectModel * t = d->getProjectModel();
+	I_ProjectModel * t = d->getI_ProjectModel();
 
 	std::stack<address_t> analysis_addrs;
 	analysis_addrs.push(start);
@@ -90,7 +90,7 @@ bool ProgramFlowAnalysis::undefine(Workspace * d, address_t start)
 
 bool ProgramFlowAnalysis::analyze(Workspace * d, DataType * dtcreate, address_t start)
 {
-	ProjectModel * t = d->getProjectModel();
+	I_ProjectModel * t = d->getI_ProjectModel();
 	
 	address_t addr;
 	addr = start;

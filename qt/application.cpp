@@ -80,7 +80,7 @@ void QTApplication::open()
 		}
 		replaceRuntime();
 		if (!FileLoaderMaker::autoLoadFromFile(fp,
-				m_runtime->getProjectModel())) {
+				m_runtime->getI_ProjectModel())) {
 			error(tr("Open failed"),
 				fileName
 				.append(": ")

@@ -16,7 +16,7 @@
 
 #include "xrefmanager.h"
 
-XrefManager::XrefManager(ProjectModel * ctx) : m_ctx(ctx)
+XrefManager::XrefManager(I_ProjectModel * ctx) : m_ctx(ctx)
 {
 	
 }

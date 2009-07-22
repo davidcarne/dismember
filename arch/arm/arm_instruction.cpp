@@ -14,7 +14,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "../../dsmem_trace.h"
+#include "../../i_projectmodel.h"
 #include "../../memlocdata.h"
 
 #include "arm_instruction.h"
@@ -39,7 +39,7 @@ u32	ARMInstruction::get_pcflags() const
 	return m_pcflags;
 }
 
-ARMInstruction::ARMInstruction(const ProjectModel * ctx, address_t address, u32 opcode) : Instruction(ctx, address, 4), m_opcode(opcode), m_pcflags(0)
+ARMInstruction::ARMInstruction(const I_ProjectModel * ctx, address_t address, u32 opcode) : Instruction(ctx, address, 4), m_opcode(opcode), m_pcflags(0)
 {
 	decode_pcflow();
 	decode_data_refs();

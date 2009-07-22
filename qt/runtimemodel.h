@@ -82,7 +82,7 @@ class QTRuntimeModel : public QObject, public WorkspaceGui
 
 	Workspace &getRuntime();
 	GuiProxy &getProxy();
-	ProjectModel &getProjectModel(); // convienience
+	I_ProjectModel &getI_ProjectModel(); // convienience
 
 	void postUpdate();
 

@@ -14,7 +14,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "dsmem_trace.h"
+#include "i_projectmodel.h"
 #include "search.h"
 #include "memsegment.h"
 #include "memsegmentmanager.h"
@@ -87,7 +87,7 @@ SearchResults *Search::submitSearchJob(Workspace *d, uint8_t *b, psize_t len)
 
 bool Search::search(Workspace * d, uint8_t *b, psize_t len, SearchResults *sr)
 {
-	ProjectModel *t = d->getProjectModel();
+	I_ProjectModel *t = d->getI_ProjectModel();
 
 	MemSegmentManager::memseglist_ci mi;
 	MemSegmentManager::memseglist_ci begin = t->memsegs_begin();

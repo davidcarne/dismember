@@ -2,3 +2,6 @@
 *.pyc
 *~
 build
+*.moc.cpp
+*.rcc.cpp
+*.ui.h

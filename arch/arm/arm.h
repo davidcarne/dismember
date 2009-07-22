@@ -17,7 +17,7 @@
 #ifndef _ARM_H_
 #define _ARM_H_
 
-#include "../../dsmem_trace.h"
+#include "../../i_projectmodel.h"
 #include "../../architecture.h"
 
 class ARMInstructionDataType;
@@ -32,11 +32,11 @@ public:
 	virtual std::string get_short_name() const; 
 	
 	static void bind_type();
-	virtual DataType * getDataType(ProjectModel *) const;
+	virtual DataType * getDataType(const I_ProjectModel *) const;
 private:
 	mutable ARMInstructionDataType * m_adt;
 	
-	//virtual Instruction * create_instruction(ProjectModel * ctx, address_t addr);
+	//virtual Instruction * create_instruction(I_ProjectModel * ctx, address_t addr);
 	//virtual endian_e getArchEndian(void);
 	// also here we have the create from serializer factory method
 };

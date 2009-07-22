@@ -16,7 +16,7 @@
 
 #ifndef _program_flow_analysis_H_
 #define _program_flow_analysis_H_
-#include "dsmem_trace.h"
+#include "i_projectmodel.h"
 #include "datatype.h"
 #include "run_queue.h"
 #include "document.h"

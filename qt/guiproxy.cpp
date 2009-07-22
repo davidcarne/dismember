@@ -22,7 +22,7 @@
 #include "memsegment.h"
 #include "memlocdata.h"
 
-GuiProxy::GuiProxy(ProjectModel * ctx)
+GuiProxy::GuiProxy(I_ProjectModel * ctx)
  : m_ctx(ctx), m_dirty(true), m_lc(0), m_last_look_set(false)
 {
 	Callback<MemlocData*, GuiProxy> *cb = new Callback<MemlocData*, GuiProxy>;

@@ -24,7 +24,7 @@
 
 // This has to be included for serialization deps.
 
-class ProjectModel;
+class I_ProjectModel;
 class LocalPythonInterpreter;
 class WorkspaceGui;
 class IRunQueueControl;
@@ -43,7 +43,7 @@ public:
 	 * Get the trace associated with the Workspace
 	 * @return the trace associated with the Workspace
 	 */
-	ProjectModel * getProjectModel();
+	I_ProjectModel * getI_ProjectModel();
 	
 	/**
 	 * Get the name of the Workspace
@@ -88,7 +88,7 @@ private:
 	IRunQueueControl * m_runQueue;
 	WorkspaceGui * m_docgui;
 	std::string m_name;
-	ProjectModel * m_trace;
+	I_ProjectModel * m_trace;
 	LocalPythonInterpreter * m_pyInterpreter;
 };
 

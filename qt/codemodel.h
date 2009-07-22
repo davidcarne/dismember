@@ -22,6 +22,7 @@
 #include <QVariant>
 #include "runtimemodel.h"
 #include "guiproxy.h"
+#include "comment.h"
 
 class Workspace;
 
@@ -43,11 +44,11 @@ class QTCodeModel : public QAbstractItemModel
 	void flush();
 
  private:
-	QString displayText(ProjectModel &, address_t addr) const;
-	QString displayXrefs(ProjectModel &, address_t addr) const;
-	QString displaySymbol(ProjectModel &, address_t addr) const;
-	QString displayComment(ProjectModel &, address_t addr) const;
-	QString displayXrefBrief(ProjectModel &, address_t addr) const;
+	QString displayText(I_ProjectModel &, address_t addr) const;
+	QString displayXrefs(I_ProjectModel &, address_t addr) const;
+	QString displaySymbol(I_ProjectModel &, address_t addr) const;
+	QString displayComment(I_ProjectModel &, address_t addr) const;
+	QString displayXrefBrief(I_ProjectModel &, address_t addr) const;
 
 	QTRuntimeModel *m_model;
 };

@@ -33,6 +33,7 @@
 #include <boost/serialization/map.hpp>
 
 #include "memlocdata.h"
+#include "i_projectmodel.h"
 #include "dsmem_trace.h"
 #include "document.h"
 #include "localpythoninterpreter.h"
@@ -45,7 +46,7 @@
 Workspace::Workspace()
 {
 	// Create all the constituent parts of the Workspace
-	m_trace = new ProjectModel(new ARMArchitecture());
+	m_trace = new MemoryBackedProjectModel(new ARMArchitecture());
 	m_pyInterpreter = new LocalPythonInterpreter(this);
 	m_docgui = setupWorkspaceGui(*this);
 	m_runQueue = createRunQueueControl();
@@ -57,7 +58,7 @@ Workspace::Workspace()
 	
 }
 
-ProjectModel * Workspace::getProjectModel()
+I_ProjectModel * Workspace::getI_ProjectModel()
 {
 	return m_trace;
 }

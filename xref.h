@@ -20,7 +20,7 @@
 #include "types.h"
 
 class MemlocData;
-class ProjectModel;
+class I_ProjectModel;
 
 /**
  * \brief represents a reference, aka, a link between two objects.
@@ -96,7 +96,7 @@ protected:
 	 * @param dstaddr dest address of the xref
 	 * @param type type of the xref
 	 */
-	Xref(ProjectModel * lookup, address_t srcaddr, address_t dstaddr, xref_type_e type);
+	Xref(I_ProjectModel * lookup, address_t srcaddr, address_t dstaddr, xref_type_e type);
 
 	
 private:
@@ -107,7 +107,7 @@ private:
 	
 	xref_type_e m_type;
 	
-	ProjectModel * m_lookuptrace;
+	I_ProjectModel * m_lookuptrace;
 };
 
 #endif

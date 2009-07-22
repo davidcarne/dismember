@@ -101,7 +101,7 @@ struct nlist
 	uint32_t n_value;
 };
 
-void load_symtab(FILE * f, ProjectModel * ctx, long start, long lcstart, uint8_t * data)
+void load_symtab(FILE * f, I_ProjectModel * ctx, long start, long lcstart, uint8_t * data)
 {
 	struct symtab_command * s = (struct symtab_command *)data;
 	printf("Symtab: %x %x %x %x\n", s->symoff, s->nsyms, s->stroff, s->strsize);
@@ -132,7 +132,7 @@ void load_symtab(FILE * f, ProjectModel * ctx, long start, long lcstart, uint8_t
 	delete ns;
 	delete strtab;
 }
-void load_seg(FILE * f, ProjectModel * ctx, long start, long lcstart, uint8_t * data)
+void load_seg(FILE * f, I_ProjectModel * ctx, long start, long lcstart, uint8_t * data)
 {
 	struct segment_command * s = (struct segment_command *)data;
 	char buf[17];
@@ -155,7 +155,7 @@ class MachOLoader : public FileLoaderMaker {
 public:
 	MachOLoader();
 	virtual int matchToFile(FILE * f) const;
-	virtual bool loadFromFile(FILE * f, ProjectModel * ctx);
+	virtual bool loadFromFile(FILE * f, I_ProjectModel * ctx);
 } registerMachOLoader;
 
 MachOLoader::MachOLoader() : FileLoaderMaker("Mach-O")
@@ -230,7 +230,7 @@ const std::string loadcmdname(uint32_t cmd)
 	}
 	return "unknown";
 }
-bool MachOLoader::loadFromFile(FILE * f, ProjectModel * ctx)
+bool MachOLoader::loadFromFile(FILE * f, I_ProjectModel * ctx)
 {
 	
 	long start = ftell(f);

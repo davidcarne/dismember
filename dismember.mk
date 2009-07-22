@@ -12,7 +12,8 @@ SRC := 	comment.cpp memlocdata.cpp xref.cpp symbol_analysis.cpp \
 	app_main.cpp document.cpp memsegment.cpp stringconstant.cpp \
 	xrefmanager.cpp binaryconstant.cpp dsmem_trace.cpp search.cpp \
 	memsegmentmanager.cpp symlist.cpp callback.cpp address.cpp \
-	codeblock.cpp instruction.cpp program_flow_analysis.cpp
+	codeblock.cpp instruction.cpp program_flow_analysis.cpp \
+	i_projectmodel.cpp
 
 
 BUILDDIR := build
