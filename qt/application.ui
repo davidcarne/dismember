@@ -67,7 +67,13 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QTCodeView" name="e_assembly"/>
+         <widget class="QTCodeView" name="e_assembly">
+          <property name="font">
+           <font>
+            <family>Courier New</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QTSearchWidget" name="e_searchwidget" native="true"/>
@@ -99,7 +105,7 @@
      <x>0</x>
      <y>0</y>
      <width>903</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_help">
