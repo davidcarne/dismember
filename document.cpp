@@ -34,7 +34,7 @@
 
 #include "memlocdata.h"
 #include "i_projectmodel.h"
-#include "dsmem_trace.h"
+#include "memorybackedprojectmodel.h"
 #include "document.h"
 #include "localpythoninterpreter.h"
 

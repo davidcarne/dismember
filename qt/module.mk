@@ -1,4 +1,4 @@
-LIBS += $(shell pkg-config QtGui --libs)
+
 
 QTMOC := qt/application.cpp \
 	 qt/runqueuemonitor.cpp \
@@ -36,6 +36,7 @@ ifeq ($(OS),Darwin)
 $(QTTARG): CPPFLAGS += -Wno-deprecated -I/Library/Frameworks/QtGui.framework/Headers/ -I/Library/Frameworks/QtCore.framework/Headers/
 LDFLAGS += -framework QtGui -framework QtCore
 else
+LIBS += $(shell pkg-config QtGui --libs)
 $(QTTARG): CPPFLAGS += $(shell pkg-config QtGui --cflags) -Wno-deprecated
 endif
 

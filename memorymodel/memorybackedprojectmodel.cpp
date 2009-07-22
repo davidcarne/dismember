@@ -23,7 +23,7 @@
 #include <assert.h>
 #include <stack>
 
-#include "dsmem_trace.h"
+#include "memorybackedprojectmodel.h"
 #include "memlocdata.h"
 #include "binaryconstant.h"
 #include "stringconstant.h"
@@ -34,6 +34,7 @@
 //#include "memtags.h"
 #include "architecture.h"
 #include "memsegment.h"
+#include "callback.h"
 
 #define ASSERT_RESOLVE(addr) assert(readByte(addr, NULL))
 
@@ -276,4 +277,32 @@ Xref *MemoryBackedProjectModel::create_xref(address_t srcaddr, address_t dstaddr
 	
 	return sx;
 }
+
+
+void MemoryBackedProjectModel::registerMemlocHook(CallbackBase<MemlocData *> *cb)
+{ memloc_hooks.push_back(cb); }
+void MemoryBackedProjectModel::registerXrefHook(CallbackBase<Xref *> *cb)
+{ xref_hooks.push_back(cb); }
+void MemoryBackedProjectModel::registerSymbolHook(CallbackBase<Symbol *> *cb)
+{ symbol_hooks.push_back(cb); }
+
+void MemoryBackedProjectModel::unregisterMemlocHook(CallbackBase<MemlocData *> *cb)
+{ memloc_hooks.remove(cb); }
+void MemoryBackedProjectModel::unregisterXrefHook(CallbackBase<Xref *> *cb)
+{ xref_hooks.remove(cb); }
+void MemoryBackedProjectModel::unregisterSymbolHook(CallbackBase<Symbol *> *cb)
+{ symbol_hooks.remove(cb); }
+
+
+#define NOTIFY_MACRO(a,b,c) \
+a##_hook_list::iterator i = a##_hooks.begin(); \
+for (; i != a##_hooks.end(); ++i) \
+(*(i))->callback(b, c);
+
+void MemoryBackedProjectModel::notifyMemlocChange(MemlocData *data, HookChange ch)
+{ NOTIFY_MACRO(memloc, data, ch) }
+void MemoryBackedProjectModel::notifyXrefChange(Xref *data, HookChange ch)
+{ NOTIFY_MACRO(xref, data, ch) }
+void MemoryBackedProjectModel::notifySymbolChange(Symbol *data, HookChange ch)
+{ NOTIFY_MACRO(symbol, data, ch) }
 

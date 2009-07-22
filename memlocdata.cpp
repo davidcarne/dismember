@@ -15,7 +15,7 @@
  */
 
 #include "i_projectmodel.h"
-#include "dsmem_trace.h"
+#include "memorybackedprojectmodel.h"
 #include "memlocdata.h"
 
 MemlocData::MemlocData(const DataType * creator, const I_ProjectModel * ctx, address_t addr, u32 length)

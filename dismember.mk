@@ -1,7 +1,7 @@
 
 
 
-MODULES := python_embed arch loaders $(GUI)
+MODULES := python_embed arch loaders memorymodel $(GUI)
 
 INCDIRS := $(MODULES)
 INCPATHS := -I.
@@ -10,8 +10,8 @@ LIBS :=
 SRC := 	comment.cpp memlocdata.cpp xref.cpp symbol_analysis.cpp \
 	datatypereg.cpp memlocmanager.cpp run_queue.cpp exception.cpp \
 	app_main.cpp document.cpp memsegment.cpp stringconstant.cpp \
-	xrefmanager.cpp binaryconstant.cpp dsmem_trace.cpp search.cpp \
-	memsegmentmanager.cpp symlist.cpp callback.cpp address.cpp \
+	xrefmanager.cpp binaryconstant.cpp search.cpp \
+	memsegmentmanager.cpp symlist.cpp address.cpp \
 	codeblock.cpp instruction.cpp program_flow_analysis.cpp \
 	i_projectmodel.cpp
 
