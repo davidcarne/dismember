@@ -21,11 +21,11 @@
 MemlocData::MemlocData(const DataType * creator, const I_ProjectModel * ctx, address_t addr, u32 length)
 : m_ctx(ctx), m_address(addr), m_creator(creator)
 {
-	m_next = ctx->lookup_memloc(m_address + length, true);
+	m_next = static_cast<MemlocData*>(ctx->lookup_memloc(m_address + length, true));
 	if (m_next)
 		m_next->m_prev = this;
 	
-	m_prev = ctx->lookup_memloc(m_address - 1, false);
+	m_prev = static_cast<MemlocData*>(ctx->lookup_memloc(m_address - 1, false));
 	if (m_prev)
 		m_prev->m_next = this;
 	
@@ -45,7 +45,7 @@ MemlocData * MemlocData::getPreviousContiguous()
 	if (m_prev)
 		return m_prev;
 	
-	m_prev = m_ctx->lookup_memloc(m_address -1, false);
+	m_prev = static_cast<MemlocData*>(m_ctx->lookup_memloc(m_address -1, false));
 	if (m_prev)
 		m_prev->m_next = this;
 	
@@ -57,7 +57,7 @@ MemlocData *  MemlocData::getNextContiguous()
 	if (m_next)
 		return m_next;
 	
-	m_next = m_ctx->lookup_memloc(m_address + get_length(), true);
+	m_next = static_cast<MemlocData*>(m_ctx->lookup_memloc(m_address + get_length(), true));
 	if (m_next)
 		m_next->m_prev = this;
 	

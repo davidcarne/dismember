@@ -24,7 +24,7 @@
 #include <QLineEdit>
 
 #include "document.h"
-#include "memlocdata.h"
+#include "i_memlocdata.h"
 #include "codeview.h"
 #include "codemodel.h"
 #include "multilinedialog.h"
@@ -330,7 +330,7 @@ void QTCodeView::setSymbol(address_t addr)
 
 bool QTCodeView::hasJump(address_t addr)
 {
-	MemlocData * i = m_runtime->getI_ProjectModel().lookup_memloc(addr);
+	I_MemlocData * i = m_runtime->getI_ProjectModel().lookup_memloc(addr);
 	return (i && i->has_xrefs_from());
 }
 
@@ -341,7 +341,7 @@ bool QTCodeView::isDefined(address_t addr)
 
 void QTCodeView::jump(address_t addr)
 {
-	MemlocData * i = m_runtime->getI_ProjectModel().lookup_memloc(addr);
+	I_MemlocData * i = m_runtime->getI_ProjectModel().lookup_memloc(addr);
 	if (i && i->has_xrefs_from()) {
 		Xref * x = (*(i->begin_xref_from())).second;
 		address_t naddr = x->get_dst_addr();
@@ -353,7 +353,7 @@ void QTCodeView::jump(address_t addr)
 
 QList<QAction *> *QTCodeView::createXrefMenu(address_t addr)
 {
-	MemlocData *id = m_runtime->getI_ProjectModel().lookup_memloc(addr);
+	I_MemlocData *id = m_runtime->getI_ProjectModel().lookup_memloc(addr);
 	if (!id || !id->has_xrefs_to())
 		return NULL;
 

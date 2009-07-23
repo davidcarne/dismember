@@ -20,7 +20,7 @@
 
 
 #include "i_projectmodel.h"
-#include "memlocdata.h"
+#include "i_memlocdata.h"
 #include "instruction.h"
 #include "architecture.h"
 #include "program_flow_analysis.h"
@@ -68,7 +68,7 @@ bool ProgramFlowAnalysis::undefine(Workspace * d, address_t start)
 		if (!addr.isValid())
 			continue;
 		
-		MemlocData * m = t->lookup_memloc(addr);
+		I_MemlocData * m = t->lookup_memloc(addr);
 		if (!m)
 			continue;
 		

@@ -20,12 +20,12 @@
 #include "codeview.h"
 
 #include "memsegment.h"
-#include "memlocdata.h"
+#include "i_memlocdata.h"
 
 GuiProxy::GuiProxy(I_ProjectModel * ctx)
  : m_ctx(ctx), m_dirty(true), m_lc(0), m_last_look_set(false)
 {
-	Callback<MemlocData*, GuiProxy> *cb = new Callback<MemlocData*, GuiProxy>;
+	Callback<I_MemlocData*, GuiProxy> *cb = new Callback<I_MemlocData*, GuiProxy>;
 	cb->setClass(this);
 	cb->setCallback(&GuiProxy::updateMemloc);
 	m_ctx->registerMemlocHook(cb);
@@ -43,7 +43,7 @@ uint8_t GuiProxy::getLineRows(line_ind_t line)
 	return 1;
 }
 
-void GuiProxy::updateMemloc(MemlocData *s, HookChange hc)
+void GuiProxy::updateMemloc(I_MemlocData *s, HookChange hc)
 {
 	
 	// later, do this on the fly
@@ -84,7 +84,7 @@ address_t GuiProxy::getLineAddr(line_ind_t line)
 			// now we iterate to find the exact line
 			while (lca < line)
 			{
-				MemlocData * d  = m_ctx->lookup_memloc(look);
+				I_MemlocData * d  = m_ctx->lookup_memloc(look);
 				
 				if (d)
 					look += d->get_length();
@@ -128,7 +128,7 @@ line_ind_t GuiProxy::getLineAtAddr(address_t addr)
 			// now we iterate to find the exact line
 			while (look < addr)
 			{
-				MemlocData * d  = m_ctx->lookup_memloc(look);
+				I_MemlocData * d  = m_ctx->lookup_memloc(look);
 				if (d)
 					look += d->get_length();
 				else
@@ -195,7 +195,7 @@ void GuiProxy::update(void)
 			if (li != m_ctx->memloc_list_end() &&
 					(*li).first.comparableTo(memind) &&
 					(*li).first == memind) {
-				MemlocData * d = (*li).second;
+				I_MemlocData * d = (*li).second;
 				if (d != NULL)
 					memind += d->get_length();
 				else

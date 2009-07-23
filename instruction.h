@@ -16,6 +16,7 @@
 
 #ifndef _instruction_H_
 #define _instruction_H_
+#include "i_memlocdata.h"
 #include "memlocdata.h"
 
 
@@ -39,7 +40,7 @@ public:
 	
 	/**
 	 *	\brief Flag bit indicating if the Instruction continues on to the next contiguous
-	 *  \sa MemlocData::getNextContiguous()
+	 *  \sa I_MemlocData::getNextContiguous()
 	 */
 	static const pcflags_type PCFLAG_CONTINUE	= 0x1;
 	

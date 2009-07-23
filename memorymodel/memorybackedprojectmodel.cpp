@@ -80,10 +80,10 @@ address_t MemoryBackedProjectModel::locateAddress(uint64_t address) const
 	return m_memsegmentmanager.locateAddress(address);
 }
 
-MemlocData * MemoryBackedProjectModel::createMemlocDataAt(DataType * d, address_t addr)
+I_MemlocData * MemoryBackedProjectModel::createMemlocDataAt(DataType * d, address_t addr)
 {
 	assert(d);
-	MemlocData * i = d->instantiate(addr);
+	I_MemlocData * i = d->instantiate(addr);
 	if (!i)
 		return NULL;
 	
@@ -155,14 +155,14 @@ const Symbol * MemoryBackedProjectModel::lookup_symbol(address_t addr) const
 }
 
 
-MemlocData * MemoryBackedProjectModel::lookup_memloc(address_t addr, bool exactmatch) const
+I_MemlocData * MemoryBackedProjectModel::lookup_memloc(address_t addr, bool exactmatch) const
 {	
 	return m_memlocmanager.findMemloc(addr, exactmatch);
 }
 
 void MemoryBackedProjectModel::remove_memloc(address_t addr)
 {
-	MemlocData * a = m_memlocmanager.findMemloc(addr, true);
+	I_MemlocData * a = m_memlocmanager.findMemloc(addr, true);
 	if (!a)
 		return;
 	
@@ -233,8 +233,8 @@ void MemoryBackedProjectModel::addDataType(sp_DataType d)
 Xref *MemoryBackedProjectModel::create_xref(address_t srcaddr, address_t dstaddr, Xref::xref_type_e type)
 {
 	
-	MemlocData * src = lookup_memloc(srcaddr);
-	MemlocData * dst = lookup_memloc(dstaddr);
+	I_MemlocData * src = lookup_memloc(srcaddr);
+	I_MemlocData * dst = lookup_memloc(dstaddr);
 	
 	if (!src)
 		return NULL;
@@ -279,14 +279,14 @@ Xref *MemoryBackedProjectModel::create_xref(address_t srcaddr, address_t dstaddr
 }
 
 
-void MemoryBackedProjectModel::registerMemlocHook(CallbackBase<MemlocData *> *cb)
+void MemoryBackedProjectModel::registerMemlocHook(CallbackBase<I_MemlocData *> *cb)
 { memloc_hooks.push_back(cb); }
 void MemoryBackedProjectModel::registerXrefHook(CallbackBase<Xref *> *cb)
 { xref_hooks.push_back(cb); }
 void MemoryBackedProjectModel::registerSymbolHook(CallbackBase<Symbol *> *cb)
 { symbol_hooks.push_back(cb); }
 
-void MemoryBackedProjectModel::unregisterMemlocHook(CallbackBase<MemlocData *> *cb)
+void MemoryBackedProjectModel::unregisterMemlocHook(CallbackBase<I_MemlocData *> *cb)
 { memloc_hooks.remove(cb); }
 void MemoryBackedProjectModel::unregisterXrefHook(CallbackBase<Xref *> *cb)
 { xref_hooks.remove(cb); }
@@ -299,7 +299,7 @@ a##_hook_list::iterator i = a##_hooks.begin(); \
 for (; i != a##_hooks.end(); ++i) \
 (*(i))->callback(b, c);
 
-void MemoryBackedProjectModel::notifyMemlocChange(MemlocData *data, HookChange ch)
+void MemoryBackedProjectModel::notifyMemlocChange(I_MemlocData *data, HookChange ch)
 { NOTIFY_MACRO(memloc, data, ch) }
 void MemoryBackedProjectModel::notifyXrefChange(Xref *data, HookChange ch)
 { NOTIFY_MACRO(xref, data, ch) }

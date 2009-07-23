@@ -14,8 +14,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "../../i_projectmodel.h"
-#include "../../memlocdata.h"
+#include "i_projectmodel.h"
+#include "i_memlocdata.h"
 
 #include "arm_instruction.h"
 

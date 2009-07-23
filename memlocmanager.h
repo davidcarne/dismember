@@ -23,20 +23,20 @@
 #include "types.h"
 #include <boost/serialization/access.hpp>
 
-class MemlocData;
+class I_MemlocData;
 
 class MemlocManager {
 public:
-	typedef std::map<address_t, MemlocData *, address_t::less> memloclist_t;
+	typedef std::map<address_t, I_MemlocData *, address_t::less> memloclist_t;
 	typedef memloclist_t::const_iterator memloclist_ci;
 	
-	typedef std::hash_map<address_t, MemlocData * > memlochash_t;
+	typedef std::hash_map<address_t, I_MemlocData * > memlochash_t;
 	typedef memlochash_t::const_iterator memlochash_ci;
 	
-	void insertMemloc(MemlocData * a);
-	MemlocData * findMemloc(address_t addr, bool exactmatch) const;
+	void insertMemloc(I_MemlocData * a);
+	I_MemlocData * findMemloc(address_t addr, bool exactmatch) const;
 	
-	void removeMemloc(MemlocData * a);
+	void removeMemloc(I_MemlocData * a);
 	
 	memloclist_ci memloc_list_begin() const;
 	memloclist_ci memloc_list_end() const;

@@ -20,7 +20,7 @@
 #include <QSize>
 #include "document.h"
 #include "xref.h"
-#include "memlocdata.h"
+#include "i_memlocdata.h"
 #include "program_flow_analysis.h"
 
 #include "symbolmodel.h"

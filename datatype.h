@@ -23,8 +23,9 @@
 
 #include <boost/shared_ptr.hpp>
 
+
 class I_ProjectModel;
-class MemlocData;
+class I_MemlocData;
 
 /**
  * \brief DataType represents the concept of a datatype.
@@ -91,7 +92,7 @@ class DataType {
 	 * @param addr The start address
 	 * @return the instantiated object, NULL on error
 	 */
-	virtual MemlocData * instantiate(address_t addr) const = 0;
+	virtual I_MemlocData * instantiate(address_t addr) const = 0;
 	
 	protected:
 	/**

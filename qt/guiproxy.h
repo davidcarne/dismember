@@ -82,7 +82,7 @@ private:
 		uint32_t lc;
 	};
 	
-	void updateMemloc(MemlocData *s, HookChange hc);
+	void updateMemloc(I_MemlocData *s, HookChange hc);
 	
 	bool m_dirty;
 	std::list<struct addrblock *> m_blocks;

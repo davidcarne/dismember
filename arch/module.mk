@@ -1,2 +1,2 @@
-SRC += $(shell find arch/ -name '*.cpp')
+SRC += $(shell find arch -name '*.cpp')
 

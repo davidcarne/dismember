@@ -15,7 +15,7 @@
  */
 
 #include "codeblock.h"
-#include "memlocdata.h"
+#include "i_memlocdata.h"
 #include "instruction.h"
 #include "xref.h"
 #include "xrefmanager.h"
@@ -51,12 +51,12 @@ bool hasNonLinkCodeXref(XrefManager::xref_map_ci begin, XrefManager::xref_map_ci
 	return false;
 }
 
-CodeBlock * CodeBlockManager::buildCodeBlockAt(MemlocData * growFrom)
+CodeBlock * CodeBlockManager::buildCodeBlockAt(I_MemlocData * growFrom)
 {
-	MemlocData * current_start = growFrom;
-	MemlocData * current_start_prev = growFrom;
-	MemlocData * current_end = growFrom;
-	MemlocData * current_end_next = growFrom;
+	I_MemlocData * current_start = growFrom;
+	I_MemlocData * current_start_prev = growFrom;
+	I_MemlocData * current_end = growFrom;
+	I_MemlocData * current_end_next = growFrom;
 	
 	if (!dynamic_cast<Instruction *>(growFrom))
 		return NULL;

@@ -32,7 +32,7 @@
 #include <boost/serialization/set.hpp>
 #include <boost/serialization/map.hpp>
 
-#include "memlocdata.h"
+#include "i_memlocdata.h"
 #include "i_projectmodel.h"
 #include "memorybackedprojectmodel.h"
 #include "document.h"

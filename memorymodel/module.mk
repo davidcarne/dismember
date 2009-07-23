@@ -1,4 +1,4 @@
-MBSRC := memorymodel/memorybackedprojectmodel.cpp
+MBSRC := memorymodel/memorybackedprojectmodel.cpp memorymodel/memlocdata.cpp
 
 SRC += $(MBSRC)
 

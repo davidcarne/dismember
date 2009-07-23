@@ -18,7 +18,7 @@
 #include <QToolTip>
 
 #include "document.h"
-#include "memlocdata.h"
+#include "i_memlocdata.h"
 #include "memsegment.h"
 #include "dataview.h"
 
@@ -71,7 +71,7 @@ void QTDataView::paintEvent(QPaintEvent *event)
 	double off = 0.0;
 	for (int i = 0; i < s.height(); ++i) {
 		address_t normAddr = baseAddr + ROUND(off);
-		MemlocData *id = t.lookup_memloc(normAddr, false);
+		I_MemlocData *id = t.lookup_memloc(normAddr, false);
 		if (id) {
 			if (id->is_executable())
 				painter.setPen(codeColor);

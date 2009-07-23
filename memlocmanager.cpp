@@ -16,9 +16,9 @@
 
 #include "memlocmanager.h"
 #include "exception.h"
-#include "memlocdata.h"
+#include "i_memlocdata.h"
 
-void MemlocManager::insertMemloc(MemlocData * a)
+void MemlocManager::insertMemloc(I_MemlocData * a)
 {
 	assert(a);
 	
@@ -31,7 +31,7 @@ void MemlocManager::insertMemloc(MemlocData * a)
 		m_memdata_hash.erase(baddr);
 		m_memdata.erase(baddr);
 	}
-	MemlocData *ov = findMemloc(addr, false);
+	I_MemlocData *ov = findMemloc(addr, false);
 	if (ov)
 		throw Exception("fixme: Overlapping memlocds.");
 	
@@ -41,7 +41,7 @@ void MemlocManager::insertMemloc(MemlocData * a)
 }
 
 
-MemlocData * MemlocManager::findMemloc(address_t addr, bool exactmatch) const
+I_MemlocData * MemlocManager::findMemloc(address_t addr, bool exactmatch) const
 {	
 	// Try and do a fast hash lookup
 	memlochash_ci i = m_memdata_hash.find(addr);
@@ -57,7 +57,7 @@ MemlocData * MemlocManager::findMemloc(address_t addr, bool exactmatch) const
 		if (ib != m_memdata.begin())
 		{
 			ib--;
-			MemlocData * d = (*ib).second;
+			I_MemlocData * d = (*ib).second;
 			address_t daddr = d->get_addr();
 			if (addr.comparableTo(daddr) && daddr <= addr
 				&& daddr + d->get_length() > addr)
@@ -68,7 +68,7 @@ MemlocData * MemlocManager::findMemloc(address_t addr, bool exactmatch) const
 	return NULL;
 }
 
-void MemlocManager::removeMemloc(MemlocData * a)
+void MemlocManager::removeMemloc(I_MemlocData * a)
 {
 
 	address_t addr = a->get_addr();

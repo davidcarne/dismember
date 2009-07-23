@@ -9,7 +9,7 @@
  */
 
 #include "i_projectmodel.h"
-#include "memlocdata.h"
+#include "i_memlocdata.h"
 
 #include "arm_instruction.h"
 

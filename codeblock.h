@@ -55,7 +55,7 @@ private:
 	typedef blocklist_t::iterator blockiterator;
 	blocklist_t m_blocks;
 	
-	CodeBlock * buildCodeBlockAt(MemlocData * growFrom);
+	CodeBlock * buildCodeBlockAt(I_MemlocData * growFrom);
 	I_ProjectModel * m_trace;
 	
 	// Hooks for change notifications

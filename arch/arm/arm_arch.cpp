@@ -15,7 +15,7 @@
  */
 
 #include "arm.h"
-#include "../../memlocdata.h"
+#include "i_memlocdata.h"
 #include "arm_instruction.h"
 #include "datatype.h"
 
@@ -81,7 +81,7 @@ public:
 	 * @param addr The start address
 	 * @return the instantiated object, NULL on error
 	 */
-	virtual MemlocData * instantiate(address_t addr) const {
+	virtual I_MemlocData * instantiate(address_t addr) const {
 		u32 data;
 		if (ldw(addr, &data) )
 			return new ARMInstruction(getI_ProjectModelContext(), addr, data);

@@ -19,6 +19,7 @@
 
 #include "types.h"
 #include "i_projectmodel.h"
+#include "i_memlocdata.h"
 #include "xrefmanager.h"
 
 
@@ -29,7 +30,7 @@ class I_ProjectModel;
  * Each analyzed memory location is associated with an instantiation of a subclass of MemlocData.
  * MemlocData is an interface and cannot be used directly
  */
-class MemlocData {
+class MemlocData : public I_MemlocData {
 public:
 	virtual ~MemlocData();
 	

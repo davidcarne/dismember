@@ -15,6 +15,7 @@
  */
 
 #include "i_projectmodel.h"
+#include "i_memlocdata.h"
 #include "memlocdata.h"
 #include "binaryconstant.h"
 #include "datatype.h"
@@ -44,7 +45,7 @@ protected:
 		 * @param addr The start address
 		 * @return the instantiated object, NULL on error
 		 */
-		virtual MemlocData * instantiate(address_t addr) const;
+		virtual I_MemlocData * instantiate(address_t addr) const;
 	
 private:
 		
@@ -122,7 +123,7 @@ bool BinaryConstantDataType::isMutable() const
 	return false;
 }
 
-MemlocData * BinaryConstantDataType::instantiate(address_t addr) const
+I_MemlocData * BinaryConstantDataType::instantiate(address_t addr) const
 {
 	return new BinaryConstant(this, getI_ProjectModelContext(), addr, m_elemsize);
 }

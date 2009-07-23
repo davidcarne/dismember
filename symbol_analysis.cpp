@@ -15,7 +15,7 @@
  */
 
 #include "i_projectmodel.h"
-#include "memlocdata.h"
+#include "i_memlocdata.h"
 #include "instruction.h"
 #include "binaryconstant.h"
 #include "datatype.h"
@@ -48,7 +48,7 @@ bool SymbolAnalysis::analyze(Workspace *d)
 	MemlocManager::memloclist_ci end = t->memloc_list_end();
 	
 	for (; it != end; ++it) {
-		MemlocData * id = (*it).second;
+		I_MemlocData * id = (*it).second;
 		if (!id || !id->has_xrefs_to())
 			continue;
 		if (id->get_symbol()) {

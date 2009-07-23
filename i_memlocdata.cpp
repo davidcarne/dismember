@@ -1,4 +1,5 @@
 /*
+ *  Copyright 2009 David Carne
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2, or (at your option)
@@ -14,28 +15,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "bindings.h"
+#include "i_memlocdata.h"
 
-#include <boost/python.hpp>
-#include <boost/shared_ptr.hpp>
-#include "i_projectmodel.h"
-#include "datatype.h"
-#include "program_flow_analysis.h"
+// Only the virtual destructor should exist in this file
+// It should be a pure interface
 
-using namespace boost::python;
-
-// Make sure we retain ownership for this object
-void addDataType_wrap(I_ProjectModel & t, boost::shared_ptr<DataType> a)
-{
-    t.addDataType(a);
-}
-
-
-void bind_trace()
-{
-	class_<I_ProjectModel, boost::noncopyable>("I_ProjectModel", no_init)
-	//.def("undefine", &I_ProjectModel::undefine)
-	//.def("createI_MemlocDataAt", &I_ProjectModel::createI_MemlocDataAt)
-	.add_property("defdatatype", make_function(&I_ProjectModel::getCodeDataType, return_internal_reference<>() ))
-	.def("addDataType", &addDataType_wrap);
-}
+I_MemlocData::~I_MemlocData() {}

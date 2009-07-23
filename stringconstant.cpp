@@ -15,7 +15,9 @@
  */
 
 #include "datatype.h"
+#include "i_memlocdata.h"
 #include "memlocdata.h"
+#include "i_projectmodel.h"
 
 class StringConstantDataType : public DataType {
 public:
@@ -38,7 +40,7 @@ protected:
 		 * @param addr The start address
 		 * @return the instantiated object, NULL on error
 		 */
-		virtual MemlocData * instantiate(address_t addr) const
+		virtual I_MemlocData * instantiate(address_t addr) const
 	{
 		address_t stadr = addr;
 		

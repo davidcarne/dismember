@@ -19,7 +19,7 @@
 
 #include "types.h"
 
-class MemlocData;
+class I_MemlocData;
 class I_ProjectModel;
 
 /**
@@ -27,7 +27,7 @@ class I_ProjectModel;
  */
 class Xref {
 private:
-	typedef MemlocData xr_mtype;
+	typedef I_MemlocData xr_mtype;
 	
 public:
 	/**

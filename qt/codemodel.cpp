@@ -20,7 +20,7 @@
 #include <QSize>
 #include "document.h"
 #include "xref.h"
-#include "memlocdata.h"
+#include "i_memlocdata.h"
 
 #include "codemodel.h"
 
@@ -55,7 +55,7 @@ QModelIndex QTCodeModel::index(int row, int column,
 
 QString QTCodeModel::displayText(I_ProjectModel &t, address_t addr) const
 {
-	MemlocData *id = t.lookup_memloc(addr);
+	I_MemlocData *id = t.lookup_memloc(addr);
 	u8 ch;
 	if (id) {
 		return QString(id->get_textual().c_str());
@@ -79,7 +79,7 @@ QString QTCodeModel::displayComment(I_ProjectModel &t, address_t addr) const
 
 QString QTCodeModel::displayXrefs(I_ProjectModel &t, address_t addr) const
 {
-	MemlocData *id = t.lookup_memloc(addr);
+	I_MemlocData *id = t.lookup_memloc(addr);
 	if (id && id->has_xrefs_to()) {
 		QString str("");
 		for (XrefManager::xref_map_ci j = id->begin_xref_to();
@@ -111,7 +111,7 @@ QString QTCodeModel::displayXrefs(I_ProjectModel &t, address_t addr) const
 
 QString QTCodeModel::displayXrefBrief(I_ProjectModel &t, address_t addr) const
 {
-	MemlocData *id = t.lookup_memloc(addr);
+	I_MemlocData *id = t.lookup_memloc(addr);
 	if (id && id->has_xrefs_to()) {
 		char buf[256];
 		QString str("; xrefs");
@@ -166,7 +166,7 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 			case 1:
 				return QVariant(QColor(0, 0, 255));
 			case 2: {
-				MemlocData *id = m_model->getI_ProjectModel().lookup_memloc(addr);
+				I_MemlocData *id = m_model->getI_ProjectModel().lookup_memloc(addr);
 				if (id && id->is_executable())
 					return QVariant(QColor(0, 0, 200));
 				else if (id)

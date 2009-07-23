@@ -26,7 +26,7 @@
 #include <boost/noncopyable.hpp>
 
 // Forward Declarations to reduce compile times
-class MemlocData;
+class I_MemlocData;
 class MemoryBackedProjectModel;
 class Instruction;
 class DataType;
@@ -65,8 +65,8 @@ public:
 	
 #pragma mark Memloc Management	
 	/*################ Memory location management ################*/
-	virtual MemlocData * createMemlocDataAt(DataType * d, address_t addr) = 0;
-	virtual MemlocData * lookup_memloc(address_t addr, bool exactmatch=true) const = 0;
+	virtual I_MemlocData * createMemlocDataAt(DataType * d, address_t addr) = 0;
+	virtual I_MemlocData * lookup_memloc(address_t addr, bool exactmatch=true) const = 0;
 	virtual MemlocManager::memloclist_ci memloc_list_begin() const = 0;
 	virtual MemlocManager::memloclist_ci memloc_list_end() const = 0;
 	virtual void remove_memloc(address_t addr) = 0;
@@ -103,11 +103,11 @@ public:
 	
 #pragma mark Callback Management
 	/*################ Callback management ################*/
-	virtual void registerMemlocHook(CallbackBase<MemlocData *> *) = 0;
+	virtual void registerMemlocHook(CallbackBase<I_MemlocData *> *) = 0;
 	virtual void registerXrefHook(CallbackBase<Xref *> *) = 0;
 	virtual void registerSymbolHook(CallbackBase<Symbol *> *) = 0;
 	
-	virtual void unregisterMemlocHook(CallbackBase<MemlocData *> *) = 0;
+	virtual void unregisterMemlocHook(CallbackBase<I_MemlocData *> *) = 0;
 	virtual void unregisterXrefHook(CallbackBase<Xref *> *) = 0;
 	virtual void unregisterSymbolHook(CallbackBase<Symbol *> *) = 0;
 	

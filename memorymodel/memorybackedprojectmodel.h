@@ -68,8 +68,8 @@ public:
 
 #pragma mark Memloc Management	
 	/*################ Memory location management ################*/
-	virtual MemlocData * createMemlocDataAt(DataType * d, address_t addr);
-	virtual MemlocData * lookup_memloc(address_t addr, bool exactmatch=true) const;
+	virtual I_MemlocData * createMemlocDataAt(DataType * d, address_t addr);
+	virtual I_MemlocData * lookup_memloc(address_t addr, bool exactmatch=true) const;
 	virtual MemlocManager::memloclist_ci memloc_list_begin() const;
 	virtual MemlocManager::memloclist_ci memloc_list_end() const;
 	virtual void remove_memloc(address_t addr);
@@ -106,11 +106,11 @@ public:
 	
 #pragma mark Callback Management
 	/*################ Callback management ################*/
-	virtual void registerMemlocHook(CallbackBase<MemlocData *> *);
+	virtual void registerMemlocHook(CallbackBase<I_MemlocData *> *);
 	virtual void registerXrefHook(CallbackBase<Xref *> *);
 	virtual void registerSymbolHook(CallbackBase<Symbol *> *);
 	
-	virtual void unregisterMemlocHook(CallbackBase<MemlocData *> *);
+	virtual void unregisterMemlocHook(CallbackBase<I_MemlocData *> *);
 	virtual void unregisterXrefHook(CallbackBase<Xref *> *);
 	virtual void unregisterSymbolHook(CallbackBase<Symbol *> *);
 	
@@ -161,13 +161,13 @@ private:
 	
 	/*################ Callback Hacks; need to decide how to persist these - could be tricky ################*/
 	/* Callback stuff - do not serialize */
-	typedef std::list<CallbackBase<MemlocData *> *> memloc_hook_list;
+	typedef std::list<CallbackBase<I_MemlocData *> *> memloc_hook_list;
 	typedef std::list<CallbackBase<Xref *> *> xref_hook_list;
 	typedef std::list<CallbackBase<Symbol *> *> symbol_hook_list;
 	memloc_hook_list memloc_hooks;
 	xref_hook_list   xref_hooks;
 	symbol_hook_list symbol_hooks;
-	void notifyMemlocChange(MemlocData *, HookChange);
+	void notifyMemlocChange(I_MemlocData *, HookChange);
 	void notifyXrefChange(Xref *, HookChange);
 	void notifySymbolChange(Symbol *, HookChange);
 };
