@@ -25,7 +25,6 @@
 #define dataColor QColor(0xb9,0x47,0x1b)
 #define codeColor QColor(0x2d,0x36,0xbc)
 #define unkColor  QColor(0xbc,0xb3,0x2d)
-#define segColor  QColor(0x22,0x66,0x22)
 #define undColor  QColor(0x00,0x00,0x00)
 #define ROUND(x) ((int)((x)+0.5f))
 
@@ -58,44 +57,45 @@ void QTDataView::paintEvent(QPaintEvent *event)
 	if (begin == end)
 		return;
 	
+	bool tall = s.height() > s.width();
+	int npixels = tall ? s.height() : s.width();
 	m_paddrMap.clear();
-	m_paddrMap.resize(s.height());
+	m_paddrMap.resize(npixels);
 
-	address_t baseAddr = (*begin)->getBaseAddress();
 	uint64_t memSize = 0;
 	for (mi = begin; mi != end; ++mi)
 		memSize += (*mi)->get_length();
 
-	float bytesPerPixel = (float)memSize / s.height();
+	float bytesPerPixel = (float)memSize / npixels;
 
-	mi = begin;
-	double off = 0.0;
-	for (int i = 0; i < s.height(); ++i) {
-		address_t normAddr = baseAddr + ROUND(off);
-		I_MemlocData *id = t.lookup_memloc(normAddr, false);
-		if (id) {
-			if (id->is_executable())
-				painter.setPen(codeColor);
-			else
-				painter.setPen(dataColor);
-		} else if (!(*mi)->is_defined())
-			painter.setPen(undColor);
-		else
-			painter.setPen(unkColor);
-			
-		painter.drawLine(0, i, s.width(), i);
+	int pixel = 0;
+	for (mi = begin; mi != end; ++mi) {
+		address_t baseAddr = (*mi)->getBaseAddress();
+		double off = 0.0;
+		for (; pixel < npixels; ++pixel) {
+			I_MemlocData *id;
+			address_t normAddr = baseAddr + ROUND(off);
 
-		m_paddrMap[i] = normAddr;
-		off += bytesPerPixel;
-
-		if (!normAddr.isValid()) {
-			painter.setPen(segColor);
-			painter.drawLine(0, i, s.width()/3, i);
-			++mi;
-			if (mi == end)
+			if (!normAddr.isValid())
 				break;
-			baseAddr = (*mi)->getBaseAddress();
-			off = 0.0;
+
+			if (!(*mi)->is_defined())
+				painter.setPen(undColor);
+			else if ((id = t.lookup_memloc(normAddr, false))) {
+				if (id->is_executable())
+					painter.setPen(codeColor);
+				else
+					painter.setPen(dataColor);
+			} else
+				painter.setPen(unkColor);
+			
+			if (tall)
+				painter.drawLine(0, pixel, s.width(), pixel);
+			else
+				painter.drawLine(pixel, 0, pixel, s.height());
+
+			m_paddrMap[pixel] = normAddr;
+			off += bytesPerPixel;
 		}
 	}
 }
@@ -104,8 +104,11 @@ void QTDataView::mousePressEvent(QMouseEvent *event)
 {
 	m_mouseActive = true;
 	if (m_mouseInside) {
-		if (m_paddrMap.size() > (u32)event->pos().y()) {
-			address_t addr = m_paddrMap[event->pos().y()];
+		QSize s = size();
+		bool tall = s.height() > s.width();
+		int pixel = tall ? event->pos().y() : event->pos().x();
+		if (m_paddrMap.size() > (u32)pixel) {
+			address_t addr = m_paddrMap[pixel];
 			if (!addr.isValid())
 				return;
 			m_model->postJump(addr);
@@ -121,8 +124,11 @@ void QTDataView::mouseReleaseEvent(QMouseEvent *event)
 void QTDataView::mouseMoveEvent(QMouseEvent *event)
 {
 	if (m_mouseActive && m_mouseInside) {
-		if (m_paddrMap.size() > (u32)event->pos().y()) {
-			address_t addr = m_paddrMap[event->pos().y()];
+		QSize s = size();
+		bool tall = s.height() > s.width();
+		int pixel = tall ? event->pos().y() : event->pos().x();
+		if (m_paddrMap.size() > (u32)pixel) {
+			address_t addr = m_paddrMap[pixel];
 			if (!addr.isValid()) // whoops.
 				return;
 			QToolTip::showText(event->globalPos(),
