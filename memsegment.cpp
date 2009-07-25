@@ -21,21 +21,35 @@
 #include <stdio.h>
 
 MemSegment::MemSegment(paddr_t base, psize_t len, void * buffer, psize_t flength, const std::string & name)
-: m_base(base), m_len(len), m_name(name)
+ : m_base(base), m_len(len), m_data(NULL), m_name(name)
 {
-	if (buffer)
-	{
+	init(buffer, flength);
+}
+
+MemSegment::MemSegment(paddr_t base, psize_t len, void * buffer, const std::string & name)
+ : m_base(base), m_len(len), m_data(NULL), m_name(name)
+{
+	init(buffer, len);
+}
+
+MemSegment::MemSegment(paddr_t base, psize_t len, const std::string & name)
+ : m_base(base), m_len(len), m_data(NULL), m_name(name)
+{
+	init(NULL, 0);
+}
+
+void MemSegment::init(void *data, psize_t initLength)
+{
+	if (initLength > 0) {
 		// TODO:, removeme, +1 to hack around a boost bug
-		m_data = new uint8_t[len+1];
-		bzero(m_data, len);
+		m_data = new uint8_t[m_len+1];
+		bzero(m_data, m_len);
 		
-		if (flength != (psize_t)-1)
-			memcpy(m_data, buffer, flength);
+		if (initLength != m_len)
+			memcpy(m_data, data, initLength);
 		else
-			memcpy(m_data, buffer, len);
-		
-	} else
-		m_data = NULL;
+			memcpy(m_data, data, m_len);
+	}
 }
 
 MemSegment::~MemSegment()
@@ -99,4 +113,9 @@ const uint8_t * MemSegment::data_ptr() const
 const std::string & MemSegment::getName() const
 {
 	return m_name;
+}
+
+bool MemSegment::less::operator()(MemSegment *a, MemSegment *b) const
+{
+	return a->get_start() < b->get_start();
 }

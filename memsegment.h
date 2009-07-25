@@ -26,17 +26,32 @@
  */
 class MemSegment {
 public:
-	
-	static const psize_t c_unitialized_segment = -1;
-	
 	/**
-	 * \brief Initialize a new memory segment.
+	 * \brief Create a new fully initialized memory segment.
+	 * @param base base address of the new memory segment
+	 * @param len length of the new memory segment
+	 * @param buffer data buffer to source contents from. May be released after buffer is created
+	 * @param name name of memory segment [eg: RAM, ROM, BSS, TXT]
+	 */
+	MemSegment(paddr_t base, psize_t len, void * buffer, const std::string & name = "");
+
+	/**
+	 * \brief Create a new memory segment with specified initialized length.
 	 * @param base base address of the new memory segment
 	 * @param len length of the new memory segment
 	 * @param buffer data buffer to source contents from. May be released after buffer is created
 	 * @param initLength length of the initialized data for the segment [ie, for a data segment]
+	 * @param name name of memory segment [eg: RAM, ROM, BSS, TXT]
 	 */
-	MemSegment(paddr_t base, psize_t len, void * buffer = NULL, psize_t initLength = -1, const std::string & name = "");
+	MemSegment(paddr_t base, psize_t len, void * buffer, psize_t initLength, const std::string & name = "");
+
+	/**
+	 * \brief Create a new uninitialized memory segment.
+	 * @param base base address of the new memory segment
+	 * @param len length of the new memory segment
+	 * @param name name of memory segment [eg: RAM, ROM, BSS, TXT]
+	 */
+	MemSegment(paddr_t base, psize_t len, const std::string & name = "");
 	
 	/** Destructor for a memory segment */
 	~MemSegment();
@@ -93,13 +108,12 @@ public:
 
 	/** Less comparison functor for MemSegment */
 	struct less {
-		
 		/** Less comparison operator for MemSegment */
-		bool operator()(MemSegment *a, MemSegment *b) const
-		{ return a->get_start() < b->get_start(); }
+		bool operator()(MemSegment *a, MemSegment *b) const;
 	};
 
 private:
+	void init(void *data, psize_t initLength);
 	
 	paddr_t m_base;
 	psize_t m_len;

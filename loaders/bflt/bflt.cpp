@@ -69,23 +69,21 @@ bool FlatLoader::loadFromFile(FILE * loadimg, I_ProjectModel * ctx)
 	if (readHeader(loadimg) < 0)
 		return false;
 	
-	u8 *data = (u8 *)malloc(header.bss_end + header.stack_size);
+	u8 *data = (u8 *)malloc(header.data_end);
 	fseek(loadimg, sizeof(struct flat_hdr), SEEK_SET);
 	if ((fread(data, 1, header.data_end, loadimg)) < header.data_end)
 		return false;
 
 	int bss_size = header.bss_end - header.data_end;
-	memset(data + header.data_end, 0, bss_size);
-
 	reloc(data, loadAddress, loadimg);
 
 	MemSegment *ms;
 	ctx->addSegment(ms = new MemSegment(loadAddress, header.data_end,
-			data, MemSegment::c_unitialized_segment, "TXT"));
+			data, "TXT"));
 	ctx->addSegment(new MemSegment(loadAddress + header.data_end,
-			bss_size, data + header.data_end, MemSegment::c_unitialized_segment, "BSS"));
+			bss_size, "BSS"));
 	ctx->addSegment(new MemSegment(loadAddress + header.bss_end,
-			header.stack_size, data + header.bss_end, MemSegment::c_unitialized_segment, "STK"));
+			header.stack_size, "STK"));
 	free(data);
 
 	ctx->create_sym("_start", ms->getBaseAddress() + header.entry);
