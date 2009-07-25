@@ -17,6 +17,7 @@
 #include "memlocmanager.h"
 #include "exception.h"
 #include "i_memlocdata.h"
+#include <assert.h>
 
 void MemlocManager::insertMemloc(I_MemlocData * a)
 {
