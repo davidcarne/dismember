@@ -26,6 +26,7 @@
 #define codeColor QColor(0x2d,0x36,0xbc)
 #define unkColor  QColor(0xbc,0xb3,0x2d)
 #define segColor  QColor(0x22,0x66,0x22)
+#define undColor  QColor(0x00,0x00,0x00)
 #define ROUND(x) ((int)((x)+0.5f))
 
 QTDataView::QTDataView(QWidget *parent)
@@ -77,8 +78,11 @@ void QTDataView::paintEvent(QPaintEvent *event)
 				painter.setPen(codeColor);
 			else
 				painter.setPen(dataColor);
-		} else
+		} else if (!(*mi)->is_defined())
+			painter.setPen(undColor);
+		else
 			painter.setPen(unkColor);
+			
 		painter.drawLine(0, i, s.width(), i);
 
 		m_paddrMap[i] = normAddr;
