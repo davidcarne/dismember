@@ -1,0 +1,54 @@
+// This is probably all wrong, but we need to start somewhere, so here's a design doc:
+
+// ASSUMPTIONS:
+// at any point - the client needs to have a full copy of the tree; no partial caching is implemented.
+//	reasoning: if we partially cache; then xrefs need to be proactively pushed down rather than calculated
+
+Tree is structured thus:
+
+[root].name			Document Name
+      .segments		Dictionary of: [keyed by segment_name]
+	           .filename_original			Filename from which segment was sourced
+			   .segment_name				
+			   .phys_addr
+			   .data
+			   .length
+      .locinfo		Dictionary of: [keyed by address]
+			   .address [segment:offset]
+			   .decoder
+			   .decoder_attrs [object of undetermined keys]
+			   .length [even though decoder gets this, important if client cannot decode]
+			   .comment
+	  .symbol		Dictionary: [keyed by address]
+		       .address
+			   .name
+	  
+// Things NOT stored:
+	Xrefs - can be calculated on the fly
+    
+Wire Protocol:
+	
+	[CMD]  [LEN]	[CMDDATA]
+	1 byte 4 bytes	len -5 bytes
+	
+	
+	CMDs:
+	0x00	Client->Server  PING [data returned in pong, max 10 bytes]
+	0x01	Server->Client  PONG [contains data in ping, max 10 bytes]
+	0x02	Server->Client  AUTHREQ	[sent upon any operation if authentication required, data AUTHSALT]
+	0x03	Client->Server  AUTHVAL  [reply to AUTHREQ, data username, \0, HMAC-SHA256(authsalt key, SHA256(password))]
+                                        [Also just send to notify server of username, server will respone with authreq if need password]
+    0x04    Server->Client  AUTHSTATUS [reply to AUTHVAL, data 0 for OK, >0 for error code]
+    
+    0x08    Server->Client  TRANSNUM [reply to any update from client->server, transaction number of last update]
+    0x09    Client->Server  QTRANSNUM [ask for transaction number]
+    
+    0x10    Both ways       VALUESET [see pathspec, value spec for data later on]
+    0x11    Client->Server  VALUEGET [see pathspec, VALUESET returned]
+    0x12    Client->Server  ROLLUPKEYS [ask server to forward to client all changes since transaction#]
+    
+// TODOS:
+	move to decoder scheme; rather than subclass, decode on the fly
+
+pathspec:   character-delimited by 0x1s , end of string marked by 0x0
+valuespec:
