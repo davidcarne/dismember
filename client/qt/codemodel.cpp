@@ -138,6 +138,22 @@ QString QTCodeModel::displaySymbol(I_ProjectModel &t, address_t addr) const
 	return QString();
 }
 
+QVariant QTCodeModel::headerData(int section, Qt::Orientation o, int role) const
+{
+	if (o == Qt::Vertical)
+		return QVariant();
+	if (role == Qt::DisplayRole) {
+		switch (section) {
+		case 0: return QVariant(QString("Address"));
+		case 1: return QVariant(QString("Symbol"));
+		case 2: return QVariant(QString("Text"));
+		case 3: return QVariant(QString("XREFs"));
+		case 4: return QVariant(QString("Comment"));
+		}
+	}
+	return QVariant();
+}
+
 QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 {
 	GuiProxy &gprox = m_model->getProxy();

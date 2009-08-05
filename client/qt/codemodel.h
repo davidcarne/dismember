@@ -41,6 +41,9 @@ class QTCodeModel : public QAbstractItemModel
 	QVariant data(const QModelIndex &index,
 			int role = Qt::DisplayRole) const;
 
+	QVariant headerData(int section, Qt::Orientation orientation,
+			int role = Qt::DisplayRole) const;
+
 	void flush();
 
  private:
