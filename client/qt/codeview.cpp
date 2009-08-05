@@ -267,10 +267,15 @@ void QTCodeView::keyPressEvent(QKeyEvent *event)
 		// collapse
 		break;
 	default:
-		// todo: filter out everything that'll cause a search.
 		QTableView::keyPressEvent(event);
 		break;
 	}
+}
+
+
+void QTCodeView::keyboardSearch(const QString &search)
+{
+	// Don't.
 }
 
 void QTCodeView::mouseDoubleClickEvent(QMouseEvent *event)

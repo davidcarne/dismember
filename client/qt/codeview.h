@@ -55,6 +55,7 @@ class QTCodeView : public QTableView, public QTRuntimeModelListener
 	void keyReleaseEvent(QKeyEvent *event);
 	void keyPressEvent(QKeyEvent *event);
 	void mouseDoubleClickEvent(QMouseEvent *event);
+	void keyboardSearch(const QString &search);
 
 	bool getSelectionAddress(address_t *addr);
 	QTCodeController *getController();
