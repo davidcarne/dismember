@@ -1,7 +1,7 @@
 
 
 
-MODULES := python_embed arch loaders memorymodel datatype $(GUI)
+MODULES := python_embed arch loaders kvsmodel datatype kvs $(GUI)
 
 INCDIRS := $(MODULES)
 INCPATHS := -I.

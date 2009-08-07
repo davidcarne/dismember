@@ -25,9 +25,9 @@
 #include <stdint.h>
 #include <boost/noncopyable.hpp>
 
+
 // Forward Declarations to reduce compile times
 class I_MemlocData;
-class MemoryBackedProjectModel;
 class Instruction;
 class DataType;
 class Symbol;

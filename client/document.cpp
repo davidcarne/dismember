@@ -34,10 +34,11 @@
 
 #include "i_memlocdata.h"
 #include "i_projectmodel.h"
-#include "memorybackedprojectmodel.h"
+#include "kvsbackedprojectmodel.h"
 #include "document.h"
 #include "localpythoninterpreter.h"
 
+#include "localkvsstore.h"
 // TODO: remove this
 #include "arch/arm/arm.h"
 #include "guiglue.h"
@@ -45,8 +46,9 @@
 
 Workspace::Workspace()
 {
+	LocalKVSStore * lkvs = new LocalKVSStore();
 	// Create all the constituent parts of the Workspace
-	m_trace = new MemoryBackedProjectModel(new ARMArchitecture());
+	m_trace = new KVSBackedProjctModel(lkvs, new ARMArchitecture());
 	m_pyInterpreter = new LocalPythonInterpreter(this);
 	m_docgui = setupWorkspaceGui(*this);
 	m_runQueue = createRunQueueControl();
