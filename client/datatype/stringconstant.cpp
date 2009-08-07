@@ -33,14 +33,14 @@ public:
 	
 protected:
 		
-		/**
-		* \brief instantiate a new instance of the datatype
-		 * @param t The trace to which the instance will belong. This does not insert it into the trace, but merely
-		 *	uses the trace to setup the datatype.
-		 * @param addr The start address
-		 * @return the instantiated object, NULL on error
-		 */
-		virtual I_MemlocData * instantiate(address_t addr) const
+	/**
+	* \brief instantiate a new instance of the datatype
+	 * @param t The trace to which the instance will belong. This does not insert it into the trace, but merely
+	 *	uses the trace to setup the datatype.
+	 * @param addr The start address
+	 * @return the instantiated object, NULL on error
+	 */
+	virtual const DataTypeDecoding decode(const address_t & addr) const
 	{
 		address_t stadr = addr;
 		
@@ -54,7 +54,7 @@ protected:
 		
 		while (!done)
 		{
-			if (!getProjectModelContext()->readByte(addr, &unitchar))
+			if (!getProjectModelContext()->readByte(stadr, &unitchar))
 			{
 				break;
 			}
@@ -89,49 +89,16 @@ protected:
 						contents += buf;
 				}
 			}
-			addr++;
+			stadr++;
 			len++;
 		}
 		contents += "\",0";
 		
-		return new StringConstant(this, getProjectModelContext(), stadr, len, contents);
+		return DataTypeDecoding(contents, len);
 	}
 	
 private:
 		
-		class StringConstant : public MemlocData {
-public:
-			
-			
-			virtual ~StringConstant() {};
-			
-			virtual u32	get_length() const
-			{
-				return m_len;
-			}
-			
-			virtual bool is_executable() const {
-				return false;
-			};
-			virtual bool logically_continues() const {
-				return false;
-			};
-			
-			/* The slist requirement will go away later when this returns tokens */
-			virtual const std::string get_textual()
-			{
-				return m_data;
-			}
-			
-protected:
-			StringConstant(const DataType * creator, const I_ProjectModel * ctx, address_t address, uint64_t len, std::string data) : MemlocData(creator, ctx, address, m_len), m_len(len), m_data(data)
-			{}
-			
-			uint64_t m_len;
-			std::string m_data;
-			friend class StringConstantDataType;	
-private:
-		};
 };
 
 StringConstantDataType::StringConstantDataType(I_ProjectModel * t) : DataType(t)

@@ -26,6 +26,53 @@
 
 class I_ProjectModel;
 class I_MemlocData;
+class KVS_Node;
+
+class DataTypeDecoding {
+public:
+	
+	typedef enum {
+		DT_IS_EXEC = 0x1,
+		DT_CONTINUES = 0x2
+	} e_datatype_decoding_flags;
+	
+	DataTypeDecoding() : m_flags(0), m_text_form(""), m_decoded_length(0), m_kvattribs(0) {
+		
+	}
+	
+	DataTypeDecoding(const std::string & text_form, psize_t declength, uint32_t flags = 0, KVS_Node * kvattribs = NULL) :
+		m_flags(flags), m_text_form(text_form), m_decoded_length(declength), m_kvattribs(kvattribs) {
+	}
+
+	bool isExecutable() const {
+		return m_flags & DT_IS_EXEC;
+	};
+	
+	bool continues() const {
+		return m_flags & DT_CONTINUES;
+	};
+	
+	bool isValid() const {
+		return m_decoded_length > 0;
+	}
+	
+	psize_t getDecodedLength() const {
+		return m_decoded_length;
+	}
+	
+	const std::string & getDecodedText() const
+	{
+		return m_text_form;
+	}
+private:
+	std::string m_text_form;
+	psize_t m_decoded_length;
+	
+	uint32_t m_flags;
+	
+	KVS_Node * m_kvattribs;
+};
+
 
 /**
  * \brief DataType represents the concept of a datatype.
@@ -92,7 +139,7 @@ class DataType {
 	 * @param addr The start address
 	 * @return the instantiated object, NULL on error
 	 */
-	virtual I_MemlocData * instantiate(address_t addr) const = 0;
+	virtual const DataTypeDecoding decode(const address_t & addr) const = 0;
 	
 	protected:
 	/**

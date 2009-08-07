@@ -15,39 +15,14 @@ def newWorkspaceSetup(theworkspace):
 def setupWorkspaceDefaultDataTypes(theworkspace):
 	
 	trce = theworkspace.trace;
-	
-	# Unsigned 8 bit int
-	x = BinaryConstantDataType(trce, "u8_le", dismember.nparse.BTYPE_PLAIN, 1, False, dismember.nparse_sign.BSIGN_NONE)
-	trce.addDataType(x)
-	
-	# Unsigned 16 bit int
-	x = BinaryConstantDataType(trce, "u16_le", dismember.nparse.BTYPE_PLAIN, 2, False, dismember.nparse_sign.BSIGN_NONE)
-	trce.addDataType(x)
-	
-	# Unsigned 32 bit int
-	x = BinaryConstantDataType(trce, "u32_le", dismember.nparse.BTYPE_PLAIN, 4, False, dismember.nparse_sign.BSIGN_NONE)
-	trce.addDataType(x)
-	
-	# Unsigned 64 bit int
-	x = BinaryConstantDataType(trce, "u64_le", dismember.nparse.BTYPE_PLAIN, 8, False, dismember.nparse_sign.BSIGN_NONE)
-	trce.addDataType(x)
-	
-	# Signed 8 bit int
-	x = BinaryConstantDataType(trce, "s8_le", dismember.nparse.BTYPE_PLAIN, 1, False, dismember.nparse_sign.BSIGN_STD)
-	trce.addDataType(x)
-	
-	# Signed 16 bit int
-	x = BinaryConstantDataType(trce, "s16_le", dismember.nparse.BTYPE_PLAIN, 2, False, dismember.nparse_sign.BSIGN_STD)
-	trce.addDataType(x)
-	
-	# Signed 32 bit int
-	x = BinaryConstantDataType(trce, "s32_le", dismember.nparse.BTYPE_PLAIN, 4, False, dismember.nparse_sign.BSIGN_STD)
-	trce.addDataType(x)
-
-	# Signed 64 bit int
-	x = BinaryConstantDataType(trce, "s64_le", dismember.nparse.BTYPE_PLAIN, 8, False, dismember.nparse_sign.BSIGN_STD)
-	trce.addDataType(x)
-
+	for length in [1,2,4,8]:
+		for name_signed, signed in [ ("u", dismember.nparse_sign.BSIGN_NONE), ("s", dismember.nparse_sign.BSIGN_STD) ]:
+			for name_endian, endian in [ ("le", dismember.endian.ENDIAN_LITTLE), ("be", dismember.endian.ENDIAN_LITTLE) ]:
+				
+				x = BinaryConstantDataType(trce, "%s%d_%s" %(name_signed, 8 * length, name_endian), 
+					dismember.nparse.BTYPE_PLAIN, length, endian, signed)
+				trce.addDataType(x)
+			
 	# Ascii String
 	x = StringConstantDataType(trce)
 	trce.addDataType(x)

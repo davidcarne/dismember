@@ -97,7 +97,9 @@ bool ProgramFlowAnalysis::analyze(Workspace * d, DataType * dtcreate, address_t 
 	
 	bool first = true;
 	
-	while (addr.isValid()) {
+	/*
+	 TODO: Make me work
+	 while (addr.isValid()) {
 		if (t->lookup_memloc(addr))
 			break;
 		
@@ -120,7 +122,7 @@ bool ProgramFlowAnalysis::analyze(Workspace * d, DataType * dtcreate, address_t 
 		
 
 	}
-	
+	*/
 	d->postGuiUpdate();
 	return true;
 }

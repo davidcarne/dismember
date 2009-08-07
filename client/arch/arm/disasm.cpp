@@ -15,9 +15,8 @@
  */
 
 #include "i_projectmodel.h"
-#include "i_memlocdata.h"
 
-#include "arm_instruction.h"
+#include "i_memlocdata.h"
 
 #include <stdexcept>
 #include <stdio.h>
@@ -386,10 +385,8 @@ static void writeImmed(char **retp, u32 imm)
 		*retp += sprintf(*retp, "#%d\t; 0x%x", simm, imm);
 }
 
-const std::string ARMInstruction::get_textual()
+const std::string decodeText(const I_ProjectModel * ctx, u32 instr, const address_t & addr)
 {
-	u32 instr = m_opcode;
-	address_t addr = get_addr();
 	
     struct arm_insn *insn;
     
@@ -421,18 +418,18 @@ const std::string ARMInstruction::get_textual()
                         break;
                     case 'a':
                         // write_addr (slixt, pptr, Pre, Up, Writeback, Immbit, Barrelshift);
-                        write_addr (get_ctx(), &retp, !!(instr & (1 << 24)), !!(instr & (1 << 23)),
+                        write_addr (ctx, &retp, !!(instr & (1 << 24)), !!(instr & (1 << 23)),
                                     !!(instr & (1 << 21)), !(instr & (1 << 25)),
                                     instr & 0xfff, (instr >> 16) & 0xf, addr + 8);
                         break;
                     case 'A':
                         if (instr & (1 << 22))
-                            write_addr (get_ctx(), &retp, !!(instr & (1 << 24)), !!(instr & (1 << 23)),
+                            write_addr (ctx, &retp, !!(instr & (1 << 24)), !!(instr & (1 << 23)),
                                         !!(instr & (1 << 21)), 1,
                                         ((instr >> 4) & 0xf0) | (instr & 0xf), (instr >> 16) & 0xf,
                                         addr + 8);
                         else
-                            write_addr (get_ctx(), &retp, !!(instr & (1 << 24)), !!(instr & (1 << 23)),
+                            write_addr (ctx, &retp, !!(instr & (1 << 24)), !!(instr & (1 << 23)),
                                         !!(instr & (1 << 21)), 0, instr & 0xf, (instr >> 16) & 0xf,
                                         addr + 8);
                         break;
@@ -465,7 +462,7 @@ const std::string ARMInstruction::get_textual()
                         retp += sprintf (retp, "0x%06x", instr & 0xffffff);
                         break;
                     case 'j':
-                        write_jump (get_ctx(), &retp, instr & 0xffffff, addr + 8);
+                        write_jump (ctx, &retp, instr & 0xffffff, addr + 8);
                         break;
                     case 'k':
                         retp += sprintf (retp, "%04x", ((instr >> 4) & 0xfff0) | (instr & 0xf));

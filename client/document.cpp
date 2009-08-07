@@ -51,9 +51,13 @@ Workspace::Workspace()
 	m_docgui = setupWorkspaceGui(*this);
 	m_runQueue = createRunQueueControl();
 	
-	// Setup the new Workspace
-	m_pyInterpreter->exec("dismemauto.newWorkspaceSetup(doc)");
-	
+	try {
+		// Setup the new Workspace
+		m_pyInterpreter->exec("dismemauto.newWorkspaceSetup(doc)");
+	} catch (boost::python::error_already_set &) {
+		PyErr_Print();
+	}
+
 	postGuiUpdate();
 	
 }

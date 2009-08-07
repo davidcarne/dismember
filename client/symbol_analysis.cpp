@@ -79,11 +79,12 @@ bool SymbolAnalysis::analyze(Workspace *d)
 				break;
 			}
 		}
-		else if (aid && aid->get_pcflags() & Instruction::PCFLAG_FNENT) {
+		/* TODO: Re-enable me
+		 else if (aid && aid->get_pcflags() & Instruction::PCFLAG_FNENT) {
 			sprintf(type, "code");
 			subroutine = true;
 			sprintf(namebuf, "_sub_%s", saddr);
-		}
+		}*/
 		else {
 			sprintf(type, "unk");
 			sprintf(namebuf, "_loc_%s", saddr);

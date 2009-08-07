@@ -11,13 +11,19 @@
 #include "i_projectmodel.h"
 #include "i_memlocdata.h"
 
-#include "arm_instruction.h"
+#include "instruction.h"
 
 #include <string.h>
 
 
-void ARMInstruction::decode_data_refs()
+
+void decode_data_refs(const u32 m_opcode, const address_t & addr)
 {
+	
+	// These need to be written to the attribute store....
+	uint32_t m_pcflags;
+	address_t m_data_ref_addr;
+	
 	if ((m_opcode & 0x0c000000) == 0x04000000) {
 		int regN = (m_opcode >> 16) & 0xf;
 		//int regD = (m_opcode >> 12) & 0xf;
@@ -34,7 +40,7 @@ void ARMInstruction::decode_data_refs()
 		}
 
 		
-		address_t base = get_addr() + 8;
+		address_t base = addr + 8;
 		
 		address_t taddr;
 		
@@ -48,39 +54,38 @@ void ARMInstruction::decode_data_refs()
 		}
 		
 		if (IPUBWL & (1 << 0)) { // ldr
-			m_pcflags |= PCFLAG_DREF;
+			m_pcflags |= Instruction::PCFLAG_DREF;
 
 			if (IPUBWL & (1 << 2)) // ldrb
-				m_pcflags |= PCFLAG_DSBYTE;
+				m_pcflags |= Instruction::PCFLAG_DSBYTE;
 			else
-				m_pcflags |= PCFLAG_DSWORD;
+				m_pcflags |= Instruction::PCFLAG_DSWORD;
 			
 			m_data_ref_addr = taddr;
 		} 
 	}
 }
 
-void ARMInstruction::decode_pcflow()
+void decode_pcflow(const u32 m_opcode, const address_t & addr)
 {
 	const char *instrname = 0;
-
+	u32 m_pcflags;
 	u32 pcflags = 0;
 	address_t ddest;
 	
 	u32 instr = m_opcode;
-	address_t addr = get_addr();
 	
 	/* By default, each instruction carries onto the next. Only certain don't */
-	pcflags |= PCFLAG_CONTINUE;
+	pcflags |= Instruction::PCFLAG_CONTINUE;
 	
 	// BX
 	if ((instr & 0x0ffffff0) == 0x012fff10) {
 		
 		// We don't continue
-		pcflags &= ~PCFLAG_CONTINUE;
+		pcflags &= ~Instruction::PCFLAG_CONTINUE;
 		
 		// Jump location is indirectly determined
-		pcflags |= PCFLAG_INDLOC;
+		pcflags |= Instruction::PCFLAG_INDLOC;
 		
 		instrname = "bx";
 	}
@@ -88,7 +93,7 @@ void ARMInstruction::decode_pcflow()
 	// SWI
 	else if ((instr & 0x0f000000) == 0x0f000000) {
 		// Jump location is indirectly determined
-		pcflags |= PCFLAG_INDLOC;
+		pcflags |= Instruction::PCFLAG_INDLOC;
 		
 		instrname = "swi";
 	}
@@ -96,13 +101,13 @@ void ARMInstruction::decode_pcflow()
 	// B, BL
 	else if ((instr & 0x0e000000) == 0x0a000000) {
 		// We don't necessarily continue
-		pcflags &= ~PCFLAG_CONTINUE;
-		pcflags |= PCFLAG_DIRLOC;
+		pcflags &= ~Instruction::PCFLAG_CONTINUE;
+		pcflags |= Instruction::PCFLAG_DIRLOC;
 		
 		if (instr & (1 << 24)) // L
 		{
 			// since its a link, we do continue + mark it as a link
-			pcflags |= PCFLAG_CONTINUE | PCFLAG_DIRLK;
+			pcflags |= Instruction::PCFLAG_CONTINUE | Instruction::PCFLAG_DIRLK;
 		}
 		
 		
@@ -137,10 +142,10 @@ void ARMInstruction::decode_pcflow()
 		if (regD == 15)
 		{
 			// We don't continue
-			pcflags &= ~PCFLAG_CONTINUE;
+			pcflags &= ~Instruction::PCFLAG_CONTINUE;
 			
 			// Jump location is indirectly determined
-			pcflags |= PCFLAG_INDLOC;
+			pcflags |= Instruction::PCFLAG_INDLOC;
 		}
 		
 		instrname = "mul";
@@ -156,10 +161,10 @@ void ARMInstruction::decode_pcflow()
 		if (regDhi == 15 || regDlo == 15)
 		{
 			// We don't continue
-			pcflags &= ~PCFLAG_CONTINUE;
+			pcflags &= ~Instruction::PCFLAG_CONTINUE;
 			
 			// Jump location is indirectly determined
-			pcflags |= PCFLAG_INDLOC;
+			pcflags |= Instruction::PCFLAG_INDLOC;
 		}
 		
 		instrname = "umull";
@@ -177,10 +182,10 @@ void ARMInstruction::decode_pcflow()
 			if (regD == 15)
 			{
 				// We don't continue
-				pcflags &= ~PCFLAG_CONTINUE;
+				pcflags &= ~Instruction::PCFLAG_CONTINUE;
 				
 				// Jump location is indirectly determined
-				pcflags |= PCFLAG_INDLOC;
+				pcflags |= Instruction::PCFLAG_INDLOC;
 			}
 			
 			instrname = "ldr";
@@ -197,10 +202,10 @@ void ARMInstruction::decode_pcflow()
 		if ((instr >> 20) & 1) { // MRC
 			if (regD == 15) {
 				// We don't continue
-				pcflags &= ~PCFLAG_CONTINUE;
+				pcflags &= ~Instruction::PCFLAG_CONTINUE;
 				
 				// Jump location is indirectly determined
-				pcflags |= PCFLAG_INDLOC;
+				pcflags |= Instruction::PCFLAG_INDLOC;
 			}
 			instrname = "mrc";
 		} else { // MCR
@@ -218,10 +223,10 @@ void ARMInstruction::decode_pcflow()
 		if (regD == 15)
 		{
 			// We don't continue
-			pcflags &= ~PCFLAG_CONTINUE;
+			pcflags &= ~Instruction::PCFLAG_CONTINUE;
 			
 			// Jump location is indirectly determined
-			pcflags |= PCFLAG_INDLOC;
+			pcflags |= Instruction::PCFLAG_INDLOC;
 		}
 
 		instrname = "swp";
@@ -243,10 +248,10 @@ void ARMInstruction::decode_pcflow()
 				if (regD == 15)
 				{
 					// We don't continue
-					pcflags &= ~PCFLAG_CONTINUE;
+					pcflags &= ~Instruction::PCFLAG_CONTINUE;
 						
 					// Jump location is indirectly determined
-					pcflags |= PCFLAG_INDLOC;
+					pcflags |= Instruction::PCFLAG_INDLOC;
 				}
 			} 
 			break;
@@ -255,10 +260,10 @@ void ARMInstruction::decode_pcflow()
 			if (regD == 15)
 			{
 				// We don't continue
-				pcflags &= ~PCFLAG_CONTINUE;
+				pcflags &= ~Instruction::PCFLAG_CONTINUE;
 				
 				// Jump location is indirectly determined
-				pcflags |= PCFLAG_INDLOC;
+				pcflags |= Instruction::PCFLAG_INDLOC;
 			}
 			break;
 		}
@@ -280,10 +285,10 @@ void ARMInstruction::decode_pcflow()
 					if (r_inc == 15)
 					{
 						// We don't continue
-						pcflags &= ~PCFLAG_CONTINUE;
+						pcflags &= ~Instruction::PCFLAG_CONTINUE;
 						
 						// Jump location is indirectly determined
-						pcflags |= PCFLAG_INDLOC;
+						pcflags |= Instruction::PCFLAG_INDLOC;
 					}
 				}
 			}
@@ -313,78 +318,63 @@ void ARMInstruction::decode_pcflow()
 		switch (opcode) {
 		case 8: /* TST */
 			writeres = 0;
-			instrname = "tst";
 			break;
 		case 0: /* AND */
-			instrname = "and";
 			break;
 		case 9: /* TEQ */
 			writeres = 0;
-			instrname = "teq";
 			break;
 		case 1: /* EOR */
-			instrname = "eor";
 			break;
 		case 0xC: /* ORR */
-			instrname = "orr";
 			break;
 		case 0xA: /* CMP */
 			writeres = 0;
-			instrname = "cmp";
 			break;
 		case 6: /* SBC */
-			instrname = "sbc";
 		case 2: /* SUB */
-			instrname = "sub";
 			break;
 		case 7: /* RSC */
-			instrname = "rsc";
 			break;
 		case 3: /* RSB */
-			instrname = "rsb";
 			break;
 		case 0xB: /* CMN */
 			writeres = 0;
-			instrname = "cmn";
 			break;
 		case 5: /* ADC */
-			instrname = "adc";
 			break;
 		case 4: /* ADD */
-			instrname = "add";
 			break;
 		case 0xD: /* MOV */
 			req_regN = 0;
 			result = opB;
-			instrname = "mov";
 			break;
 		case 0xE: /* BIC */
-			instrname = "bic";
 			break;
 		case 0xF: /* MVN */
 			req_regN = 0;
 			result = ~opB;
-			instrname = "mvn";
 			break;
 		}
 
 		// write result
 		if (writeres && regD == 15) {
 			// We don't continue
-			pcflags &= ~PCFLAG_CONTINUE;
+			pcflags &= ~Instruction::PCFLAG_CONTINUE;
 			if (!req_regN && (instr & (1 << 25))) { // immediate
 				// Jump location is directly determined
-				pcflags |= PCFLAG_DIRLOC;
-				ddest = get_ctx()->locateAddress(result);
+				pcflags |= Instruction::PCFLAG_DIRLOC;
+				
+				// TODO: uncomment_me
+				//ddest = get_ctx()->locateAddress(result);
 			} else {
 				// Jump location is indirectly determined
-				pcflags |= PCFLAG_INDLOC;
+				pcflags |= Instruction::PCFLAG_INDLOC;
 			}
 		}
 	}
 	else {
-		instrname = "undf";
-		pcflags &= ~PCFLAG_CONTINUE;
+		pcflags &= ~Instruction::PCFLAG_CONTINUE;
 		m_pcflags = pcflags;
 		return;
 	}
@@ -393,9 +383,11 @@ void ARMInstruction::decode_pcflow()
 	if ((instr >> 28) != 0xE)
 	{
 		// If the instruction could be skipped, we could continue
-		pcflags |= PCFLAG_CONTINUE;
+		pcflags |= Instruction::PCFLAG_CONTINUE;
 	}
 	
 	m_pcflags = pcflags;
-	m_ddest = ddest;
+	
+	//TODO: write this to kvs store
+	//m_ddest = ddest;
 }

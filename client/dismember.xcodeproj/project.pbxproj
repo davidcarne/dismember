@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		671052F9102BC78A000D8D88 /* i_kvs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_kvs.h; sourceTree = "<group>"; };
+		671052FA102BC78A000D8D88 /* i_kvs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = i_kvs.cpp; sourceTree = "<group>"; };
+		671052FB102BC8A2000D8D88 /* localkvsstore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = localkvsstore.h; sourceTree = "<group>"; };
+		671052FC102BC8A2000D8D88 /* localkvsstore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = localkvsstore.cpp; sourceTree = "<group>"; };
+		6710536D102BD00C000D8D88 /* binaryconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = binaryconstant.cpp; sourceTree = "<group>"; };
+		6710536E102BD00C000D8D88 /* binaryconstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = binaryconstant.h; sourceTree = "<group>"; };
+		6710536F102BD00C000D8D88 /* datatype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = datatype.h; sourceTree = "<group>"; };
+		67105370102BD00C000D8D88 /* module.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = module.mk; sourceTree = "<group>"; };
+		67105371102BD00C000D8D88 /* stringconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stringconstant.cpp; sourceTree = "<group>"; };
+		67105372102BD00C000D8D88 /* stringconstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringconstant.h; sourceTree = "<group>"; };
 		67CC922E1029332E000657AB /* abstractdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abstractdata.h; sourceTree = "<group>"; };
 		67CC922F1029332E000657AB /* address.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = address.cpp; sourceTree = "<group>"; };
 		67CC92301029332E000657AB /* address.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = address.h; sourceTree = "<group>"; };
@@ -21,8 +31,6 @@
 		67CC923B1029332E000657AB /* disasm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = disasm.cpp; sourceTree = "<group>"; };
 		67CC923C1029332E000657AB /* module.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = module.mk; sourceTree = "<group>"; };
 		67CC923D1029332E000657AB /* architecture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = architecture.h; sourceTree = "<group>"; };
-		67CC923E1029332E000657AB /* binaryconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = binaryconstant.cpp; sourceTree = "<group>"; };
-		67CC923F1029332E000657AB /* binaryconstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = binaryconstant.h; sourceTree = "<group>"; };
 		67CC92411029332E000657AB /* address.d */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.dtrace; path = address.d; sourceTree = "<group>"; };
 		67CC92421029332E000657AB /* address.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = address.o; sourceTree = "<group>"; };
 		67CC92431029332E000657AB /* app_main.d */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.dtrace; path = app_main.d; sourceTree = "<group>"; };
@@ -52,8 +60,8 @@
 		67CC925F1029332E000657AB /* pbxindex.header */ = {isa = PBXFileReference; lastKnownFileType = file; path = pbxindex.header; sourceTree = "<group>"; };
 		67CC92601029332E000657AB /* protocols.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = protocols.pbxbtree; sourceTree = "<group>"; };
 		67CC92611029332E000657AB /* refs.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = refs.pbxbtree; sourceTree = "<group>"; };
-		67CC92631029332E000657AB /* control */ = {isa = PBXFileReference; lastKnownFileType = file; path = control; sourceTree = "<group>"; };
-		67CC92641029332E000657AB /* strings */ = {isa = PBXFileReference; lastKnownFileType = file; path = strings; sourceTree = "<group>"; };
+		67CC92631029332E000657AB /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
+		67CC92641029332E000657AB /* strings */ = {isa = PBXFileReference; lastKnownFileType = text; path = strings; sourceTree = "<group>"; };
 		67CC92651029332E000657AB /* subclasses.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = subclasses.pbxbtree; sourceTree = "<group>"; };
 		67CC92661029332E000657AB /* symbols0.pbxsymbols */ = {isa = PBXFileReference; lastKnownFileType = file; path = symbols0.pbxsymbols; sourceTree = "<group>"; };
 		67CC92671029332E000657AB /* document.d */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.dtrace; path = document.d; sourceTree = "<group>"; };
@@ -180,7 +188,6 @@
 		67CC92EB1029332E000657AB /* configure */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = configure; sourceTree = "<group>"; };
 		67CC92ED1029332E000657AB /* base64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = base64.cpp; sourceTree = "<group>"; };
 		67CC92EE1029332E000657AB /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
-		67CC92EF1029332E000657AB /* datatype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = datatype.h; sourceTree = "<group>"; };
 		67CC92F01029332E000657AB /* datatypereg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = datatypereg.cpp; sourceTree = "<group>"; };
 		67CC92F11029332E000657AB /* datatypereg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = datatypereg.h; sourceTree = "<group>"; };
 		67CC92F21029332E000657AB /* dismember-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "dismember-Info.plist"; sourceTree = "<group>"; };
@@ -307,8 +314,6 @@
 		67CC937B1029332F000657AB /* run_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = run_queue.h; sourceTree = "<group>"; };
 		67CC937C1029332F000657AB /* search.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = search.cpp; sourceTree = "<group>"; };
 		67CC937D1029332F000657AB /* search.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = search.h; sourceTree = "<group>"; };
-		67CC937E1029332F000657AB /* stringconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stringconstant.cpp; sourceTree = "<group>"; };
-		67CC937F1029332F000657AB /* stringconstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringconstant.h; sourceTree = "<group>"; };
 		67CC93801029332F000657AB /* symbol_analysis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = symbol_analysis.cpp; sourceTree = "<group>"; };
 		67CC93811029332F000657AB /* symbol_analysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = symbol_analysis.h; sourceTree = "<group>"; };
 		67CC93821029332F000657AB /* symlist.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = symlist.cpp; sourceTree = "<group>"; };
@@ -328,6 +333,8 @@
 		08FB7794FE84155DC02AAC07 /* armtrace */ = {
 			isa = PBXGroup;
 			children = (
+				6710536C102BD00C000D8D88 /* datatype */,
+				671052F8102BC77C000D8D88 /* kvs */,
 				67CC922E1029332E000657AB /* abstractdata.h */,
 				67CC922F1029332E000657AB /* address.cpp */,
 				67CC92301029332E000657AB /* address.h */,
@@ -336,8 +343,6 @@
 				67CC92331029332E000657AB /* app_main.h */,
 				67CC92341029332E000657AB /* arch */,
 				67CC923D1029332E000657AB /* architecture.h */,
-				67CC923E1029332E000657AB /* binaryconstant.cpp */,
-				67CC923F1029332E000657AB /* binaryconstant.h */,
 				67CC92401029332E000657AB /* build */,
 				67CC92E61029332E000657AB /* callback.h */,
 				67CC92E71029332E000657AB /* codeblock.cpp */,
@@ -346,7 +351,6 @@
 				67CC92EA1029332E000657AB /* comment.h */,
 				67CC92EB1029332E000657AB /* configure */,
 				67CC92EC1029332E000657AB /* contrib */,
-				67CC92EF1029332E000657AB /* datatype.h */,
 				67CC92F01029332E000657AB /* datatypereg.cpp */,
 				67CC92F11029332E000657AB /* datatypereg.h */,
 				67CC92F21029332E000657AB /* dismember-Info.plist */,
@@ -385,8 +389,6 @@
 				67CC937B1029332F000657AB /* run_queue.h */,
 				67CC937C1029332F000657AB /* search.cpp */,
 				67CC937D1029332F000657AB /* search.h */,
-				67CC937E1029332F000657AB /* stringconstant.cpp */,
-				67CC937F1029332F000657AB /* stringconstant.h */,
 				67CC93801029332F000657AB /* symbol_analysis.cpp */,
 				67CC93811029332F000657AB /* symbol_analysis.h */,
 				67CC93821029332F000657AB /* symlist.cpp */,
@@ -403,6 +405,30 @@
 				67CD5B9E0D284D00003B72E8 /* Products */,
 			);
 			name = armtrace;
+			sourceTree = "<group>";
+		};
+		671052F8102BC77C000D8D88 /* kvs */ = {
+			isa = PBXGroup;
+			children = (
+				671052F9102BC78A000D8D88 /* i_kvs.h */,
+				671052FA102BC78A000D8D88 /* i_kvs.cpp */,
+				671052FB102BC8A2000D8D88 /* localkvsstore.h */,
+				671052FC102BC8A2000D8D88 /* localkvsstore.cpp */,
+			);
+			path = kvs;
+			sourceTree = "<group>";
+		};
+		6710536C102BD00C000D8D88 /* datatype */ = {
+			isa = PBXGroup;
+			children = (
+				6710536D102BD00C000D8D88 /* binaryconstant.cpp */,
+				6710536E102BD00C000D8D88 /* binaryconstant.h */,
+				6710536F102BD00C000D8D88 /* datatype.h */,
+				67105370102BD00C000D8D88 /* module.mk */,
+				67105371102BD00C000D8D88 /* stringconstant.cpp */,
+				67105372102BD00C000D8D88 /* stringconstant.h */,
+			);
+			path = datatype;
 			sourceTree = "<group>";
 		};
 		67CC92341029332E000657AB /* arch */ = {

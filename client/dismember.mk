@@ -12,7 +12,7 @@ SRC := 	comment.cpp xref.cpp symbol_analysis.cpp \
 	app_main.cpp document.cpp memsegment.cpp  \
 	xrefmanager.cpp search.cpp \
 	memsegmentmanager.cpp symlist.cpp address.cpp i_memlocdata.cpp \
-	codeblock.cpp instruction.cpp program_flow_analysis.cpp \
+	program_flow_analysis.cpp \
 	i_projectmodel.cpp
 
 

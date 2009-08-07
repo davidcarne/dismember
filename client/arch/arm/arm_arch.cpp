@@ -16,7 +16,6 @@
 
 #include "arm.h"
 #include "i_memlocdata.h"
-#include "arm_instruction.h"
 #include "datatype.h"
 
 #include <boost/python.hpp>
@@ -32,6 +31,7 @@ std::string ARMArchitecture::get_short_name() const
 }
 
 
+const std::string decodeText(const I_ProjectModel * ctx, u32 instr, const address_t & addr);
 
 class ARMInstructionDataType : public DataType {
 public:
@@ -54,6 +54,31 @@ public:
 	virtual ~ARMInstructionDataType() {
 	};
 
+	
+	
+	/**
+	 * \brief Default constructor for the datatype class - cannot fully construct a datatype.
+	 */
+	ARMInstructionDataType(const I_ProjectModel * t) : DataType(t) {
+	};
+
+	/**
+	 * \brief instantiate a new instance of the datatype
+	 * @param addr The start address
+	 * @return the instantiated object, NULL on error
+	 */
+	virtual const DataTypeDecoding decode(const address_t & addr) const {
+		u32 opcode;
+		
+		if (ldw(addr, &opcode) )
+			// TODO: needs work, it won't decode worth shite.
+			return DataTypeDecoding(decodeText(getProjectModelContext(), opcode, addr), 4, 0, NULL);
+		
+		// If we can't decode, return nothing
+		return DataTypeDecoding();
+	};
+	
+private:
 	// TODO: Remove hack
 	bool ldw(address_t addr, u32 * data) const
 	{
@@ -69,25 +94,6 @@ public:
 		*data |= dataar[0];
 		return true;
 	}
-	
-	/**
-	 * \brief Default constructor for the datatype class - cannot fully construct a datatype.
-	 */
-	ARMInstructionDataType(const I_ProjectModel * t) : DataType(t) {
-	};
-
-	/**
-	 * \brief instantiate a new instance of the datatype
-	 * @param addr The start address
-	 * @return the instantiated object, NULL on error
-	 */
-	virtual I_MemlocData * instantiate(address_t addr) const {
-		u32 data;
-		if (ldw(addr, &data) )
-			return new ARMInstruction(getProjectModelContext(), addr, data);
-		
-		return NULL;
-	};
 	
 };
 

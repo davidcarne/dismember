@@ -20,22 +20,12 @@
 #include "memlocdata.h"
 
 
-/** 
- * \brief Virtual subclass of memlocdata for dealing with executable memory locations
- */
-class Instruction : public MemlocData {
-protected:
-	
-	/**
-	 * \brief Create a new Instruction
-	 * \todo Need to pass the datatype
-	 */
-	Instruction(const I_ProjectModel * ctx, address_t addr, u32 length);
+// Shell of a class - we don't need an instruction subtype right now.
+class Instruction {
+private:
+	Instruction() {}
 	
 public:
-	/**
-	 * \brief Type of pcflags bitfield
-	 */
 	typedef u32 pcflags_type;
 	
 	/**
@@ -110,34 +100,6 @@ public:
 	 * \brief PCflags bit indicating possible data reference read/write direction
 	 */
 	static const pcflags_type PCFLAG_DRW		= 0x200;
-	
-	/**
-	 * \brief Mark this memory location as being the entrance to a function
-	 * \todo this should take the actual function block
-	 */
-	virtual void mark_fn_ent(bool fnent) = 0;
-	
-	/**
-	 * \brief the location in memory that this can directly jump to
-	 * \sa get_pcflags
-	 * \deprecated this needs to be better represented
-	 */
-	virtual address_t DEPRECATED(get_direct_jump_addr() const) = 0;
-	
-	/**
-	 * \brief get the address of data this function references
-	 * \sa get_pcflags
-	 * \deprecated this needs to be better represented
-	 */
-	virtual address_t DEPRECATED(get_data_ref_addr() const) = 0;
-	
-	/**
-	 * \brief get flags about the execution flow of this memory location
-	 * \deprecated this needs to be better represented
-	 */
-	virtual pcflags_type DEPRECATED(get_pcflags() const) = 0;
-	
-	virtual bool logically_continues() const;
 };
 
 #endif

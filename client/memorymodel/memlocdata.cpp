@@ -18,9 +18,13 @@
 #include "memorybackedprojectmodel.h"
 #include "memlocdata.h"
 
-MemlocData::MemlocData(const DataType * creator, const I_ProjectModel * ctx, address_t addr, u32 length)
+MemlocData::MemlocData(const DataType * creator, const I_ProjectModel * ctx, address_t addr)
 : m_ctx(ctx), m_address(addr), m_creator(creator)
 {
+	const DataTypeDecoding & decoding = creator->decode(m_address);
+	
+	u32 length = m_decoded_length = decoding.getDecodedLength();
+	
 	m_next = static_cast<MemlocData*>(ctx->lookup_memloc(m_address + length, true));
 	if (m_next)
 		m_next->m_prev = this;
@@ -162,8 +166,30 @@ bool MemlocData::get_explicit() const
 }
 
 
+const std::string MemlocData::get_textual() const
+{
+	
+	const DataTypeDecoding & decoding = m_creator->decode(m_address);
+	return decoding.getDecodedText();
+}
+
 const I_ProjectModel * MemlocData::get_ctx() const
 {
 	return m_ctx;
 }
 
+u32 MemlocData::get_length() const
+{
+	return m_decoded_length;
+}
+
+bool MemlocData::logically_continues() const
+{
+	return false;
+}
+
+bool MemlocData::is_executable() const
+{
+	// TODO: Load this from attributes
+	return false;
+}

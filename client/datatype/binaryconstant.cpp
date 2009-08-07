@@ -26,7 +26,7 @@
 class BinaryConstantDataType : public DataType {
 public:
 	
-	BinaryConstantDataType(I_ProjectModel * t, std::string name, nparse_e type, u32 len, bool big_endian, 
+	BinaryConstantDataType(I_ProjectModel * t, std::string name, nparse_e type, u32 len, enum endian_e endian, 
 						   nparse_sign_e is_signed, u32 excessoffs = 0);
 	
 	virtual const std::string getName() const;
@@ -45,39 +45,15 @@ protected:
 		 * @param addr The start address
 		 * @return the instantiated object, NULL on error
 		 */
-		virtual I_MemlocData * instantiate(address_t addr) const;
-	
+		virtual const DataTypeDecoding decode(const address_t & addr) const;
 private:
-		
-		class BinaryConstant : public MemlocData {
-public:
-			
-			
-			virtual ~BinaryConstant() {};
-			
-			virtual u32	get_length() const;
-			
-			virtual bool is_executable() const;
-			virtual bool logically_continues() const;
-			
-			/* The slist requirement will go away later when this returns tokens */
-			virtual const std::string get_textual();
-			
-			
-protected:
-				BinaryConstant(const DataType * creator, const I_ProjectModel * ctx, address_t address, u32 elemsize, 
-							enum endian_e endian = ENDIAN_LITTLE);
-			
-			friend class BinaryConstantDataType;	
-private:
-				u32 m_elemsize;
-			
-			enum endian_e m_endian;
-		};
 	
-	
+	const std::string decode_textual(const address_t & addr) const;
+	enum endian_e m_endian;
 	std::string m_name;
 	size_t m_elemsize;
+	
+	
 };
 
 
@@ -97,8 +73,8 @@ const DataType * datatype_s64_le = NULL;
  * \brief Create a new BinaryConstantDataType
  */
 BinaryConstantDataType::BinaryConstantDataType(I_ProjectModel * t, std::string name, nparse_e type, 
-											   u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs) : 
-	DataType(t), m_name(name), m_elemsize(len)
+											   u32 len, enum endian_e endian, nparse_sign_e is_signed, u32 excessoffs) : 
+	DataType(t), m_name(name), m_elemsize(len), m_endian(endian)
 {
 }
 
@@ -123,31 +99,13 @@ bool BinaryConstantDataType::isMutable() const
 	return false;
 }
 
-I_MemlocData * BinaryConstantDataType::instantiate(address_t addr) const
+const DataTypeDecoding BinaryConstantDataType::decode(const address_t & addr) const
 {
-	return new BinaryConstant(this, getProjectModelContext(), addr, m_elemsize);
-}
-
-BinaryConstantDataType::BinaryConstant::BinaryConstant(const DataType * creator, 
-													   const I_ProjectModel * ctx, address_t address, 
-													   u32 elemsize, enum endian_e endian) : 
-	MemlocData(creator, ctx, address, elemsize), m_elemsize(elemsize), m_endian(endian)
-{
-}
-
-
-u32	BinaryConstantDataType::BinaryConstant::get_length() const
-{
-	return m_elemsize;
-}
-
-bool BinaryConstantDataType::BinaryConstant::is_executable() const
-{
-	return false;
+	return DataTypeDecoding(decode_textual(addr), m_elemsize);
 }
 
 /* The slist requirement will go away later when this returns tokens */
-const std::string BinaryConstantDataType::BinaryConstant::get_textual()
+const std::string BinaryConstantDataType::decode_textual(const address_t & base_addr) const
 {
 	std::string res="";
 	switch (m_elemsize)
@@ -181,14 +139,14 @@ const std::string BinaryConstantDataType::BinaryConstant::get_textual()
 		address_t addr;
 		
 		if (m_endian == ENDIAN_LITTLE)
-			addr = get_addr() + (m_elemsize - bind - 1);
+			addr = base_addr + (m_elemsize - bind - 1);
 		else
-			addr = get_addr() + bind;
+			addr = base_addr + bind;
 		
 		
 		uint8_t data;
 		
-		if (get_ctx()->readByte(addr, &data))
+		if (addr.readByte(&data))
 			snprintf(bytebuf, 3, "%02x", data);
 		else
 			snprintf(bytebuf, 3, "??");
@@ -199,17 +157,13 @@ const std::string BinaryConstantDataType::BinaryConstant::get_textual()
 	return res;
 }
 
-
-bool BinaryConstantDataType::BinaryConstant::logically_continues() const {
-	return false;
-}
 #include <memory>
 
 #include <boost/python.hpp>
 void bindBinaryConstantDataTypes()
 {//BinaryConstantDataType(I_ProjectModel * t, std::string name, nparse_e type, u32 len, bool big_endian, nparse_sign_e is_signed, u32 excessoffs = 0);
 	boost::python::class_<BinaryConstantDataType, boost::python::bases<DataType>,  boost::shared_ptr<BinaryConstantDataType> >
-	("BinaryConstantDataType", boost::python::init<I_ProjectModel *, std::string, nparse_e, u32, bool, nparse_sign_e>());
+	("BinaryConstantDataType", boost::python::init<I_ProjectModel *, std::string, nparse_e, u32, endian_e, nparse_sign_e>());
 	
 }
 

@@ -27,11 +27,11 @@ void bind_codeblocks()
 	/*def("linkCodeBlocks", linkCodeBlocks);
 	def("unlinkCodeBlocks", unlinkCodeBlocks);
 	def("codeBlockAnalysisPass", codeBlockAnalysisPass, codeBlockAnalysisPass_overloads());*/
-	class_<CodeBlock>("CodeBlock", no_init)
+	/*class_<CodeBlock>("CodeBlock", no_init)
 	.def("getStart", &CodeBlock::getStart)
 		.def("getEnd", &CodeBlock::getEnd);
 	
 	class_<CodeBlockManager>("CodeBlockManager", no_init)
 		.def("codeBlockAnalysisPassAt", &CodeBlockManager::codeBlockAnalysisPassAt)
-		.def("codeBlockAt", &CodeBlockManager::codeBlockAt, return_internal_reference<>());
+		.def("codeBlockAt", &CodeBlockManager::codeBlockAt, return_internal_reference<>());*/
 }

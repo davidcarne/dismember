@@ -83,7 +83,7 @@ address_t MemoryBackedProjectModel::locateAddress(uint64_t address) const
 I_MemlocData * MemoryBackedProjectModel::createMemlocDataAt(DataType * d, address_t addr)
 {
 	assert(d);
-	I_MemlocData * i = d->instantiate(addr);
+	I_MemlocData * i = new MemlocData(d, this, addr);
 	if (!i)
 		return NULL;
 	
@@ -94,6 +94,7 @@ I_MemlocData * MemoryBackedProjectModel::createMemlocDataAt(DataType * d, addres
 	
 	// Create Code XREF's if this memlocdata has any
 	// The fn / jmp business is to avoid a gcc bug
+	/* TODO: Make this work
 	Xref::xref_type_e fn = Xref::XR_TYPE_FNCALL;
 	Xref::xref_type_e jmp = Xref::XR_TYPE_JMP;
 	if (b && (b->get_pcflags() & Instruction::PCFLAG_LOCMASK) == Instruction::PCFLAG_DIRLOC)
@@ -103,7 +104,7 @@ I_MemlocData * MemoryBackedProjectModel::createMemlocDataAt(DataType * d, addres
 		create_xref(b->get_addr(), b->get_data_ref_addr(), Xref::XR_TYPE_DATA);
 	
 	notifyMemlocChange(i, HOOK_CREATE);
-	
+	*/
 	return i;
 }
 
@@ -230,6 +231,7 @@ void MemoryBackedProjectModel::addDataType(sp_DataType d)
 }
 
 
+// Xrefs should be an analysis pass!
 Xref *MemoryBackedProjectModel::create_xref(address_t srcaddr, address_t dstaddr, Xref::xref_type_e type)
 {
 	
@@ -246,7 +248,7 @@ Xref *MemoryBackedProjectModel::create_xref(address_t srcaddr, address_t dstaddr
 	// Build data if its a data xref
 	if (type == Xref::XR_TYPE_DATA)
 	{
-		Instruction * id  = dynamic_cast<Instruction *>(src);
+/*		Instruction * id  = dynamic_cast<Instruction *>(src);
 		if (id)
 			switch (id->get_pcflags() & Instruction::PCFLAG_DSMASK) {
 					// HACK HACK HACK - changeme
@@ -258,6 +260,7 @@ Xref *MemoryBackedProjectModel::create_xref(address_t srcaddr, address_t dstaddr
 					createMemlocDataAt(lookupDataType("u32_le").get(), id->get_data_ref_addr());
 					break;
 			}
+ */
 	}
 	
 	// Mark as a function call
@@ -266,9 +269,9 @@ Xref *MemoryBackedProjectModel::create_xref(address_t srcaddr, address_t dstaddr
 		if (type == Xref::XR_TYPE_FNCALL)
 		{
 			Instruction * instdst;
-			instdst = dynamic_cast<Instruction *>(dst);
+			/*instdst = dynamic_cast<Instruction *>(dst);
 			if (instdst)
-				instdst->mark_fn_ent(true);
+				instdst->mark_fn_ent(true);*/
 		}
 		
 	}
