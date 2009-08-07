@@ -18,7 +18,7 @@
 #include <assert.h>
 #include "exception.h"
 
-MemSegmentManager::MemSegmentManager() : m_last_segment(NULL)
+MemSegmentManager::MemSegmentManager()
 {
 	
 }
@@ -57,24 +57,13 @@ address_t MemSegmentManager::locateAddress(uint64_t address) const
 	return address_t();
 }
 
-bool MemSegmentManager::readBytes(address_t addr,u8 bytes, u8 * buf) const
+bool MemSegmentManager::readBytes(const address_t & addr,u8 bytes, u8 * buf) const
 {
 	assert(buf);
-	
-	if (m_last_segment && m_last_segment->get_bytes(addr, bytes, buf))
-		return true;
-	
-	for (memseglist_ci i = m_mem_segments.begin(); i != m_mem_segments.end(); i++)
-		if ((*i)->get_bytes(addr, bytes, buf))
-		{
-			m_last_segment = (*i);
-			return true;
-		}
-	
-	return false;
+	return addr.readBytes(bytes, buf);
 }
 
-bool MemSegmentManager::readByte(address_t taddr, uint8_t * data) const
+bool MemSegmentManager::readByte(const address_t & taddr, uint8_t * data) const
 {
 	uint8_t dummy;
 	

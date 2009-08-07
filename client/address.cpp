@@ -104,6 +104,23 @@ std::string address_t::toString() const
 	return std::string(buf);
 }
 
+
+
+bool address_t::readBytes(u8 bytes, u8 * buf) const
+{
+	return m_memsegment->get_bytes(*this, bytes, buf);
+}
+
+bool address_t::readByte(uint8_t * data) const
+{
+	uint8_t dummy;
+	
+	if (data)
+		return m_memsegment->get_bytes(*this, 1, data);
+	 
+	return m_memsegment->get_bytes(*this, 1, &dummy);
+}
+
 address_t &address_t::operator+=(const address_t &r)
 {
 	m_offset += r.m_offset;

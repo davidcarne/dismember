@@ -66,6 +66,17 @@ class address_t
 	 */
 	std::string toString() const;
 
+	/**
+	 * Get bytes at address
+	 */
+	bool readBytes(u8 bytes, u8 * buf) const;
+	
+	/*
+	 * Get byte at address
+	 * TODO: byte != 8 bits in all cases
+	 */
+	bool readByte(uint8_t * data) const;
+	
 	friend address_t operator+(const address_t &l, const address_t &r);
 	friend address_t operator+(const address_t &l, const poffset_t &r);
 	friend address_t operator+(const poffset_t &l, const address_t &r);

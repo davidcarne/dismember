@@ -74,7 +74,7 @@ psize_t MemSegment::get_length() const
 	return m_len;
 }
 
-bool MemSegment::get_bytes(address_t addr, psize_t length, void * dest) const
+bool MemSegment::get_bytes(const address_t & addr, psize_t length, void * dest) const
 {
 	if (!m_data)
 		return false;
@@ -88,13 +88,13 @@ bool MemSegment::get_bytes(address_t addr, psize_t length, void * dest) const
 	return true;
 }
 
-bool MemSegment::can_resolve(paddr_t addr) const
+bool MemSegment::can_resolve(const paddr_t & addr) const
 {
 	return (addr >= m_base) && (addr < m_base + m_len);
 }
 
 
-bool MemSegment::can_resolve(address_t addr) const
+bool MemSegment::can_resolve(const address_t & addr) const
 {
 	return addr.isValid() && addr.m_memsegment == this;
 }

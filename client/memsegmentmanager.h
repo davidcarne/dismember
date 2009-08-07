@@ -31,8 +31,8 @@ public:
 	typedef memseglist_t::const_iterator memseglist_ci;
 	
 	bool addSegment(MemSegment * m);
-	bool readByte(address_t taddr, uint8_t * data) const;
-	bool readBytes(address_t, u8, u8*) const;
+	bool readByte(const address_t & taddr, uint8_t * data) const;
+	bool readBytes(const address_t &, u8, u8*) const;
 	memseglist_ci memsegs_begin() const;
 	memseglist_ci memsegs_end() const;
 
@@ -50,8 +50,6 @@ private:
 	/* Needs serializing */
 	memseglist_t m_mem_segments;
 	
-	/* do not serialize - cache*/
-	mutable MemSegment * m_last_segment;
 };
 
 #endif

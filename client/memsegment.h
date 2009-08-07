@@ -75,7 +75,7 @@ public:
 	 * @param dest destination buffer. May be null.
 	 * @return if the copy succeeded, or would have succeeded had dest been non-null
 	 */
-	bool get_bytes(address_t addr, psize_t length, void * dest) const;
+	bool get_bytes(const address_t & addr, psize_t length, void * dest) const;
 	
 	/** 
 	 * @return the name of the memory section
@@ -86,13 +86,13 @@ public:
 	 * @param addr address to check
 	 * @return is addr valid within this block
 	 */
-	bool can_resolve(paddr_t addr) const;
+	bool can_resolve(const paddr_t & addr) const;
 
 	/**
 	 * @param addr address to check
 	 * @return is addr valid within this block
 	 */
-	bool can_resolve(address_t addr) const;
+	bool DEPRECATED(can_resolve(const address_t & addr) const);
 	
 	/**
 	 * @return if the memory block has data, or if its virtual.
