@@ -25,7 +25,7 @@ using namespace boost::python;
 void bind_document()
 {
 	class_<Workspace>("Workspace", no_init)
-		.add_property("trace", make_function(&Workspace::getI_ProjectModel, return_internal_reference<>() ))
+		.add_property("trace", make_function(&Workspace::getProjectModel, return_internal_reference<>() ))
 		.add_property("name", make_function(&Workspace::getName, return_value_policy< copy_const_reference >() ))
 		.add_property("runqueue", make_function(&Workspace::getRunQueue, return_internal_reference<>() ))
 		.def("postGuiUpdate", &Workspace::postGuiUpdate);

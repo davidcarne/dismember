@@ -54,7 +54,7 @@ void ProgramFlowAnalysis::submitUndefineJob(Workspace * d, address_t start)
 
 bool ProgramFlowAnalysis::undefine(Workspace * d, address_t start)
 {
-	I_ProjectModel * t = d->getI_ProjectModel();
+	I_ProjectModel * t = d->getProjectModel();
 
 	std::stack<address_t> analysis_addrs;
 	analysis_addrs.push(start);
@@ -90,7 +90,7 @@ bool ProgramFlowAnalysis::undefine(Workspace * d, address_t start)
 
 bool ProgramFlowAnalysis::analyze(Workspace * d, DataType * dtcreate, address_t start)
 {
-	I_ProjectModel * t = d->getI_ProjectModel();
+	I_ProjectModel * t = d->getProjectModel();
 	
 	address_t addr;
 	addr = start;

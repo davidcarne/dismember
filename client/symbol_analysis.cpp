@@ -38,7 +38,7 @@ void SymbolAnalysis::submitAnalysisJob(Workspace * d)
 
 bool SymbolAnalysis::analyze(Workspace *d)
 {
-	I_ProjectModel *t = d->getI_ProjectModel();
+	I_ProjectModel *t = d->getProjectModel();
 	char namebuf[128];
 	char type[16];
 	int size;

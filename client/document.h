@@ -43,7 +43,7 @@ public:
 	 * Get the trace associated with the Workspace
 	 * @return the trace associated with the Workspace
 	 */
-	I_ProjectModel * getI_ProjectModel();
+	I_ProjectModel * getProjectModel();
 	
 	/**
 	 * Get the name of the Workspace

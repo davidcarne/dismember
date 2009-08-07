@@ -58,7 +58,7 @@ Workspace::Workspace()
 	
 }
 
-I_ProjectModel * Workspace::getI_ProjectModel()
+I_ProjectModel * Workspace::getProjectModel()
 {
 	return m_trace;
 }

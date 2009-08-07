@@ -54,7 +54,7 @@ protected:
 		
 		while (!done)
 		{
-			if (!getI_ProjectModelContext()->readByte(addr, &unitchar))
+			if (!getProjectModelContext()->readByte(addr, &unitchar))
 			{
 				break;
 			}
@@ -94,7 +94,7 @@ protected:
 		}
 		contents += "\",0";
 		
-		return new StringConstant(this, getI_ProjectModelContext(), stadr, len, contents);
+		return new StringConstant(this, getProjectModelContext(), stadr, len, contents);
 	}
 	
 private:

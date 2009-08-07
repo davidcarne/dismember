@@ -25,8 +25,8 @@ QTDataTypeView::QTDataTypeView(QWidget *parent)
 void QTDataTypeView::setRuntimeModel(QTRuntimeModel *model)
 {
 	m_runtime = model;
-	DataTypeReg::datatypereg_ci di = model->getI_ProjectModel().getDataTypeBegin();
-	DataTypeReg::datatypereg_ci end = model->getI_ProjectModel().getDataTypeEnd();
+	DataTypeReg::datatypereg_ci di = model->getProjectModel().getDataTypeBegin();
+	DataTypeReg::datatypereg_ci end = model->getProjectModel().getDataTypeEnd();
 	clear();
 	for (; di != end; ++di) {
 		sp_DataType dt = (*di).second;
@@ -69,7 +69,7 @@ void QTDataTypeView::setCodeview(QTCodeView *cv)
 
 void QTDataTypeView::createDataType(const QString &str)
 {
-	sp_DataType d = m_runtime->getI_ProjectModel().lookupDataType(str.toStdString());
+	sp_DataType d = m_runtime->getProjectModel().lookupDataType(str.toStdString());
 	address_t addr;
 	if (m_codeview->getSelectionAddress(&addr))
 		m_codeview->getController()->setDataType(addr, d.get());

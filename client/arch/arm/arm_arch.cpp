@@ -58,7 +58,7 @@ public:
 	bool ldw(address_t addr, u32 * data) const
 	{
 		u8 dataar[4];
-		if (!getI_ProjectModelContext()->readBytes(addr, 4, dataar))
+		if (!getProjectModelContext()->readBytes(addr, 4, dataar))
 			return false;
 		*data = dataar[3];
 		*data <<= 8;
@@ -84,7 +84,7 @@ public:
 	virtual I_MemlocData * instantiate(address_t addr) const {
 		u32 data;
 		if (ldw(addr, &data) )
-			return new ARMInstruction(getI_ProjectModelContext(), addr, data);
+			return new ARMInstruction(getProjectModelContext(), addr, data);
 		
 		return NULL;
 	};

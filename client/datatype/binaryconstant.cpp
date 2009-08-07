@@ -125,7 +125,7 @@ bool BinaryConstantDataType::isMutable() const
 
 I_MemlocData * BinaryConstantDataType::instantiate(address_t addr) const
 {
-	return new BinaryConstant(this, getI_ProjectModelContext(), addr, m_elemsize);
+	return new BinaryConstant(this, getProjectModelContext(), addr, m_elemsize);
 }
 
 BinaryConstantDataType::BinaryConstant::BinaryConstant(const DataType * creator, 

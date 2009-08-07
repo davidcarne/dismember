@@ -161,7 +161,7 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 	case Qt::ToolTipRole:
 		if (index.column() == 3) {
 			address_t addr = gprox.getLineAddr(index.row());
-			I_ProjectModel &t = m_model->getI_ProjectModel();
+			I_ProjectModel &t = m_model->getProjectModel();
 			return QVariant(displayXrefs(t, addr));
 		}
 		return QVariant();
@@ -182,7 +182,7 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 			case 1:
 				return QVariant(QColor(0, 0, 255));
 			case 2: {
-				I_MemlocData *id = m_model->getI_ProjectModel().lookup_memloc(addr);
+				I_MemlocData *id = m_model->getProjectModel().lookup_memloc(addr);
 				if (id && id->is_executable())
 					return QVariant(QColor(0, 0, 200));
 				else if (id)
@@ -201,7 +201,7 @@ QVariant QTCodeModel::data(const QModelIndex &index, int role) const
 	case Qt::DisplayRole:
 		try {
 			address_t addr = gprox.getLineAddr(index.row());
-			I_ProjectModel &t = m_model->getI_ProjectModel();
+			I_ProjectModel &t = m_model->getProjectModel();
 			if (!addr.isValid())
 				return QVariant();
 			switch (index.column()) {

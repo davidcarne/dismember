@@ -87,7 +87,7 @@ SearchResults *Search::submitSearchJob(Workspace *d, uint8_t *b, psize_t len)
 
 bool Search::search(Workspace * d, uint8_t *b, psize_t len, SearchResults *sr)
 {
-	I_ProjectModel *t = d->getI_ProjectModel();
+	I_ProjectModel *t = d->getProjectModel();
 
 	MemSegmentManager::memseglist_ci mi;
 	MemSegmentManager::memseglist_ci begin = t->memsegs_begin();

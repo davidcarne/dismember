@@ -79,7 +79,7 @@ class DataType {
 	/**
 	 * @return the trace context that this datatype belongs to
 	 */
-	const I_ProjectModel * getI_ProjectModelContext() const {
+	const I_ProjectModel * getProjectModelContext() const {
 		return m_ctx;
 	}
 	
