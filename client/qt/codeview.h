@@ -28,6 +28,14 @@
 #include "runtimemodel.h"
 #include "codemodel.h"
 
+// Apparently event->modifiers() doesn't work on linux
+// But the workarond hack doesn't work on OSX
+// #ifdef fun. c'est la vie.
+#ifdef __APPLE__
+#define USE_EVENT_MODIFIERS
+#else
+#endif
+
 class QTCodeController
 {
  public:
@@ -73,7 +81,10 @@ class QTCodeView : public QTableView, public QTRuntimeModelListener
 	QTCodeModel *m_model;
 	QTCodeController *m_controller;
 	QTRuntimeModel *m_runtime;
+	
+#ifndef USE_EVENT_MODIFIERS
 	u8 m_modifiers;
+#endif // USE_EVENT_MODIFIERS
 	QStack<address_t> m_jumpStack;
 };
 

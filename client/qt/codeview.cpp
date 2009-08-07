@@ -106,8 +106,10 @@ class QTMutableCodeController : public QTCodeController
 };
 
 QTCodeView::QTCodeView(QWidget *parent)
- : QTableView(parent), m_model(NULL), m_controller(NULL), m_runtime(NULL),
-		m_modifiers(0)
+ : QTableView(parent), m_model(NULL), m_controller(NULL), m_runtime(NULL)
+#ifndef USE_EVENT_MODIFIERS
+	, m_modifiers(0)
+#endif
 {
 	setShowGrid(false);
 	verticalHeader()->hide();
@@ -176,13 +178,18 @@ void QTCodeView::setCurrentIndex(address_t addr)
 	} catch (std::out_of_range &) { }
 }
 
+#ifndef USE_EVENT_MODIFIERS
+
 #define KEY_CONTROL (1 << 0)
 #define KEY_SHIFT   (1 << 1)
 #define KEY_ALT     (1 << 2)
 #define KEY_META    (1 << 3)
 
+#endif
+
 void QTCodeView::keyReleaseEvent(QKeyEvent *ev)
 {
+#ifndef USE_EVENT_MODIFIERS
 	switch (ev->key()) {
 	case Qt::Key_Control:
 		m_modifiers &= ~KEY_CONTROL;
@@ -197,6 +204,7 @@ void QTCodeView::keyReleaseEvent(QKeyEvent *ev)
 		m_modifiers &= ~KEY_META;
 		break;
 	}
+#endif
 	QTableView::keyReleaseEvent(ev);
 }
 
@@ -204,6 +212,10 @@ void QTCodeView::keyPressEvent(QKeyEvent *event)
 {
 	int row = selectionModel()->currentIndex().row();
 
+#ifdef USE_EVENT_MODIFIERS
+	if (event->modifiers())
+		return;
+#else
 	switch (event->key()) {
 	case Qt::Key_Control:
 		m_modifiers |= KEY_CONTROL;
@@ -221,7 +233,8 @@ void QTCodeView::keyPressEvent(QKeyEvent *event)
 
 	if (m_modifiers & ~KEY_SHIFT)
 		return;
-
+#endif
+	
 	switch (event->key()) {
 	case Qt::Key_Escape:
 	case Qt::Key_Backspace:
