@@ -15,11 +15,17 @@
  */
 
 #include "i_projectmodel.h"
-#include "memorybackedprojectmodel.h"
+#include "kvsbackedprojectmodel.h"
 #include "memlocdata.h"
 
-MemlocData::MemlocData(const DataType * creator, const I_ProjectModel * ctx, address_t addr)
-: m_ctx(ctx), m_address(addr), m_creator(creator)
+
+MemlocData::MemlocData(const sp_LocalKVSNode sourceNode, const I_ProjectModel * ctx) : I_KVS_attribproxy(sourceNode->getAttributesReference())
+{
+	m_decoded_length = atoi(getAttrib("length").c_str());
+}
+
+MemlocData::MemlocData(const sp_LocalKVSNode sourceNode, const DataType * creator, const I_ProjectModel * ctx, address_t addr)
+: m_ctx(ctx), m_address(addr), m_creator(creator),  I_KVS_attribproxy(sourceNode->getAttributesReference())
 {
 	const DataTypeDecoding & decoding = creator->decode(m_address);
 	
@@ -81,20 +87,17 @@ const DataType * MemlocData::getCreatingDataType() const
 
 XrefManager::xref_map_ci MemlocData::begin_xref_to() const
 {
-	const MemoryBackedProjectModel * mmod = dynamic_cast<const MemoryBackedProjectModel *> (m_ctx);
-	return mmod->m_xrefmanager.xref_to_lower_bound(m_address);
+	
 }
 
 XrefManager::xref_map_ci MemlocData::end_xref_to() const
 {
-	const MemoryBackedProjectModel * mmod = dynamic_cast<const MemoryBackedProjectModel *> (m_ctx);
-	return mmod->m_xrefmanager.xref_to_upper_bound(m_address);
+	
 }
 
 u32 MemlocData::count_xrefs_to() const
 {
-	const MemoryBackedProjectModel * mmod = dynamic_cast<const MemoryBackedProjectModel *> (m_ctx);
-	return mmod->m_xrefmanager.xref_to_count(m_address);
+	
 }
 
 bool MemlocData::has_xrefs_to() const
@@ -104,21 +107,17 @@ bool MemlocData::has_xrefs_to() const
 
 XrefManager::xref_map_ci MemlocData::begin_xref_from() const
 {
-	const MemoryBackedProjectModel * mmod = dynamic_cast<const MemoryBackedProjectModel *> (m_ctx);
 	
-	return mmod->m_xrefmanager.xref_from_lower_bound(m_address);
 }
 
 XrefManager::xref_map_ci MemlocData::end_xref_from() const
 {
-	const MemoryBackedProjectModel * mmod = dynamic_cast<const MemoryBackedProjectModel *> (m_ctx);
-	return mmod->m_xrefmanager.xref_from_upper_bound(m_address);
+	
 }
 
 u32 MemlocData::count_xrefs_from() const
 {
-	const MemoryBackedProjectModel * mmod = dynamic_cast<const MemoryBackedProjectModel *> (m_ctx);
-	return mmod->m_xrefmanager.xref_from_count(m_address);
+	
 }
 
 bool MemlocData::has_xrefs_from() const

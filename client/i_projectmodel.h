@@ -28,7 +28,6 @@
 
 // Forward Declarations to reduce compile times
 class I_MemlocData;
-class Instruction;
 class DataType;
 class Symbol;
 class Comment;

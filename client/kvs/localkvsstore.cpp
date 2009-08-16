@@ -18,34 +18,56 @@
 
 #include "LocalKVSStore.h"
 
+#include <boost/tokenizer.hpp>
 
-LocalKVSStore::LocalKVSStore() : m_root("")
+LocalKVSStore::LocalKVSStore()
 {
-	
+	m_root = LocalKVSNode::createKVSNode("");
 }
-/*
-const std::string LocalKVSStore::get(const std::string & key)
+
+const std::string & LocalKVSStore::getValue(const std::string & key)
 {
-	// Not an absolute path?
-	if (key[0] != KVS_PATH_CHARACTER)
-		return;
+	return "";
+}
+
+void LocalKVSStore::setValue(const std::string & key, const std::string & value)
+{
+}
+
+I_KVS_attributes * LocalKVSStore::createDanglingAttributes()
+{
+	return NULL;
+}
+
+sp_I_KVS_node LocalKVSStore::getNode(const std::string & key)
+{
+	std::string mykey = key;
+	assert(mykey[0] == '/');
 	
+	sp_LocalKVSNode cursor = m_root;
 	
-	int pos = 1;
-	int len = key.size();
-	int sep;
-	bool done = false;
-	while (!done)
+	typedef boost::tokenizer<boost::char_separator<char> > path_tokenizer;
+	boost::char_separator<char> sep("/");
+	path_tokenizer tokens(key, sep);
+	
+	for (path_tokenizer::iterator path_comp_iter = tokens.begin();
+		 path_comp_iter != tokens.end(); path_comp_iter++)
 	{
-		sep = key.find(KVS_PATH_SEPARATOR, pos)
-		if (sep == -1)
+		const std::string & ptok = *path_comp_iter;
+		LocalKVS_children & node_children = cursor->m_children;
+		
+		LocalKVS_children::iterator ci = node_children.find(ptok);
+		if (ci == node_children.end())
+			return sp_I_KVS_node();
+		
+		cursor = sp_LocalKVSNode((*ci).second);
+		
+		if (!cursor)
+			return sp_I_KVS_node();
 	}
+	return cursor;
 }
 
-void LocalKVSStore::set(const std::string & key, const std::string & value)
-{
-	
-}*/
 LocalKVSStore::~LocalKVSStore()
 {
 	

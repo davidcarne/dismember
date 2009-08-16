@@ -48,7 +48,7 @@ Workspace::Workspace()
 {
 	LocalKVSStore * lkvs = new LocalKVSStore();
 	// Create all the constituent parts of the Workspace
-	m_trace = new KVSBackedProjctModel(lkvs, new ARMArchitecture());
+	m_trace = new KVSBackedProjectModel(lkvs, new ARMArchitecture());
 	m_pyInterpreter = new LocalPythonInterpreter(this);
 	m_docgui = setupWorkspaceGui(*this);
 	m_runQueue = createRunQueueControl();

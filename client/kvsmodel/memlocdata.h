@@ -21,7 +21,8 @@
 #include "i_projectmodel.h"
 #include "i_memlocdata.h"
 #include "xrefmanager.h"
-
+#include "i_kvs.h"
+#include "kvs_node.h"
 
 class I_ProjectModel;
 /**
@@ -30,7 +31,7 @@ class I_ProjectModel;
  * Each analyzed memory location is associated with an instantiation of a subclass of MemlocData.
  * MemlocData is an interface and cannot be used directly
  */
-class MemlocData : public I_MemlocData {
+class MemlocData : public I_MemlocData, private I_KVS_attribproxy {
 public:
 	virtual ~MemlocData();
 	
@@ -140,13 +141,20 @@ public:
 	const I_ProjectModel * get_ctx() const;
 
 	/** 
-	 * \brief Create a new memoryloc
+	 * \brief Create a new memoryloc giiven a type, project context, and address
 	 * @param creator the creating datatype
 	 * @param ctx the trace to own this memoryloc
 	 * @param addr the star address of this memory location info
 	 * @param length the length of this memory location info
 	 */
 	MemlocData(const DataType * creator, const I_ProjectModel * ctx, address_t addr);
+	
+	/** 
+	 * \brief Create a new memoryloc given a the KVS attributes, project context, and address
+	 */
+	MemlocData(sp_LocalKVSNode sourceNode, const I_ProjectModel * ctx);
+	
+	BRING_IN_KVS_ATTRIBS
 protected:
 	
 private:
@@ -162,6 +170,7 @@ private:
 	// Common variables
 	const address_t m_address;
 
+	// Cached
 	const DataType * m_creator;
 	
 	psize_t m_decoded_length;

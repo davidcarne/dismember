@@ -104,7 +104,18 @@ std::string address_t::toString() const
 	return std::string(buf);
 }
 
-
+/**
+ * Convert address to serial string
+ */
+std::string address_t::toSerialString() const
+{
+	if (!isValid())
+		throw Exception("Invalid address!");
+	
+	char buf[100];
+	snprintf(buf, 100, "%s!%x", m_memsegment->getName().c_str(), getValue());
+	return std::string(buf);
+}
 
 bool address_t::readBytes(u8 bytes, u8 * buf) const
 {

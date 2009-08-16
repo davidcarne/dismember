@@ -58,7 +58,7 @@ bool SymbolAnalysis::analyze(Workspace *d)
 				continue;
 		}
 
-		Instruction * aid = dynamic_cast<Instruction *>(id);
+		//Instruction * aid = dynamic_cast<Instruction *>(id);
 
 		address_t addr = id->get_addr();
 		std::string saddr_l = addr.toString();
@@ -80,7 +80,7 @@ bool SymbolAnalysis::analyze(Workspace *d)
 			}
 		}
 		/* TODO: Re-enable me
-		 else if (aid && aid->get_pcflags() & Instruction::PCFLAG_FNENT) {
+		 else if (aid && aid->get_pcflags() & InstructionFlags::PCFLAG_FNENT) {
 			sprintf(type, "code");
 			subroutine = true;
 			sprintf(namebuf, "_sub_%s", saddr);

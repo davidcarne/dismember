@@ -14,3 +14,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "kvs_node.h"
+const std::string LocalKVSNode::EMPTY_NODE = "";
+
+
+void LocalKVSNode::overlayAttributes(const sp_I_KVS_attributes attsrc)
+{
+	
+}

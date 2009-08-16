@@ -29,7 +29,7 @@ namespace std
 	{ };
 
 	namespace tr1 {
-		template<> struct hash< address_t >
+		template<> struct hash<const address_t >
 		{
 			size_t operator()(const address_t &x) const
 			{
@@ -45,7 +45,25 @@ namespace std
 #  include "types.h"
 namespace __gnu_cxx
 {
-	template<> struct hash< std::string >
+	// No idea why the const versions aren't catch all
+	template<> struct hash<std::string >
+	{
+		size_t operator()(const std::string &x) const
+		{
+			return __stl_hash_string(x.c_str());
+		}
+	};
+	
+	template<> struct hash<address_t >
+	{
+		size_t operator()(const address_t &x) const
+		{
+			uint64_t __x = x.getValue();
+			return (__x >> 32) ^ __x;
+		}
+	};
+	
+	template<> struct hash<const std::string >
 	{
 		size_t operator()(const std::string &x) const
 		{
@@ -53,7 +71,7 @@ namespace __gnu_cxx
 		}
 	};
 
-	template<> struct hash< address_t >
+	template<> struct hash<const address_t >
 	{
 		size_t operator()(const address_t &x) const
 		{

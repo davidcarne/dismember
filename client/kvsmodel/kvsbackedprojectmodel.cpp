@@ -30,6 +30,7 @@
 #include "datatype.h"
 #include "xref.h"
 #include "instruction.h"
+#include "memsegmentmanager.h"
 
 //#include "memtags.h"
 #include "architecture.h"
@@ -38,7 +39,22 @@
 
 #define ASSERT_RESOLVE(addr) assert(readByte(addr, NULL))
 
-KVSBackedProjectModel::KVSBackedProjectModel(Architecture * arch) : m_arch(arch), m_xrefmanager(this)
+address_t KVSBackedProjectModel::addressFromString(std::string k)
+{
+	std::string segname = k.substr(0, k.find("!"));
+	std::string addr = k.substr(k.find("!"), k.size());
+	int addri = atoi(addr.c_str());
+	
+	for (MemSegmentManager::memseglist_ci it = m_memsegmentmanager.memsegs_begin(); it != m_memsegmentmanager.memsegs_end(); it++)
+	{
+		if ((*it)->getName() == segname)
+			return (*it)->getBaseAddress() + addri;
+	}
+	return address_t();
+}
+
+KVSBackedProjectModel::KVSBackedProjectModel(I_KVS * root_node, Architecture * arch) : 
+	I_KVS_attribproxy(root_node->getNode("/")->getAttributesReference()), m_arch(arch), m_xrefmanager(this)
 {}
 
 DataType * KVSBackedProjectModel::getCodeDataType() const {
@@ -90,17 +106,16 @@ I_MemlocData * KVSBackedProjectModel::createMemlocDataAt(DataType * d, address_t
 	m_memlocmanager.insertMemloc(i);
 	
 	// Todo: this is sorta hacky....  the memlocd's should insert their own xrefs, or provide a way to enumerate them
-	Instruction * b = dynamic_cast<Instruction*>(i);
 	
 	// Create Code XREF's if this memlocdata has any
 	// The fn / jmp business is to avoid a gcc bug
 	/* TODO: Make this work
 	Xref::xref_type_e fn = Xref::XR_TYPE_FNCALL;
 	Xref::xref_type_e jmp = Xref::XR_TYPE_JMP;
-	if (b && (b->get_pcflags() & Instruction::PCFLAG_LOCMASK) == Instruction::PCFLAG_DIRLOC)
-		create_xref(b->get_addr(), b->get_direct_jump_addr(), b->get_pcflags() & Instruction::PCFLAG_DIRLK ? fn : jmp);
+	if (b && (b->get_pcflags() & InstructionFlags::PCFLAG_LOCMASK) == InstructionFlags::PCFLAG_DIRLOC)
+		create_xref(b->get_addr(), b->get_direct_jump_addr(), b->get_pcflags() & InstructionFlags::PCFLAG_DIRLK ? fn : jmp);
 	
-	if (b && (b->get_pcflags() & Instruction::PCFLAG_DREF))
+	if (b && (b->get_pcflags() & InstructionFlags::PCFLAG_DREF))
 		create_xref(b->get_addr(), b->get_data_ref_addr(), Xref::XR_TYPE_DATA);
 	
 	notifyMemlocChange(i, HOOK_CREATE);
@@ -250,13 +265,13 @@ Xref *KVSBackedProjectModel::create_xref(address_t srcaddr, address_t dstaddr, X
 	{
 /*		Instruction * id  = dynamic_cast<Instruction *>(src);
 		if (id)
-			switch (id->get_pcflags() & Instruction::PCFLAG_DSMASK) {
+			switch (id->get_pcflags() & InstructionFlags::PCFLAG_DSMASK) {
 					// HACK HACK HACK - changeme
-				case Instruction::PCFLAG_DSBYTE:
+				case InstructionFlags::PCFLAG_DSBYTE:
 					createMemlocDataAt(lookupDataType("u8_le").get(), id->get_data_ref_addr());
 					break;
 				
-				case Instruction::PCFLAG_DSWORD:
+				case InstructionFlags::PCFLAG_DSWORD:
 					createMemlocDataAt(lookupDataType("u32_le").get(), id->get_data_ref_addr());
 					break;
 			}
@@ -268,7 +283,6 @@ Xref *KVSBackedProjectModel::create_xref(address_t srcaddr, address_t dstaddr, X
 	{
 		if (type == Xref::XR_TYPE_FNCALL)
 		{
-			Instruction * instdst;
 			/*instdst = dynamic_cast<Instruction *>(dst);
 			if (instdst)
 				instdst->mark_fn_ent(true);*/

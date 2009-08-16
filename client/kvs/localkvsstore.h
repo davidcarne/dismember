@@ -20,6 +20,8 @@
 #include "i_kvs.h"
 #include "kvs_node.h"
 
+#include "hash_map.h"
+
 class LocalKVSStore : public I_KVS {
 public:
 	LocalKVSStore();
@@ -27,11 +29,11 @@ public:
 	virtual void setValue(const std::string & key, const std::string & value);
 
 	virtual I_KVS_attributes * createDanglingAttributes();
-	virtual I_KVS_node & getNode(const std::string & key);
+	virtual sp_I_KVS_node getNode(const std::string & key);
 
 	virtual ~LocalKVSStore();
 private:
-	LocalKVSNode m_root;
+	sp_LocalKVSNode m_root;
 };
 
 #endif

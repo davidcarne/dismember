@@ -17,6 +17,13 @@
 		67105370102BD00C000D8D88 /* module.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = module.mk; sourceTree = "<group>"; };
 		67105371102BD00C000D8D88 /* stringconstant.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stringconstant.cpp; sourceTree = "<group>"; };
 		67105372102BD00C000D8D88 /* stringconstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringconstant.h; sourceTree = "<group>"; };
+		6798D6051037A9700096293D /* kvs_node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kvs_node.cpp; sourceTree = "<group>"; };
+		6798D6061037A9700096293D /* kvs_node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kvs_node.h; sourceTree = "<group>"; };
+		6798D63F1037ABF30096293D /* kvsbackedprojectmodel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kvsbackedprojectmodel.cpp; sourceTree = "<group>"; };
+		6798D6401037ABF30096293D /* kvsbackedprojectmodel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kvsbackedprojectmodel.h; sourceTree = "<group>"; };
+		6798D6411037ABF30096293D /* memlocdata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memlocdata.cpp; sourceTree = "<group>"; };
+		6798D6421037ABF30096293D /* memlocdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memlocdata.h; sourceTree = "<group>"; };
+		6798D6431037ABF30096293D /* module.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = module.mk; sourceTree = "<group>"; };
 		67CC922E1029332E000657AB /* abstractdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abstractdata.h; sourceTree = "<group>"; };
 		67CC922F1029332E000657AB /* address.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = address.cpp; sourceTree = "<group>"; };
 		67CC92301029332E000657AB /* address.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = address.h; sourceTree = "<group>"; };
@@ -204,7 +211,6 @@
 		67CC92FD1029332E000657AB /* i_memlocdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_memlocdata.h; sourceTree = "<group>"; };
 		67CC92FE1029332E000657AB /* i_projectmodel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = i_projectmodel.cpp; sourceTree = "<group>"; };
 		67CC92FF1029332E000657AB /* i_projectmodel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_projectmodel.h; sourceTree = "<group>"; };
-		67CC93001029332E000657AB /* instruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = instruction.cpp; sourceTree = "<group>"; };
 		67CC93011029332E000657AB /* instruction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = instruction.h; sourceTree = "<group>"; };
 		67CC93041029332E000657AB /* bflt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bflt.cpp; sourceTree = "<group>"; };
 		67CC93061029332E000657AB /* binary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = binary.cpp; sourceTree = "<group>"; };
@@ -223,11 +229,6 @@
 		67CC93171029332E000657AB /* Makefile.macosx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.macosx; sourceTree = "<group>"; };
 		67CC93181029332E000657AB /* memlocmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memlocmanager.cpp; sourceTree = "<group>"; };
 		67CC93191029332E000657AB /* memlocmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memlocmanager.h; sourceTree = "<group>"; };
-		67CC931B1029332E000657AB /* memlocdata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memlocdata.cpp; sourceTree = "<group>"; };
-		67CC931C1029332E000657AB /* memlocdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memlocdata.h; sourceTree = "<group>"; };
-		67CC931D1029332E000657AB /* memorybackedprojectmodel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memorybackedprojectmodel.cpp; sourceTree = "<group>"; };
-		67CC931E1029332E000657AB /* memorybackedprojectmodel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memorybackedprojectmodel.h; sourceTree = "<group>"; };
-		67CC931F1029332E000657AB /* module.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = module.mk; sourceTree = "<group>"; };
 		67CC93201029332E000657AB /* memsegment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memsegment.cpp; sourceTree = "<group>"; };
 		67CC93211029332E000657AB /* memsegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memsegment.h; sourceTree = "<group>"; };
 		67CC93221029332E000657AB /* memsegmentmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memsegmentmanager.cpp; sourceTree = "<group>"; };
@@ -333,6 +334,7 @@
 		08FB7794FE84155DC02AAC07 /* armtrace */ = {
 			isa = PBXGroup;
 			children = (
+				6798D63E1037ABF30096293D /* kvsmodel */,
 				6710536C102BD00C000D8D88 /* datatype */,
 				671052F8102BC77C000D8D88 /* kvs */,
 				67CC922E1029332E000657AB /* abstractdata.h */,
@@ -367,7 +369,6 @@
 				67CC92FD1029332E000657AB /* i_memlocdata.h */,
 				67CC92FE1029332E000657AB /* i_projectmodel.cpp */,
 				67CC92FF1029332E000657AB /* i_projectmodel.h */,
-				67CC93001029332E000657AB /* instruction.cpp */,
 				67CC93011029332E000657AB /* instruction.h */,
 				67CC93021029332E000657AB /* loaders */,
 				67CC93151029332E000657AB /* Makefile */,
@@ -375,7 +376,6 @@
 				67CC93171029332E000657AB /* Makefile.macosx */,
 				67CC93181029332E000657AB /* memlocmanager.cpp */,
 				67CC93191029332E000657AB /* memlocmanager.h */,
-				67CC931A1029332E000657AB /* memorymodel */,
 				67CC93201029332E000657AB /* memsegment.cpp */,
 				67CC93211029332E000657AB /* memsegment.h */,
 				67CC93221029332E000657AB /* memsegmentmanager.cpp */,
@@ -410,6 +410,8 @@
 		671052F8102BC77C000D8D88 /* kvs */ = {
 			isa = PBXGroup;
 			children = (
+				6798D6051037A9700096293D /* kvs_node.cpp */,
+				6798D6061037A9700096293D /* kvs_node.h */,
 				671052F9102BC78A000D8D88 /* i_kvs.h */,
 				671052FA102BC78A000D8D88 /* i_kvs.cpp */,
 				671052FB102BC8A2000D8D88 /* localkvsstore.h */,
@@ -429,6 +431,18 @@
 				67105372102BD00C000D8D88 /* stringconstant.h */,
 			);
 			path = datatype;
+			sourceTree = "<group>";
+		};
+		6798D63E1037ABF30096293D /* kvsmodel */ = {
+			isa = PBXGroup;
+			children = (
+				6798D63F1037ABF30096293D /* kvsbackedprojectmodel.cpp */,
+				6798D6401037ABF30096293D /* kvsbackedprojectmodel.h */,
+				6798D6411037ABF30096293D /* memlocdata.cpp */,
+				6798D6421037ABF30096293D /* memlocdata.h */,
+				6798D6431037ABF30096293D /* module.mk */,
+			);
+			path = kvsmodel;
 			sourceTree = "<group>";
 		};
 		67CC92341029332E000657AB /* arch */ = {
@@ -813,18 +827,6 @@
 			path = s19;
 			sourceTree = "<group>";
 		};
-		67CC931A1029332E000657AB /* memorymodel */ = {
-			isa = PBXGroup;
-			children = (
-				67CC931B1029332E000657AB /* memlocdata.cpp */,
-				67CC931C1029332E000657AB /* memlocdata.h */,
-				67CC931D1029332E000657AB /* memorybackedprojectmodel.cpp */,
-				67CC931E1029332E000657AB /* memorybackedprojectmodel.h */,
-				67CC931F1029332E000657AB /* module.mk */,
-			);
-			path = memorymodel;
-			sourceTree = "<group>";
-		};
 		67CC93261029332E000657AB /* python_embed */ = {
 			isa = PBXGroup;
 			children = (
@@ -987,6 +989,22 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXLegacyTarget section */
+		6798D85C1037B8F20096293D /* Untitled */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 6798D8661037B9190096293D /* Build configuration list for PBXLegacyTarget "Untitled" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			dependencies = (
+			);
+			name = Untitled;
+			passBuildSettingsInEnvironment = 1;
+			productName = Untitled;
+		};
+/* End PBXLegacyTarget section */
+
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
@@ -998,6 +1016,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				6798D85C1037B8F20096293D /* Untitled */,
 			);
 		};
 /* End PBXProject section */
@@ -1023,6 +1042,27 @@
 			};
 			name = Release;
 		};
+		6798D85D1037B8F20096293D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = Untitled;
+			};
+			name = Debug;
+		};
+		6798D85E1037B8F20096293D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = Untitled;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1031,6 +1071,15 @@
 			buildConfigurations = (
 				1DEB919408733D9F0010E9CD /* Debug */,
 				1DEB919508733D9F0010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6798D8661037B9190096293D /* Build configuration list for PBXLegacyTarget "Untitled" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6798D85D1037B8F20096293D /* Debug */,
+				6798D85E1037B8F20096293D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -111,11 +111,11 @@ bool ProgramFlowAnalysis::analyze(Workspace * d, DataType * dtcreate, address_t 
 		first = false;
 	
 		// If we jump anywhere, submit a new analysis job
-		if (curr && (curr->get_pcflags() & Instruction::PCFLAG_LOCMASK) == Instruction::PCFLAG_DIRLOC)
+		if (curr && (curr->get_pcflags() & InstructionFlags::PCFLAG_LOCMASK) == InstructionFlags::PCFLAG_DIRLOC)
 			submitAnalysisJob(d, dtcreate, curr->get_direct_jump_addr());
 		
 		// If the instruction can continue
-		if (curr && (curr->get_pcflags() & Instruction::PCFLAG_CONTINUE))
+		if (curr && (curr->get_pcflags() & InstructionFlags::PCFLAG_CONTINUE))
 			addr += curr->get_length();
 		else
 			break;

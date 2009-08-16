@@ -28,7 +28,6 @@
 // Forward Declarations to reduce compile times
 class MemlocData;
 class MemoryBackedProjectModel;
-class Instruction;
 class DataType;
 class Symbol;
 class Comment;
@@ -46,7 +45,7 @@ class Xref;
 #include "memlocmanager.h"
 #include "memsegmentmanager.h"
 
-class KVSBackedProjctModel : public I_ProjectModel, private I_KVS_attribproxy
+class KVSBackedProjectModel : public I_ProjectModel, private I_KVS_attribproxy
 {	
 public:
 #pragma mark Hacks	
@@ -56,8 +55,8 @@ public:
 	
 #pragma mark Constructor/Destructor
 	/*################ Constructor / Destructor ################*/
-	KVSBackedProjctModel(I_KVS * root_node, Architecture * arch);
-	virtual ~KVSBackedProjctModel();
+	KVSBackedProjectModel(I_KVS * root_node, Architecture * arch);
+	virtual ~KVSBackedProjectModel();
 	
 #pragma mark Comment Management		
 	/*################ Comment Management ################*/
@@ -121,7 +120,8 @@ protected:
 
 	
 private:
-
+	address_t addressFromString(std::string);
+	
 #pragma mark Internals 
 	/*################ Sub Managers ################*/
 	/* Serialize by name */

@@ -1,4 +1,4 @@
-MBSRC := memorymodel/memorybackedprojectmodel.cpp memorymodel/memlocdata.cpp
+MBSRC := kvsmodel/kvsbackedprojectmodel.cpp kvsmodel/memlocdata.cpp
 
 SRC += $(MBSRC)
 

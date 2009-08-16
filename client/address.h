@@ -67,6 +67,11 @@ class address_t
 	std::string toString() const;
 
 	/**
+	 * Convert address to fixed format for serialization
+	 */
+	std::string toSerialString() const;
+	
+	/**
 	 * Get bytes at address
 	 */
 	bool readBytes(u8 bytes, u8 * buf) const;

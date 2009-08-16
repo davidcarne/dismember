@@ -54,12 +54,12 @@ void decode_data_refs(const u32 m_opcode, const address_t & addr)
 		}
 		
 		if (IPUBWL & (1 << 0)) { // ldr
-			m_pcflags |= Instruction::PCFLAG_DREF;
+			m_pcflags |= InstructionFlags::PCFLAG_DREF;
 
 			if (IPUBWL & (1 << 2)) // ldrb
-				m_pcflags |= Instruction::PCFLAG_DSBYTE;
+				m_pcflags |= InstructionFlags::PCFLAG_DSBYTE;
 			else
-				m_pcflags |= Instruction::PCFLAG_DSWORD;
+				m_pcflags |= InstructionFlags::PCFLAG_DSWORD;
 			
 			m_data_ref_addr = taddr;
 		} 
@@ -76,16 +76,16 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 	u32 instr = m_opcode;
 	
 	/* By default, each instruction carries onto the next. Only certain don't */
-	pcflags |= Instruction::PCFLAG_CONTINUE;
+	pcflags |= InstructionFlags::PCFLAG_CONTINUE;
 	
 	// BX
 	if ((instr & 0x0ffffff0) == 0x012fff10) {
 		
 		// We don't continue
-		pcflags &= ~Instruction::PCFLAG_CONTINUE;
+		pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
 		
 		// Jump location is indirectly determined
-		pcflags |= Instruction::PCFLAG_INDLOC;
+		pcflags |= InstructionFlags::PCFLAG_INDLOC;
 		
 		instrname = "bx";
 	}
@@ -93,7 +93,7 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 	// SWI
 	else if ((instr & 0x0f000000) == 0x0f000000) {
 		// Jump location is indirectly determined
-		pcflags |= Instruction::PCFLAG_INDLOC;
+		pcflags |= InstructionFlags::PCFLAG_INDLOC;
 		
 		instrname = "swi";
 	}
@@ -101,13 +101,13 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 	// B, BL
 	else if ((instr & 0x0e000000) == 0x0a000000) {
 		// We don't necessarily continue
-		pcflags &= ~Instruction::PCFLAG_CONTINUE;
-		pcflags |= Instruction::PCFLAG_DIRLOC;
+		pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
+		pcflags |= InstructionFlags::PCFLAG_DIRLOC;
 		
 		if (instr & (1 << 24)) // L
 		{
 			// since its a link, we do continue + mark it as a link
-			pcflags |= Instruction::PCFLAG_CONTINUE | Instruction::PCFLAG_DIRLK;
+			pcflags |= InstructionFlags::PCFLAG_CONTINUE | InstructionFlags::PCFLAG_DIRLK;
 		}
 		
 		
@@ -142,10 +142,10 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 		if (regD == 15)
 		{
 			// We don't continue
-			pcflags &= ~Instruction::PCFLAG_CONTINUE;
+			pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
 			
 			// Jump location is indirectly determined
-			pcflags |= Instruction::PCFLAG_INDLOC;
+			pcflags |= InstructionFlags::PCFLAG_INDLOC;
 		}
 		
 		instrname = "mul";
@@ -161,10 +161,10 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 		if (regDhi == 15 || regDlo == 15)
 		{
 			// We don't continue
-			pcflags &= ~Instruction::PCFLAG_CONTINUE;
+			pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
 			
 			// Jump location is indirectly determined
-			pcflags |= Instruction::PCFLAG_INDLOC;
+			pcflags |= InstructionFlags::PCFLAG_INDLOC;
 		}
 		
 		instrname = "umull";
@@ -182,10 +182,10 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 			if (regD == 15)
 			{
 				// We don't continue
-				pcflags &= ~Instruction::PCFLAG_CONTINUE;
+				pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
 				
 				// Jump location is indirectly determined
-				pcflags |= Instruction::PCFLAG_INDLOC;
+				pcflags |= InstructionFlags::PCFLAG_INDLOC;
 			}
 			
 			instrname = "ldr";
@@ -202,10 +202,10 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 		if ((instr >> 20) & 1) { // MRC
 			if (regD == 15) {
 				// We don't continue
-				pcflags &= ~Instruction::PCFLAG_CONTINUE;
+				pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
 				
 				// Jump location is indirectly determined
-				pcflags |= Instruction::PCFLAG_INDLOC;
+				pcflags |= InstructionFlags::PCFLAG_INDLOC;
 			}
 			instrname = "mrc";
 		} else { // MCR
@@ -223,10 +223,10 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 		if (regD == 15)
 		{
 			// We don't continue
-			pcflags &= ~Instruction::PCFLAG_CONTINUE;
+			pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
 			
 			// Jump location is indirectly determined
-			pcflags |= Instruction::PCFLAG_INDLOC;
+			pcflags |= InstructionFlags::PCFLAG_INDLOC;
 		}
 
 		instrname = "swp";
@@ -248,10 +248,10 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 				if (regD == 15)
 				{
 					// We don't continue
-					pcflags &= ~Instruction::PCFLAG_CONTINUE;
+					pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
 						
 					// Jump location is indirectly determined
-					pcflags |= Instruction::PCFLAG_INDLOC;
+					pcflags |= InstructionFlags::PCFLAG_INDLOC;
 				}
 			} 
 			break;
@@ -260,10 +260,10 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 			if (regD == 15)
 			{
 				// We don't continue
-				pcflags &= ~Instruction::PCFLAG_CONTINUE;
+				pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
 				
 				// Jump location is indirectly determined
-				pcflags |= Instruction::PCFLAG_INDLOC;
+				pcflags |= InstructionFlags::PCFLAG_INDLOC;
 			}
 			break;
 		}
@@ -285,10 +285,10 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 					if (r_inc == 15)
 					{
 						// We don't continue
-						pcflags &= ~Instruction::PCFLAG_CONTINUE;
+						pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
 						
 						// Jump location is indirectly determined
-						pcflags |= Instruction::PCFLAG_INDLOC;
+						pcflags |= InstructionFlags::PCFLAG_INDLOC;
 					}
 				}
 			}
@@ -360,21 +360,21 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 		// write result
 		if (writeres && regD == 15) {
 			// We don't continue
-			pcflags &= ~Instruction::PCFLAG_CONTINUE;
+			pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
 			if (!req_regN && (instr & (1 << 25))) { // immediate
 				// Jump location is directly determined
-				pcflags |= Instruction::PCFLAG_DIRLOC;
+				pcflags |= InstructionFlags::PCFLAG_DIRLOC;
 				
 				// TODO: uncomment_me
 				//ddest = get_ctx()->locateAddress(result);
 			} else {
 				// Jump location is indirectly determined
-				pcflags |= Instruction::PCFLAG_INDLOC;
+				pcflags |= InstructionFlags::PCFLAG_INDLOC;
 			}
 		}
 	}
 	else {
-		pcflags &= ~Instruction::PCFLAG_CONTINUE;
+		pcflags &= ~InstructionFlags::PCFLAG_CONTINUE;
 		m_pcflags = pcflags;
 		return;
 	}
@@ -383,7 +383,7 @@ void decode_pcflow(const u32 m_opcode, const address_t & addr)
 	if ((instr >> 28) != 0xE)
 	{
 		// If the instruction could be skipped, we could continue
-		pcflags |= Instruction::PCFLAG_CONTINUE;
+		pcflags |= InstructionFlags::PCFLAG_CONTINUE;
 	}
 	
 	m_pcflags = pcflags;

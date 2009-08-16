@@ -1,4 +1,4 @@
-MBSRC := kvs/i_kvs.cpp kvs/localkvsstore.cpp
+MBSRC := kvs/i_kvs.cpp kvs/localkvsstore.cpp kvs/kvs_node.cpp
 
 SRC += $(MBSRC)
 

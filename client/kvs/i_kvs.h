@@ -28,6 +28,7 @@
 
 #include <string>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 // View of a node that just represents its attributes [aka, children without children]
 // Could be thought of as a leaf node; but doesn't contain name
@@ -70,13 +71,18 @@ private:
 // View of a node that represents it + its children
 class I_KVS_node {
 public:
-	virtual sp_I_KVS_attributes getAttributesReference();
-	virtual void overlayAttributes(const sp_I_KVS_attributes attsrc);
+	virtual sp_I_KVS_attributes getAttributesReference() = 0;
+	virtual void overlayAttributes(const sp_I_KVS_attributes attsrc) = 0;
 	
+	virtual const std::string & getKey() const = 0;
+	virtual std::string getPath() const = 0;
 	// TODO: Children accessors
 	
 	virtual ~I_KVS_node() = 0;
 };
+
+typedef boost::shared_ptr<I_KVS_node> sp_I_KVS_node;
+typedef boost::weak_ptr<I_KVS_node> wp_I_KVS_node;
 
 class I_KVS {
 public:
@@ -91,7 +97,7 @@ public:
 	 */
 	virtual const std::string & getValue(const std::string & key) = 0;
 	
-	virtual I_KVS_node & getNode(const std::string & key) = 0;
+	virtual sp_I_KVS_node getNode(const std::string & key) = 0;
 	
 	/**
 	 * Get an absolute path (starting with /)

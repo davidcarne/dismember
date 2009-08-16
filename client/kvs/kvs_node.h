@@ -21,18 +21,103 @@
 
 #include "hash_map.h"
 
-typedef  std::hash_map<const std::string *, struct KVS_Node *> KVS_children;
+class LocalKVSNode;
 
-class LocalKVSNode : I_KVS_node{
+
+
+
+typedef boost::weak_ptr<LocalKVSNode> wp_LocalKVSNode;
+typedef boost::shared_ptr<LocalKVSNode> sp_LocalKVSNode;
+
+typedef boost::weak_ptr<const LocalKVSNode> wp_c_LocalKVSNode;
+typedef boost::shared_ptr<const LocalKVSNode> sp_c_LocalKVSNode;
+
+typedef  std::hash_map<const std::string, sp_LocalKVSNode> LocalKVS_children;
+
+
+class LocalKVSNode : public I_KVS_node, public I_KVS_attributes{
 public:
+	static const std::string EMPTY_NODE;
 	
-	LocalKVSNode(const std::string & key) : m_key(key) {
+	virtual void overlayAttributes(const sp_I_KVS_attributes attsrc);
+	
+	virtual const std::string & getAttrib(const std::string & key) const {
+		sp_LocalKVSNode child = findChild(key);
+		if (!child)
+			return EMPTY_NODE;
+		
+		return child->m_value;
+	}
+	
+	
+	virtual sp_I_KVS_attributes LocalKVSNode::getAttributesReference()
+	{
+		return sp_I_KVS_attributes(m_me);
+	}
+	
+	virtual void setAttrib(const std::string & key, const std::string & value) {
+		
+		sp_LocalKVSNode sp_child = findChild_create(key);
+		sp_child->m_value = value;
+	}
+	
+	virtual const std::string & getKey() const
+	{
+		return m_key;
+	}
+	
+	virtual std::string getPath() const
+	{
+		std::string path = m_key;
+		sp_c_LocalKVSNode nptr = sp_c_LocalKVSNode(this);
+		
+		// sp_LocalKVSNode constructor creates scope-locked conversion to shared_ptr, so no concurrency issues
+		while (nptr = sp_c_LocalKVSNode(nptr->m_parent))
+		{
+			
+			path = nptr->getKey() + "/" + path;
+		}
+		return path;
+	}
+	
+	static sp_LocalKVSNode createKVSNode(const std::string & key, const wp_LocalKVSNode & parent = wp_LocalKVSNode())
+	{
+		sp_LocalKVSNode node = sp_LocalKVSNode(new LocalKVSNode(key, parent));
+		node->m_me = node;
+		return node;
+	}
+private:
+	LocalKVSNode(const std::string & key, const wp_LocalKVSNode & parent = wp_LocalKVSNode()) : m_key(key), m_parent(parent) {
 		
 	};
-private:
+	
+	sp_LocalKVSNode findChild(const std::string & key) const
+	{
+		LocalKVS_children::const_iterator ci = m_children.find(key);
+		if (ci != m_children.end())
+			return (*ci).second;
+		return sp_LocalKVSNode();
+	}
+	sp_LocalKVSNode findChild_create(const std::string & key)
+	{
+		sp_LocalKVSNode sp_child = findChild(key);
+		if (sp_child)
+			return sp_child;
+		wp_LocalKVSNode parent = m_me;
+		
+		sp_child = createKVSNode(key, parent);
+		m_children[key] = sp_child;
+		return sp_child;
+		
+	};
+	
+	wp_LocalKVSNode m_me;
+	wp_LocalKVSNode m_parent;
 	const std::string m_key;
-	KVS_children m_children;
+	LocalKVS_children m_children;
 	std::string m_value;
+
+	friend class LocalKVSStore;
 };
 
 

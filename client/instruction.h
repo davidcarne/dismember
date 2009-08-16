@@ -21,9 +21,9 @@
 
 
 // Shell of a class - we don't need an instruction subtype right now.
-class Instruction {
+class InstructionFlags {
 private:
-	Instruction() {}
+	InstructionFlags() {}
 	
 public:
 	typedef u32 pcflags_type;
