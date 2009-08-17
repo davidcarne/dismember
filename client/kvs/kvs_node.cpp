@@ -15,7 +15,7 @@
  */
 
 #include "kvs_node.h"
-const std::string LocalKVSNode::EMPTY_NODE = "";
+const std::string LKVS_EMPTY_NODE = "";
 
 
 void LocalKVSNode::overlayAttributes(const sp_I_KVS_attributes attsrc)

@@ -76,7 +76,7 @@ public:
 	
 	virtual const std::string & getKey() const = 0;
 	virtual std::string getPath() const = 0;
-	// TODO: Children accessors
+	virtual std::string getValue() const = 0;
 	
 	virtual ~I_KVS_node() = 0;
 };
@@ -90,7 +90,7 @@ public:
 	 * Create an unattached set of attributes; useful for something decoding, but not sure
 	 * when / if will be attached to tree
 	 */
-	virtual I_KVS_attributes * createDanglingAttributes() = 0;
+	virtual sp_I_KVS_attributes createDanglingAttributes() = 0;
 	
 	/**
 	 * Get the value of an absolute path (starting with /)

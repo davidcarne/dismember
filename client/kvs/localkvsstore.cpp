@@ -20,6 +20,9 @@
 
 #include <boost/tokenizer.hpp>
 
+#include "stdio.h"
+#include <list>
+
 LocalKVSStore::LocalKVSStore()
 {
 	m_root = LocalKVSNode::createKVSNode("");
@@ -27,16 +30,57 @@ LocalKVSStore::LocalKVSStore()
 
 const std::string & LocalKVSStore::getValue(const std::string & key)
 {
-	return "";
+	std::string mykey = key;
+	assert(mykey[0] == '/');
+	
+	sp_LocalKVSNode cursor = m_root;
+	
+	typedef boost::tokenizer<boost::char_separator<char> > path_tokenizer;
+	boost::char_separator<char> sep("/");
+	path_tokenizer tokens(key, sep);
+	
+	for (path_tokenizer::iterator path_comp_iter = tokens.begin();
+		 path_comp_iter != tokens.end(); path_comp_iter++)
+	{
+		const std::string & ptok = *path_comp_iter;
+		
+		cursor = cursor->findChild(ptok);
+		
+		if (!cursor)
+			return LKVS_EMPTY_NODE;
+	}
+	
+	return cursor->m_value;
 }
 
 void LocalKVSStore::setValue(const std::string & key, const std::string & value)
 {
+	std::string mykey = key;
+	assert(mykey[0] == '/');
+	
+	sp_LocalKVSNode cursor = m_root;
+	
+	typedef boost::tokenizer<boost::char_separator<char> > path_tokenizer;
+	boost::char_separator<char> sep("/");
+	path_tokenizer tokens(key, sep);
+	
+	for (path_tokenizer::iterator path_comp_iter = tokens.begin();
+		 path_comp_iter != tokens.end(); path_comp_iter++)
+	{
+		const std::string & ptok = *path_comp_iter;
+		
+		cursor = cursor->findChild_create(ptok);
+		
+		if (!cursor)
+			return;
+	}
+	
+	cursor->m_value = value;
 }
 
-I_KVS_attributes * LocalKVSStore::createDanglingAttributes()
+sp_I_KVS_attributes LocalKVSStore::createDanglingAttributes()
 {
-	return NULL;
+	return sp_I_KVS_attributes(new LocalKVSAttributes());
 }
 
 sp_I_KVS_node LocalKVSStore::getNode(const std::string & key)
@@ -71,4 +115,43 @@ sp_I_KVS_node LocalKVSStore::getNode(const std::string & key)
 LocalKVSStore::~LocalKVSStore()
 {
 	
+}
+
+
+
+bool LocalKVSStore::serializeTo(const std::string & output_filename) const
+{
+	std::list<sp_LocalKVSNode> ser_q;
+	ser_q.push_back(m_root);
+	int level = 0;
+	while (ser_q.size())
+	{
+		sp_LocalKVSNode node = ser_q.front();
+		ser_q.pop_front();
+		
+		for (LocalKVS_children::iterator it = node->m_children.begin();
+			 it != node->m_children.end(); it++)
+		{
+			ser_q.push_back((*it).second);
+		}
+		
+		if (node->getValue().length() != 0)
+			std::cout << node->getPath() << "::" << node->getValue() << std::endl;
+	}
+}
+
+bool LocalKVSStore::overwriteContentsFrom(const std::string  & input_filename)
+{
+	// Zero the root; should cause deallocation of the whole tree.
+	m_root = LocalKVSNode::createKVSNode("");
+}
+
+sp_LocalKVSStore LocalKVSStore::createFromFile(const std::string & input_filename)
+{
+	sp_LocalKVSStore kvsp = sp_LocalKVSStore(new LocalKVSStore);
+	
+	if (kvsp->overwriteContentsFrom(input_filename))
+		return kvsp;
+	
+	return sp_LocalKVSStore();
 }

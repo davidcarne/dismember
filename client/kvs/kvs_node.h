@@ -21,9 +21,12 @@
 
 #include "hash_map.h"
 
+#include "iostream"
+
 class LocalKVSNode;
 
 
+extern const std::string LKVS_EMPTY_NODE;
 
 
 typedef boost::weak_ptr<LocalKVSNode> wp_LocalKVSNode;
@@ -33,18 +36,33 @@ typedef boost::weak_ptr<const LocalKVSNode> wp_c_LocalKVSNode;
 typedef boost::shared_ptr<const LocalKVSNode> sp_c_LocalKVSNode;
 
 typedef  std::hash_map<const std::string, sp_LocalKVSNode> LocalKVS_children;
+typedef  std::hash_map<const std::string, std::string> LocalKVS_attributes;
 
+
+class LocalKVSAttributes : public I_KVS_attributes {
+	virtual const std::string & getAttrib(const std::string & key) const {
+		LocalKVS_attributes::const_iterator it = m_lkva.find(key);
+		if (it == m_lkva.end())
+			return LKVS_EMPTY_NODE;
+		return (*it).second;
+	};
+	
+	virtual void setAttrib(const std::string & key, const std::string & value) {
+		m_lkva[key] = value;
+	};
+private:
+	LocalKVS_attributes m_lkva;
+};
 
 class LocalKVSNode : public I_KVS_node, public I_KVS_attributes{
 public:
-	static const std::string EMPTY_NODE;
 	
 	virtual void overlayAttributes(const sp_I_KVS_attributes attsrc);
 	
 	virtual const std::string & getAttrib(const std::string & key) const {
 		sp_LocalKVSNode child = findChild(key);
 		if (!child)
-			return EMPTY_NODE;
+			return LKVS_EMPTY_NODE;
 		
 		return child->m_value;
 	}
@@ -69,15 +87,20 @@ public:
 	virtual std::string getPath() const
 	{
 		std::string path = m_key;
-		sp_c_LocalKVSNode nptr = sp_c_LocalKVSNode(this);
+		sp_c_LocalKVSNode nptr = m_me.lock();
 		
 		// sp_LocalKVSNode constructor creates scope-locked conversion to shared_ptr, so no concurrency issues
-		while (nptr = sp_c_LocalKVSNode(nptr->m_parent))
+		while (nptr = nptr->m_parent.lock())
 		{
-			
 			path = nptr->getKey() + "/" + path;
 		}
 		return path;
+	}
+	
+	
+	virtual std::string getValue() const
+	{
+		return m_value;
 	}
 	
 	static sp_LocalKVSNode createKVSNode(const std::string & key, const wp_LocalKVSNode & parent = wp_LocalKVSNode())
@@ -86,10 +109,17 @@ public:
 		node->m_me = node;
 		return node;
 	}
+	
+	virtual ~LocalKVSNode()
+	{
+		std::cout << "DEBUG: Deleting node: " << m_key << std::endl;
+	};
+	
 private:
 	LocalKVSNode(const std::string & key, const wp_LocalKVSNode & parent = wp_LocalKVSNode()) : m_key(key), m_parent(parent) {
-		
+		std::cout << "DEBUG: Creating node: " << m_key << std::endl;
 	};
+	
 	
 	sp_LocalKVSNode findChild(const std::string & key) const
 	{

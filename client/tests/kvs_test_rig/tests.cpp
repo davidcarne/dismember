@@ -53,4 +53,16 @@ public:
  void runTest() { suite_MyTestSuite.testRootNodeAttributes(); }
 } testDescription_MyTestSuite_testRootNodeAttributes;
 
+static class TestDescription_MyTestSuite_testMultiSectionPath : public CxxTest::RealTestDescription {
+public:
+ TestDescription_MyTestSuite_testMultiSectionPath() : CxxTest::RealTestDescription( Tests_MyTestSuite, suiteDescription_MyTestSuite, 73, "testMultiSectionPath" ) {}
+ void runTest() { suite_MyTestSuite.testMultiSectionPath(); }
+} testDescription_MyTestSuite_testMultiSectionPath;
+
+static class TestDescription_MyTestSuite_testSerialize : public CxxTest::RealTestDescription {
+public:
+ TestDescription_MyTestSuite_testSerialize() : CxxTest::RealTestDescription( Tests_MyTestSuite, suiteDescription_MyTestSuite, 102, "testSerialize" ) {}
+ void runTest() { suite_MyTestSuite.testSerialize(); }
+} testDescription_MyTestSuite_testSerialize;
+
 #include <cxxtest/Root.cpp>

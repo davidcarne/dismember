@@ -19,8 +19,12 @@
 
 #include "i_kvs.h"
 #include "kvs_node.h"
+#include <boost/shared_ptr.hpp>
 
 #include "hash_map.h"
+class LocalKVSStore;
+
+typedef boost::shared_ptr<LocalKVSStore> sp_LocalKVSStore;
 
 class LocalKVSStore : public I_KVS {
 public:
@@ -28,9 +32,14 @@ public:
 	virtual const std::string & getValue(const std::string & key);
 	virtual void setValue(const std::string & key, const std::string & value);
 
-	virtual I_KVS_attributes * createDanglingAttributes();
+	virtual sp_I_KVS_attributes createDanglingAttributes();
 	virtual sp_I_KVS_node getNode(const std::string & key);
 
+	
+	bool serializeTo(const std::string & output_filename) const;
+	bool overwriteContentsFrom(const std::string  & output_filename);
+	static sp_LocalKVSStore createFromFile(const std::string & input_filename);
+	
 	virtual ~LocalKVSStore();
 private:
 	sp_LocalKVSNode m_root;
