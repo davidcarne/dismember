@@ -62,6 +62,8 @@ $(BUILDDIR)/%.d: %.cpp
 
 -include $(CPPDEPS)
 
+test:
+	make -C tests
 
 clean:
 	@echo CLEAN
