@@ -25,7 +25,7 @@
  */
 
 #include "globalpythoninterpreter.h"
-#include "string.h"
+#include <string.h>
 #include "localpythoninterpreter.h"
 
 GlobalPythonInterpreter * GlobalPythonInterpreter::s_interpreter = NULL;

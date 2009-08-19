@@ -17,7 +17,7 @@
 #ifndef _ARM_H_
 #define _ARM_H_
 
-#include "../../i_projectmodel.h"
+#include "i_projectmodel.h"
 #include "../../architecture.h"
 
 class ARMInstructionDataType;

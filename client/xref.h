@@ -30,25 +30,6 @@ private:
 	typedef I_MemlocData xr_mtype;
 	
 public:
-	/**
-	 * Xref type enum
-	 */
-	typedef enum {
-		/**
-		 * \brief Xref of type jump
-		 */
-		XR_TYPE_JMP,
-		
-		/**
-		 * \brief Xref of type function call
-		 */
-		XR_TYPE_FNCALL,
-		
-		/**
-		 * \brief Xref of type data reference. See source pcflags for more info
-		 */
-		XR_TYPE_DATA
-	} xref_type_e;
 
 	
 	

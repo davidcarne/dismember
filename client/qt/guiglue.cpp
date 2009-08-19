@@ -16,7 +16,7 @@
 
 #include "guiglue.h"
 #include "runtimemodel.h"
-#include "document.h"
+#include "workspace.h"
 
 WorkspaceGui *setupWorkspaceGui(Workspace &doc)
 { 

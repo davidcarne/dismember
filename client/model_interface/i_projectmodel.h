@@ -28,46 +28,49 @@
 
 // Forward Declarations to reduce compile times
 class I_MemlocData;
-class DataType;
 class Symbol;
-class Comment;
+class I_Comment;
 class Architecture;
 class Xref;
+class I_MemlocData;
+class I_Symbol;
+class MemSegment;
 
 #include "callback.h"
-#include "datatypereg.h"
-#include "xref.h"
-#include "memlocmanager.h"
-#include "symlist.h"
-#include "memsegmentmanager.h"
-#include "xrefmanager.h"
+#include "address.h"
+#include "datatype.h"
+#include "any_iterator.hpp"
+
+
+
+// Constructor fucked for this one, use such that assignment operator is used.
+typedef IteratorTypeErasure::any_iterator<std::pair<const address_t, I_MemlocData *>, std::bidirectional_iterator_tag, std::pair<const address_t, I_MemlocData *> > memloc_addr_pair_ci;
+typedef IteratorTypeErasure::any_iterator<const I_Symbol *, std::bidirectional_iterator_tag> symbol_ci;
+typedef IteratorTypeErasure::any_iterator<const MemSegment *, std::bidirectional_iterator_tag> memsegment_ci;
+typedef IteratorTypeErasure::any_iterator<const sp_DataType, std::bidirectional_iterator_tag> datatype_ci;
 
 class I_ProjectModel : boost::noncopyable
 {	
-public:
-	/*################ Hacks ################*/
-	// Todo: This needs to be rethought
-	virtual DataType * getCodeDataType() const = 0;
-	
+public:	
 #pragma mark Constructor/Destructor
 	/*################ Constructor / Destructor ################*/
 	virtual ~I_ProjectModel() = 0;
 	
 #pragma mark Comment Management		
 	/*################ Comment Management ################*/
-	virtual Comment *create_comment(std::string comment, address_t addr) = 0;
-	virtual Comment *lookup_comment(address_t addr) const = 0;
+	virtual I_Comment *create_comment(std::string comment, address_t addr) = 0;
+	virtual I_Comment *lookup_comment(address_t addr) const = 0;
 	
 #pragma mark Xref Management		
 	/*################ Xref Management ################*/
-	virtual Xref *create_xref(address_t src, address_t dst, Xref::xref_type_e type) = 0;
+	virtual Xref *create_xref(address_t src, address_t dst, xref_type_e type) = 0;
 	
 #pragma mark Memloc Management	
 	/*################ Memory location management ################*/
 	virtual I_MemlocData * createMemlocDataAt(DataType * d, address_t addr) = 0;
 	virtual I_MemlocData * lookup_memloc(address_t addr, bool exactmatch=true) const = 0;
-	virtual MemlocManager::memloclist_ci memloc_list_begin() const = 0;
-	virtual MemlocManager::memloclist_ci memloc_list_end() const = 0;
+	virtual memloc_addr_pair_ci memloc_list_begin() const = 0;
+	virtual memloc_addr_pair_ci memloc_list_end() const = 0;
 	virtual void remove_memloc(address_t addr) = 0;
 	
 #pragma mark Symbol Management	
@@ -75,11 +78,11 @@ public:
 	virtual Symbol *create_sym(const std::string & name, address_t addr) = 0;
 	virtual const Symbol * lookup_symbol(const std::string & symname) const = 0;
 	virtual const Symbol * lookup_symbol(address_t addr) const = 0;
-	virtual SymbolList::symname_ci sym_begin_name() const = 0;
-	virtual SymbolList::symname_ci sym_end_name() const = 0;
-	virtual SymbolList::symaddr_ci sym_begin_addr() const = 0;
-	virtual SymbolList::symaddr_ci sym_end_addr() const = 0;
-	virtual Symbol * find_ordered_symbol(uint32_t index, SymbolList::symsortorder_e order) const = 0;
+	virtual symbol_ci sym_begin_name() const = 0;
+	virtual symbol_ci sym_end_name() const = 0;
+	virtual symbol_ci sym_begin_addr() const = 0;
+	virtual symbol_ci sym_end_addr() const = 0;
+	virtual Symbol * find_ordered_symbol(uint32_t index, symsortorder_e order) const = 0;
 	virtual uint32_t get_symbol_count(void) const = 0;
 	
 	
@@ -88,14 +91,14 @@ public:
 	virtual bool addSegment(MemSegment * m) = 0;
 	virtual bool readByte(address_t taddr, uint8_t * data) const = 0;
 	virtual bool readBytes(address_t, u8, u8*) const = 0;
-	virtual MemSegmentManager::memseglist_ci memsegs_begin() const = 0;
-	virtual MemSegmentManager::memseglist_ci memsegs_end() const = 0;
+	virtual memsegment_ci memsegs_begin() const = 0;
+	virtual memsegment_ci memsegs_end() const = 0;
 	virtual address_t locateAddress(uint64_t address) const = 0;
 	
 #pragma mark Datatype Management	
 	/*################ Datatype management ################*/
-	virtual DataTypeReg::datatypereg_ci getDataTypeBegin() const = 0;
-	virtual DataTypeReg::datatypereg_ci getDataTypeEnd() const = 0;
+	virtual datatype_ci getDataTypeBegin() const = 0;
+	virtual datatype_ci getDataTypeEnd() const = 0;
 	virtual sp_DataType lookupDataType(std::string name) const = 0;
 	virtual void addDataType(sp_DataType d) = 0;
 	

@@ -14,7 +14,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "document.h"
+#include "workspace.h"
 #include <boost/python.hpp>
 #include "i_projectmodel.h"
 #include "bindings.h"

@@ -25,8 +25,8 @@
  */
 
 
-#ifndef _GLOBALPYTHON_H_
-#define _GLOBALPYTHON_H_
+#ifndef _GLOBALPYTHONINTERPRETER_H_
+#define _GLOBALPYTHONINTERPRETER_H_
 
 #include <boost/python.hpp>
 #include <string>

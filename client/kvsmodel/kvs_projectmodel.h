@@ -14,8 +14,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _KVSBACKEDPROJECTMODEL_H_
-#define _KVSBACKEDPROJECTMODEL_H_
+#ifndef _KVS_PROJECTMODEL_H_
+#define _KVS_PROJECTMODEL_H_
 
 #include <list>
 #include <string>
@@ -24,55 +24,41 @@
 #include <boost/serialization/utility.hpp>
 
 #include "i_kvs.h"
+#include "i_projectmodel.h"
 
 // Forward Declarations to reduce compile times
 class MemlocData;
 class MemoryBackedProjectModel;
 class DataType;
 class Symbol;
-class Comment;
-class Architecture;
 class Xref;
 
 #include "i_projectmodel.h"
 #include "types.h"
-#include "memsegment.h"
-#include "symlist.h"
-#include "comment.h"
-#include "callback.h"
-#include "datatypereg.h"
-#include "xrefmanager.h"
-#include "memlocmanager.h"
-#include "memsegmentmanager.h"
 
 class KVSBackedProjectModel : public I_ProjectModel, private I_KVS_attribproxy
 {	
 public:
-#pragma mark Hacks	
-	/*################ Hacks ################*/
-	// Todo: This needs to be rethought
-	virtual DataType * getCodeDataType() const;
-	
 #pragma mark Constructor/Destructor
 	/*################ Constructor / Destructor ################*/
-	KVSBackedProjectModel(I_KVS * root_node, Architecture * arch);
+	KVSBackedProjectModel(I_KVS * root_node);
 	virtual ~KVSBackedProjectModel();
 	
 #pragma mark Comment Management		
 	/*################ Comment Management ################*/
-	virtual Comment *create_comment(std::string comment, address_t addr);
-	virtual Comment *lookup_comment(address_t addr) const;
+	virtual I_Comment *create_comment(std::string comment, address_t addr);
+	virtual I_Comment *lookup_comment(address_t addr) const;
 	
 #pragma mark Xref Management		
 	/*################ Xref Management ################*/
-	virtual Xref *create_xref(address_t src, address_t dst, Xref::xref_type_e type);
+	virtual Xref *create_xref(address_t src, address_t dst, xref_type_e type);
 
 #pragma mark Memloc Management	
 	/*################ Memory location management ################*/
 	virtual I_MemlocData * createMemlocDataAt(DataType * d, address_t addr);
 	virtual I_MemlocData * lookup_memloc(address_t addr, bool exactmatch=true) const;
-	virtual MemlocManager::memloclist_ci memloc_list_begin() const;
-	virtual MemlocManager::memloclist_ci memloc_list_end() const;
+	virtual memloc_addr_pair_ci memloc_list_begin() const;
+	virtual memloc_addr_pair_ci memloc_list_end() const;
 	virtual void remove_memloc(address_t addr);
 
 #pragma mark Symbol Management	
@@ -80,11 +66,11 @@ public:
 	virtual Symbol *create_sym(const std::string & name, address_t addr);
 	virtual const Symbol * lookup_symbol(const std::string & symname) const;
 	virtual const Symbol * lookup_symbol(address_t addr) const;
-	virtual SymbolList::symname_ci sym_begin_name() const;
-	virtual SymbolList::symname_ci sym_end_name() const;
-	virtual SymbolList::symaddr_ci sym_begin_addr() const;
-	virtual SymbolList::symaddr_ci sym_end_addr() const;
-	virtual Symbol * find_ordered_symbol(uint32_t index, SymbolList::symsortorder_e order) const;
+	virtual symbol_ci sym_begin_name() const;
+	virtual symbol_ci sym_end_name() const;
+	virtual symbol_ci sym_begin_addr() const;
+	virtual symbol_ci sym_end_addr() const;
+	virtual Symbol * find_ordered_symbol(uint32_t index, symsortorder_e order) const;
 	virtual uint32_t get_symbol_count(void) const;
 	
 
@@ -93,14 +79,14 @@ public:
 	virtual bool addSegment(MemSegment * m);
 	virtual bool readByte(address_t taddr, uint8_t * data) const;
 	virtual bool readBytes(address_t, u8, u8*) const;
-	virtual MemSegmentManager::memseglist_ci memsegs_begin() const;
-	virtual MemSegmentManager::memseglist_ci memsegs_end() const;
+	virtual memsegment_ci memsegs_begin() const;
+	virtual memsegment_ci memsegs_end() const;
 	virtual address_t locateAddress(uint64_t address) const;
 	
 #pragma mark Datatype Management	
 	/*################ Datatype management ################*/
-	virtual DataTypeReg::datatypereg_ci getDataTypeBegin() const;
-	virtual DataTypeReg::datatypereg_ci getDataTypeEnd() const;
+	virtual datatype_ci getDataTypeBegin() const;
+	virtual datatype_ci getDataTypeEnd() const;
 	virtual sp_DataType lookupDataType(std::string name) const;
 	virtual void addDataType(sp_DataType d);
 	
@@ -123,28 +109,6 @@ private:
 	address_t addressFromString(std::string);
 	
 #pragma mark Internals 
-	/*################ Sub Managers ################*/
-	/* Serialize by name */
-	Architecture * m_arch;
-
-	/* Needs serializing */
-	CommentList m_commentlist;
-	
-	/* Needs serializing */
-	DataTypeReg m_datatypelist;
-	
-	/* Needs serializing */
-	MemlocManager m_memlocmanager;
-	
-	/* Needs serializing */
-	SymbolList m_symlist;
-
-	/* Needs serializing */
-	XrefManager m_xrefmanager;
-	
-	/* Needs serializing */
-	MemSegmentManager m_memsegmentmanager;
-	
 	/*################ Callback Hacks; need to decide how to persist these - could be tricky ################*/
 	/* Callback stuff - do not serialize */
 	typedef std::list<CallbackBase<I_MemlocData *> *> memloc_hook_list;

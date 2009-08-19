@@ -18,7 +18,7 @@
 #include <stdexcept>
 #include "exception.h"
 #include "application.h"
-#include "document.h"
+#include "workspace.h"
 #include "app_main.h"
 
 int main(int argc, char **argv)

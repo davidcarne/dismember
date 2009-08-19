@@ -89,9 +89,9 @@ bool Search::search(Workspace * d, uint8_t *b, psize_t len, SearchResults *sr)
 {
 	I_ProjectModel *t = d->getProjectModel();
 
-	MemSegmentManager::memseglist_ci mi;
-	MemSegmentManager::memseglist_ci begin = t->memsegs_begin();
-	MemSegmentManager::memseglist_ci end = t->memsegs_end();
+	memsegment_ci mi;
+	memsegment_ci begin = t->memsegs_begin();
+	memsegment_ci end = t->memsegs_end();
 	if (begin == end)
 		return true;
 	

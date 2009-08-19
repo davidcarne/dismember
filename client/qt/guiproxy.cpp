@@ -165,10 +165,10 @@ void GuiProxy::update(void)
 	m_lclookup.clear();
 	struct addrblock * cins = NULL;
 	
-	MemlocManager::memloclist_ci li = m_ctx->memloc_list_begin();
+	memloc_addr_pair_ci li = m_ctx->memloc_list_begin();
 	u32 sblc = m_lc;
 	
-	for (MemSegmentManager::memseglist_ci mi = m_ctx->memsegs_begin(); mi != m_ctx->memsegs_end(); mi++)
+	for (memsegment_ci mi = m_ctx->memsegs_begin(); mi != m_ctx->memsegs_end(); mi++)
 	{
 		// for each segment
 		address_t memind = (*mi)->getBaseAddress();

@@ -15,7 +15,7 @@
  */
 
 #include <string.h>
-#include "comment.h"
+#include "kvs_comment.h"
 
 Comment::Comment(std::string cmt, address_t addr)
 {

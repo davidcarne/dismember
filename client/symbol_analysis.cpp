@@ -20,6 +20,7 @@
 #include "binaryconstant.h"
 #include "datatype.h"
 #include "symbol_analysis.h"
+#include "symlist.h"
 
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
@@ -44,11 +45,11 @@ bool SymbolAnalysis::analyze(Workspace *d)
 	int size;
 	bool subroutine = false;
 
-	MemlocManager::memloclist_ci it = t->memloc_list_begin();
-	MemlocManager::memloclist_ci end = t->memloc_list_end();
+	memloc_addr_pair_ci it = t->memloc_list_begin();
+	memloc_addr_pair_ci end = t->memloc_list_end();
 	
 	for (; it != end; ++it) {
-		I_MemlocData * id = (*it).second;
+		const I_MemlocData * id = (*it).second;
 		if (!id || !id->has_xrefs_to())
 			continue;
 		if (id->get_symbol()) {

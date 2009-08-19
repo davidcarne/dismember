@@ -52,7 +52,7 @@ u32 XrefManager::xref_to_count(address_t addr) const
 	return m_xrefs_to.count(addr);
 }
 
-Xref * XrefManager::createXref(address_t srcaddr, address_t destaddr, Xref::xref_type_e type)
+Xref * XrefManager::createXref(address_t srcaddr, address_t destaddr, xref_type_e type)
 {
 	
 	// Check if we already have an xref pointing to the destination

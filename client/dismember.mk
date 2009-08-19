@@ -1,20 +1,18 @@
 
 
 
-MODULES := python_embed arch loaders kvsmodel datatype kvs $(GUI)
+MODULES := python_embed arch loaders kvsmodel datatype kvs model_interface $(GUI)
 
 INCDIRS := $(MODULES)
-INCPATHS := -I.
+INCPATHS := -I. -Icontrib
 
 LIBS :=
-SRC := 	comment.cpp xref.cpp symbol_analysis.cpp \
+SRC := 	xref.cpp symbol_analysis.cpp \
 	datatypereg.cpp memlocmanager.cpp run_queue.cpp exception.cpp \
-	app_main.cpp document.cpp memsegment.cpp  \
+	app_main.cpp workspace.cpp memsegment.cpp  \
 	xrefmanager.cpp search.cpp \
-	memsegmentmanager.cpp symlist.cpp address.cpp i_memlocdata.cpp \
-	program_flow_analysis.cpp \
-	i_projectmodel.cpp
-
+	memsegmentmanager.cpp symlist.cpp address.cpp \
+	program_flow_analysis.cpp
 
 BUILDDIR := build
 PROG := $(BUILDDIR)/dismember
@@ -58,8 +56,8 @@ $(BUILDDIR)/%.o: %.cpp
 $(BUILDDIR)/%.d: %.cpp
 	@echo "DEP	$<"
 	@mkdir -p $(@D)
-	@$(CXX) -MM $(CPPFLAGS) $< | sed -e "s@^\(.*\)\.o:@$(@D)/\1.d $(@D)/\1.o:@" > $@
-
+	@#@$(CXX) -MM $(CPPFLAGS) $< | sed -e "s@^\(.*\)\.o:@$(@D)/\1.d $(@D)/\1.o:@" > $@
+	@./build_tools/fast_dep.py $(CPPFLAGS) $< | sed -e "s@^\(.*\)\.o:@$(@D)/\1.d $(@D)/\1.o:@" > $@
 -include $(CPPDEPS)
 
 test:

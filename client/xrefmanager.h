@@ -25,7 +25,7 @@ public:
 	
 	XrefManager(I_ProjectModel * ctx);
 	
-	Xref * createXref(address_t srcaddr, address_t destaddr, Xref::xref_type_e type);
+	Xref * createXref(address_t srcaddr, address_t destaddr, xref_type_e type);
 	
 	typedef std::multimap<address_t, Xref *, address_t::less> xref_map;
 	typedef xref_map::iterator xref_map_i;

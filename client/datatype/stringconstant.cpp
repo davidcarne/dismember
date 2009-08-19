@@ -16,7 +16,6 @@
 
 #include "datatype.h"
 #include "i_memlocdata.h"
-#include "memlocdata.h"
 #include "i_projectmodel.h"
 
 class StringConstantDataType : public DataType {

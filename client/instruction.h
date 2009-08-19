@@ -16,9 +16,6 @@
 
 #ifndef _instruction_H_
 #define _instruction_H_
-#include "i_memlocdata.h"
-#include "memlocdata.h"
-
 
 // Shell of a class - we don't need an instruction subtype right now.
 class InstructionFlags {

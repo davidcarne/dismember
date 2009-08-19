@@ -30,6 +30,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
+#include "any_iterator.hpp"
+
 // View of a node that just represents its attributes [aka, children without children]
 // Could be thought of as a leaf node; but doesn't contain name
 class I_KVS_attributes {
@@ -85,6 +87,14 @@ private:
 	using I_KVS_attribproxy::getAttrib; \
 	using I_KVS_attribproxy::setAttrib;
 
+
+class I_KVS_node;
+
+typedef boost::shared_ptr<I_KVS_node> sp_I_KVS_node;
+typedef boost::weak_ptr<I_KVS_node> wp_I_KVS_node;
+
+typedef IteratorTypeErasure::any_iterator<sp_I_KVS_node, std::forward_iterator_tag, sp_I_KVS_node> kvs_node_child_ci;
+
 // View of a node that represents it + its children
 class I_KVS_node {
 public:
@@ -130,11 +140,18 @@ public:
 	 */
 	virtual void setValue(const std::string & value) = 0;
 	
+	/*
+	 * - HAS TEST
+	 */
+	virtual kvs_node_child_ci beginChildren() const = 0;
+	
+	/*
+	 * - HAS TEST
+	 */
+	virtual kvs_node_child_ci endChildren() const = 0;
+	
 	virtual ~I_KVS_node() = 0;
 };
-
-typedef boost::shared_ptr<I_KVS_node> sp_I_KVS_node;
-typedef boost::weak_ptr<I_KVS_node> wp_I_KVS_node;
 
 class I_KVS {
 public:

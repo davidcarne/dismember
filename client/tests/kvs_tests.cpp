@@ -422,3 +422,48 @@ BOOST_AUTO_TEST_CASE(AttribProxyDangling)
 }
 
 
+BOOST_AUTO_TEST_CASE(EmptyChildIterator)
+{
+	LocalKVSStore s;
+	I_KVS  & i_s = s;
+	
+	
+	sp_I_KVS_node hello_node = i_s.setValue("/hello","world");
+	
+	BOOST_REQUIRE(hello_node);
+	
+	BOOST_CHECK(hello_node->beginChildren() == hello_node->endChildren());
+}
+
+
+BOOST_AUTO_TEST_CASE(OneChildIterator)
+{
+	LocalKVSStore s;
+	I_KVS  & i_s = s;
+	
+	sp_I_KVS_node hello_node = i_s.setValue("/hello","world");
+	sp_I_KVS_node child_orig_node = i_s.setValue("/hello/a","b");
+	
+	BOOST_REQUIRE(hello_node);
+	BOOST_REQUIRE(child_orig_node);
+	
+	kvs_node_child_ci ci = hello_node->beginChildren();
+	
+	// Check iterator begin() equality
+	BOOST_CHECK(ci == hello_node->beginChildren());
+	
+	// Check that we can retrieve the child node
+	sp_I_KVS_node child_node = *ci;
+	BOOST_REQUIRE(child_node);
+	BOOST_CHECK(child_node == child_orig_node);
+	BOOST_CHECK_EQUAL(child_node->getPath(), "/hello/a");
+	BOOST_CHECK_EQUAL(child_node->getKey(), "a");
+	BOOST_CHECK_EQUAL(child_node->getValue(), "b");
+	
+	// Check that we can retrieve the end
+	ci++;
+	BOOST_CHECK(ci == hello_node->endChildren());
+}
+
+
+

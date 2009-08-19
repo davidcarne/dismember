@@ -167,10 +167,10 @@ public:
 	symname_ci end_name() const;
 	
 	/** @return begin const iterator across addr-ordered symbols */
-	symaddr_ci begin_addr() const;
+	symname_ci begin_addr() const;
 	
 	/** @return end const iterator across addr-ordered symbols */
-	symaddr_ci end_addr() const;
+	symname_ci end_addr() const;
 	
 private:
 	symnamemap_t m_name_lookup;

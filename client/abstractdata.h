@@ -14,8 +14,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _ABSTRACT_DATA_H_
-#define _ABSTRACT_DATA_H_
+#ifndef _ABSTRACTDATA_H_
+#define _ABSTRACTDATA_H_
 
 #include <string>
 #include <boost/variant/get.hpp>

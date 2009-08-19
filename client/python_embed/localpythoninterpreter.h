@@ -25,13 +25,13 @@
  */
 
 
-#ifndef _LOCAL_PYTHON_H_
-#define _LOCAL_PYTHON_H_
+#ifndef _LOCALPYTHONINTERPRETER_H_
+#define _LOCALPYTHONINTERPRETER_H_
 #include <boost/python.hpp>
 #include "globalpythoninterpreter.h"
 #include <boost/utility.hpp>
 #include <stdexcept>
-#include "document.h"
+#include "workspace.h"
 
 /**
  * Interface for an output that the python output redirector can write to

@@ -34,8 +34,8 @@
 
 #include "i_memlocdata.h"
 #include "i_projectmodel.h"
-#include "kvsbackedprojectmodel.h"
-#include "document.h"
+#include "kvs_projectmodel.h"
+#include "workspace.h"
 #include "localpythoninterpreter.h"
 
 #include "localkvsstore.h"
@@ -48,7 +48,7 @@ Workspace::Workspace()
 {
 	LocalKVSStore * lkvs = new LocalKVSStore();
 	// Create all the constituent parts of the Workspace
-	m_trace = new KVSBackedProjectModel(lkvs, new ARMArchitecture());
+	m_trace = new KVSBackedProjectModel(lkvs);
 	m_pyInterpreter = new LocalPythonInterpreter(this);
 	m_docgui = setupWorkspaceGui(*this);
 	m_runQueue = createRunQueueControl();

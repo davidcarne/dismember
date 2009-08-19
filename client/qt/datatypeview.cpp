@@ -15,7 +15,7 @@
  */
 
 #include <QApplication>
-#include "document.h"
+#include "workspace.h"
 #include "datatypeview.h"
 
 QTDataTypeView::QTDataTypeView(QWidget *parent)
@@ -25,11 +25,11 @@ QTDataTypeView::QTDataTypeView(QWidget *parent)
 void QTDataTypeView::setRuntimeModel(QTRuntimeModel *model)
 {
 	m_runtime = model;
-	DataTypeReg::datatypereg_ci di = model->getProjectModel().getDataTypeBegin();
-	DataTypeReg::datatypereg_ci end = model->getProjectModel().getDataTypeEnd();
+	datatype_ci di = model->getProjectModel().getDataTypeBegin();
+	datatype_ci end = model->getProjectModel().getDataTypeEnd();
 	clear();
 	for (; di != end; ++di) {
-		sp_DataType dt = (*di).second;
+		sp_DataType dt = *di;
 		std::string name = dt->getName();
 		addItem(QString(name.c_str()));
 	}

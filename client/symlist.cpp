@@ -110,13 +110,13 @@ SymbolList::symname_ci SymbolList::end_name() const
 	return m_name_order.end();
 }
 
-SymbolList::symaddr_ci SymbolList::begin_addr() const
+SymbolList::symname_ci SymbolList::begin_addr() const
 {
 	updateDirtyVectors();
 	return m_addr_order.begin();
 }
 
-SymbolList::symaddr_ci SymbolList::end_addr() const
+SymbolList::symname_ci SymbolList::end_addr() const
 {
 	updateDirtyVectors();
 	return m_addr_order.end();

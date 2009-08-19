@@ -14,16 +14,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _COMMENT_H_
-#define _COMMENT_H_
+#ifndef _KVS_COMMENT_H_
+#define _KVS_COMMENT_H_
 #include "types.h"
 #include <string>
 #include <map>
+#include "i_comment.h"
 
 /**
  * \brief Representation of a [possibly multiline] comment
  */
-class Comment
+class Comment : public I_Comment
 {
  public:
 	/**

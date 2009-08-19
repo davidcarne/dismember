@@ -17,7 +17,7 @@
 #include <QLabel>
 #include <QTimer>
 
-#include "document.h"
+#include "workspace.h"
 #include "runtimemodel.h"
 #include "runqueuemonitor.h"
 #include "run_queue.h"

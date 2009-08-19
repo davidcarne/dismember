@@ -18,7 +18,7 @@
 #define _SEARCH_H_
 
 #include "run_queue.h"
-#include "document.h"
+#include "workspace.h"
 #include "types.h"
 #include <list>
 

@@ -18,7 +18,7 @@
 #define _SYMBOL_ANALYSIS_H_
 
 #include "run_queue.h"
-#include "document.h"
+#include "workspace.h"
 
 class SymbolAnalysis
 {

@@ -16,7 +16,7 @@
 
 #include <QTimer>
 #include "runtimemodel.h"
-#include "document.h"
+#include "workspace.h"
 
 
 QTRuntimeEvent::QTRuntimeEvent(QTRuntimeModel *model, QTRuntimeEvent::Type type,

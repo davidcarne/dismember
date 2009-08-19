@@ -17,6 +17,7 @@
 #include "i_projectmodel.h"
 #include <stdint.h>
 #include <list>
+#include <map>
 
 #ifndef _GUIPROXY_H_
 #define _GUIPROXY_H_

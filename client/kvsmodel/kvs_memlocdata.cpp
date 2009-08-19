@@ -15,8 +15,8 @@
  */
 
 #include "i_projectmodel.h"
-#include "kvsbackedprojectmodel.h"
-#include "memlocdata.h"
+#include "kvs_projectmodel.h"
+#include "kvs_memlocdata.h"
 
 
 MemlocData::MemlocData(const sp_LocalKVSNode sourceNode, const I_ProjectModel * ctx) : I_KVS_attribproxy(sourceNode->getAttributesReference())
@@ -24,8 +24,8 @@ MemlocData::MemlocData(const sp_LocalKVSNode sourceNode, const I_ProjectModel * 
 	m_decoded_length = atoi(getAttrib("length").c_str());
 }
 
-MemlocData::MemlocData(const sp_LocalKVSNode sourceNode, const DataType * creator, const I_ProjectModel * ctx, address_t addr)
-: m_ctx(ctx), m_address(addr), m_creator(creator),  I_KVS_attribproxy(sourceNode->getAttributesReference())
+MemlocData::MemlocData(sp_I_KVS_attributes attribs, const DataType * creator, const I_ProjectModel * ctx, address_t addr)
+: m_ctx(ctx), m_address(addr), m_creator(creator),  I_KVS_attribproxy(attribs)
 {
 	const DataTypeDecoding & decoding = creator->decode(m_address);
 	

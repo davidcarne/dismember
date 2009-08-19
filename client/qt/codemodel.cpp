@@ -18,11 +18,12 @@
 #include <QApplication>
 #include <QFontMetrics>
 #include <QSize>
-#include "document.h"
+#include "workspace.h"
 #include "xref.h"
 #include "i_memlocdata.h"
 
 #include "codemodel.h"
+#include "symlist.h"
 
 
 QTCodeModel::QTCodeModel(QTRuntimeModel *model)
@@ -71,7 +72,7 @@ QString QTCodeModel::displayText(I_ProjectModel &t, address_t addr) const
 
 QString QTCodeModel::displayComment(I_ProjectModel &t, address_t addr) const
 {
-	const Comment *cmt = t.lookup_comment(addr);
+	const I_Comment *cmt = t.lookup_comment(addr);
 	if (cmt)
 		return QString(cmt->get_comment().c_str());
 	return QString();
@@ -88,13 +89,13 @@ QString QTCodeModel::displayXrefs(I_ProjectModel &t, address_t addr) const
 			const char *type = "?";
 			char buf[256];
 			switch (x->get_type()) {
-			case Xref::XR_TYPE_JMP:
+			case XR_TYPE_JMP:
 				type = "jump";
 				break;
-			case Xref::XR_TYPE_FNCALL:
+			case XR_TYPE_FNCALL:
 				type = "call";
 				break;
-			case Xref::XR_TYPE_DATA:
+			case XR_TYPE_DATA:
 				type = "data";
 				break;
 			}

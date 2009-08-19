@@ -17,7 +17,7 @@
 #include <QPainter>
 #include <QToolTip>
 
-#include "document.h"
+#include "workspace.h"
 #include "i_memlocdata.h"
 #include "memsegment.h"
 #include "dataview.h"
@@ -51,9 +51,9 @@ void QTDataView::paintEvent(QPaintEvent *event)
 
 	I_ProjectModel &t = m_model->getProjectModel();
 
-	MemSegmentManager::memseglist_ci mi;
-	MemSegmentManager::memseglist_ci begin = t.memsegs_begin();
-	MemSegmentManager::memseglist_ci end = t.memsegs_end();
+	memsegment_ci mi;
+	memsegment_ci begin = t.memsegs_begin();
+	memsegment_ci end = t.memsegs_end();
 	if (begin == end)
 		return;
 	

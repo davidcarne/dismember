@@ -16,11 +16,11 @@
  */
 
 
-#include "LocalKVSStore.h"
+#include "localkvsstore.h"
 
 #include <boost/tokenizer.hpp>
 
-#include "stdio.h"
+#include <stdio.h>
 #include <list>
 #include <iostream>
 #include <fstream>

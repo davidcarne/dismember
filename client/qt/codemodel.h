@@ -14,15 +14,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _DOCUMENTPROXYMODEL_H_
-#define _DOCUMENTPROXYMODEL_H_
+#ifndef _CODEMODEL_H_
+#define _CODEMODEL_H_
 
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
 #include "runtimemodel.h"
 #include "guiproxy.h"
-#include "comment.h"
+#include "i_comment.h"
 
 class Workspace;
 

@@ -36,6 +36,5 @@ void bind_trace()
 	class_<I_ProjectModel, boost::noncopyable>("I_ProjectModel", no_init)
 	//.def("undefine", &I_ProjectModel::undefine)
 	//.def("createI_MemlocDataAt", &I_ProjectModel::createI_MemlocDataAt)
-	.add_property("defdatatype", make_function(&I_ProjectModel::getCodeDataType, return_internal_reference<>() ))
 	.def("addDataType", &addDataType_wrap);
 }

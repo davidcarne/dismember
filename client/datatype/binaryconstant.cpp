@@ -15,8 +15,6 @@
  */
 
 #include "i_projectmodel.h"
-#include "i_memlocdata.h"
-#include "memlocdata.h"
 #include "binaryconstant.h"
 #include "datatype.h"
 

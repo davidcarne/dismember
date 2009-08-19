@@ -23,14 +23,15 @@
 #include <QItemSelectionModel>
 #include <QLineEdit>
 
-#include "document.h"
+#include "workspace.h"
 #include "i_memlocdata.h"
 #include "codeview.h"
 #include "codemodel.h"
 #include "multilinedialog.h"
 #include "program_flow_analysis.h"
 #include "symbol_analysis.h"
-#include "comment.h"
+#include "i_comment.h"
+#include "symlist.h"
 
 Q_DECLARE_METATYPE(address_t);
 
@@ -66,8 +67,10 @@ class QTMutableCodeController : public QTCodeController
 	{
 		if (!addr.isValid())
 			return;
-		ProgramFlowAnalysis::submitAnalysisJob(&m_model.getRuntime(),
-				m_model.getProjectModel().getCodeDataType(), addr);
+		
+		// TODO: Get code type from gui
+		//ProgramFlowAnalysis::submitAnalysisJob(&m_model.getRuntime(),
+		//		m_model.getProjectModel().getCodeDataType(), addr);
 		SymbolAnalysis::submitAnalysisJob(&m_model.getRuntime());
 	}
 
@@ -318,7 +321,7 @@ void QTCodeView::mouseDoubleClickEvent(QMouseEvent *event)
 void QTCodeView::setComment(address_t addr)
 {
 	bool ok;
-	const Comment *com = m_runtime->getProjectModel().lookup_comment(addr);
+	const I_Comment *com = m_runtime->getProjectModel().lookup_comment(addr);
 	QString text = com ? QString(com->get_comment().c_str()) : QString();
 
 	QString ntext = QTMultiLineDialog::getText(this,

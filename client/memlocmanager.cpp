@@ -19,6 +19,8 @@
 #include "i_memlocdata.h"
 #include <assert.h>
 
+#include "i_projectmodel.h"
+
 void MemlocManager::insertMemloc(I_MemlocData * a)
 {
 	assert(a);
@@ -82,13 +84,17 @@ void MemlocManager::removeMemloc(I_MemlocData * a)
 	
 }
 
-MemlocManager::memloclist_ci MemlocManager::memloc_list_begin() const
+memloc_addr_pair_ci MemlocManager::memloc_list_begin() const
 {
-	return m_memdata.begin();
+	memloc_addr_pair_ci it;
+	it = m_memdata.begin();
+	return it;
 }
 
-MemlocManager::memloclist_ci MemlocManager::memloc_list_end() const
+memloc_addr_pair_ci MemlocManager::memloc_list_end() const
 {
-	return m_memdata.end();
+	memloc_addr_pair_ci it;
+	it = m_memdata.end();
+	return it;
 }
 

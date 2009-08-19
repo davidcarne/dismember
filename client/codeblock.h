@@ -19,6 +19,7 @@
 
 
 #include <set>
+#include <map>
 #include "types.h"
 #include "i_projectmodel.h"
 

@@ -18,6 +18,8 @@
 
 #include "i_memlocdata.h"
 
+#include "symlist.h"
+
 #include <stdexcept>
 #include <stdio.h>
 #include <stdlib.h>

@@ -14,8 +14,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _MEMLOCDATA_H_
-#define _MEMLOCDATA_H_
+#ifndef _KVS_MEMLOCDATA_H_
+#define _KVS_MEMLOCDATA_H_
 
 #include "types.h"
 #include "i_projectmodel.h"
@@ -147,7 +147,7 @@ public:
 	 * @param addr the star address of this memory location info
 	 * @param length the length of this memory location info
 	 */
-	MemlocData(const DataType * creator, const I_ProjectModel * ctx, address_t addr);
+	MemlocData(sp_I_KVS_attributes attribs, const DataType * creator, const I_ProjectModel * ctx, address_t addr);
 	
 	/** 
 	 * \brief Create a new memoryloc given a the KVS attributes, project context, and address

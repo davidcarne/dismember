@@ -14,26 +14,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _program_flow_analysis_H_
-#define _program_flow_analysis_H_
-#include "i_projectmodel.h"
-#include "datatype.h"
-#include "run_queue.h"
-#include "workspace.h"
+#ifndef _I_COMMENT_H_
+#define _I_COMMENT_H_
+#include "types.h"
+#include <string>
+#include <map>
 
-class ProgramFlowAnalysis {
-public:
-	static sp_RunQueueJob createAnalysisJob(Workspace * d, DataType * dtcreate, address_t start);
-	static void submitAnalysisJob(Workspace * d, DataType * dtcreate, address_t start);
-
-	static sp_RunQueueJob createUndefineJob(Workspace * d, address_t start);
-	static void submitUndefineJob(Workspace * d, address_t start);
+/**
+ * \brief Representation of a [possibly multiline] comment
+ */
+class I_Comment
+{
+ public:
+	/**
+	 * \brief get the string contents of the comment
+	 * @return the textual contents of the comment
+	 */
+	const virtual std::string get_comment() const = 0;
 	
-private:
-	static bool undefine(Workspace * d, address_t start);
-	static bool analyze(Workspace * d, DataType * dtcreate, address_t start);
+	/**
+	 * \brief get the address at which the comment is set
+	 * @return the address of the comment
+	 */
+	const virtual address_t get_address() const = 0;
+	
+	/**
+	 * \brief get the number of newlines in the comment
+	 * @return the number of newlines in the comment
+	 */
+	const virtual int get_lines() const = 0;
 };
 
 #endif
-
-

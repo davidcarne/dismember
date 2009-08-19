@@ -18,13 +18,13 @@
 #include <QApplication>
 #include <QFontMetrics>
 #include <QSize>
-#include "document.h"
+#include "workspace.h"
 #include "xref.h"
 #include "i_memlocdata.h"
 #include "program_flow_analysis.h"
 
 #include "symbolmodel.h"
-
+#include "symlist.h"
 
 QTSymbolModel::QTSymbolModel(QTRuntimeModel *model)
  : QAbstractItemModel(NULL), m_model(model)
@@ -65,7 +65,7 @@ QVariant QTSymbolModel::data(const QModelIndex &index, int role) const
 		break;
 	case Qt::DisplayRole: {
 		const Symbol *sym = m_model->getProjectModel().find_ordered_symbol(
-				index.row(), SymbolList::SYMORDER_NAME);
+				index.row(), SYMORDER_NAME);
 		if (!sym) return QVariant();
 		return QVariant(QString(sym->get_name().c_str()));
 		} break;
@@ -79,7 +79,7 @@ QVariant QTSymbolModel::data(const QModelIndex &index, int role) const
 address_t QTSymbolModel::getAddress(int row)
 {
 	const Symbol *sym = m_model->getProjectModel().find_ordered_symbol(
-			row, SymbolList::SYMORDER_NAME);
+			row, SYMORDER_NAME);
 	return sym->get_addr();
 }
 

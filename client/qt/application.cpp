@@ -26,7 +26,7 @@
 #include "loaders/loaderfactory.h"
 #include "application.h"
 #include "runtimemodel.h"
-#include "document.h"
+#include "workspace.h"
 
 QTApplication::QTApplication()
  : QMainWindow(NULL), m_fileChanged(false), m_updated(false)

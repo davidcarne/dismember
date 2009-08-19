@@ -21,8 +21,10 @@
 
 #include "hash_map.h"
 
-#include "iostream"
+#include <iostream>
 
+#include <boost/iterator/transform_iterator.hpp>
+#include "iterator_hacks.h"
 class LocalKVSNode;
 
 //#define KVS_ALLOCATION_DEBUG
@@ -170,12 +172,39 @@ public:
 		return node;
 	}
 	
+	// Interface is for a sp_I_KVS_node, iterator returns a std::pair<std::string, sp_LocalKVSNode>
+	// First transform iterator gets (*i).second
+	// Second transform iterator explicitly converts sp_I_KVS_node(i)
+	typedef boost::transform_iterator<selectSecond<LocalKVS_children::const_iterator::value_type>, LocalKVS_children::const_iterator> select2nd_transform_iterator;
+	typedef boost::transform_iterator<spGetBase<sp_I_KVS_node, sp_LocalKVSNode>, select2nd_transform_iterator> spGetBase_transform_iterator;
+	
+	virtual kvs_node_child_ci beginChildren() const
+	{
+		
+		// Copy constructor broken
+		kvs_node_child_ci r;
+		select2nd_transform_iterator i(m_children.begin(), selectSecond<LocalKVS_children::const_iterator::value_type>());
+		r = i;
+		return r;
+	}
+	
+	virtual kvs_node_child_ci endChildren() const
+	{
+		// Copy constructor broken
+		
+		kvs_node_child_ci r;
+		select2nd_transform_iterator i(m_children.end(), selectSecond<LocalKVS_children::const_iterator::value_type>());
+		r=i;
+		return r;
+	}
+	
 	virtual ~LocalKVSNode()
 	{
 		KVS_ALLOCATION_PRINT("Deleting node: " << m_key);
 	};
 	
 private:
+
 	LocalKVSNode(const std::string & key, const wp_LocalKVSNode & parent = wp_LocalKVSNode()) : m_key(key), m_parent(parent) {
 		
 		KVS_ALLOCATION_PRINT("Creating node: " << m_key);

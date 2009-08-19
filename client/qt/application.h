@@ -14,8 +14,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _DOCUMENTWINDOW_H_
-#define _DOCUMENTWINDOW_H_
+#ifndef _APPLICATION_H_
+#define _APPLICATION_H_
 
 #include <QMainWindow>
 #include <QCloseEvent>
@@ -23,7 +23,7 @@
 #include "guiglue.h"
 #include "guiproxy.h"
 #include "application.ui.h"
-#include "document.h"
+#include "workspace.h"
 #include "runqueuemonitor.h"
 
 class QTApplication : public QMainWindow

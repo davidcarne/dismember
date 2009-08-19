@@ -15,7 +15,7 @@
  */
 
 #include <QApplication>
-#include "document.h"
+#include "workspace.h"
 #include "symbolview.h"
 
 QTSymbolView::QTSymbolView(QWidget *parent)
