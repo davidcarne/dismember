@@ -24,6 +24,7 @@ std::string convertToKVS(const endian_e & value)
 		case ENDIAN_BIG: return "BIG";
 		case ENDIAN_LITTLE: return "LITTLE";
 	}
+	return "";
 }
 
 std::string convertToKVS(const nparse_e & value)
@@ -34,6 +35,7 @@ std::string convertToKVS(const nparse_e & value)
 		case BTYPE_FIXEDAT: return "FIXED"; // see fixed_place
 		case BTYPE_FLOAT: return "FLOAT";
 	}
+	return "";
 }
 
 std::string convertToKVS(const nparse_sign_e & value)
@@ -46,6 +48,7 @@ std::string convertToKVS(const nparse_sign_e & value)
 		case BSIGN_TWOS_COMP: return "TWOS_COMP";
 		case BSIGN_EXCESS_N: return "EXCESS_N"; // see sign_excess
 	}
+	return "";
 }
 
 #define GENERIC_STRINGBUF_SERDES_PAIR(type) \
@@ -71,12 +74,15 @@ GENERIC_STRINGBUF_SERDES_PAIR(uint32_t);
 
 std::string convertToKVS(const address_t & value)
 {
+	// TODO: implement me
+	return "";
 }
 
 endian_e convertFromKVS_endian_e(const std::string & value)
 {
 	if (value == "BIG") return ENDIAN_BIG;
 	if (value == "LITTLE") return ENDIAN_LITTLE;
+	return ENDIAN_LITTLE;
 }
 
 nparse_e convertFromKVS_nparse_e(const std::string & value)
@@ -84,6 +90,7 @@ nparse_e convertFromKVS_nparse_e(const std::string & value)
 	if (value == "PLAIN") return BTYPE_PLAIN;
 	if (value == "FIXED") return BTYPE_FIXEDAT;
 	if (value == "FLOAT") return BTYPE_FLOAT;
+	return BTYPE_PLAIN;
 }
 
 nparse_sign_e convertFromKVS_nparse_sign_e(const std::string & value)
@@ -93,9 +100,10 @@ nparse_sign_e convertFromKVS_nparse_sign_e(const std::string & value)
 	if (value == "ONES_COMP") return BSIGN_ONES_COMP;
 	if (value == "TWOS_COMP") return BSIGN_TWOS_COMP;
 	if (value == "EXCESS_N") return BSIGN_EXCESS_N;
+	return BSIGN_NONE;
 }
 
 address_t convertToKVS_address_t(const std::string & value)
 {
-	
+	return address_t();
 }

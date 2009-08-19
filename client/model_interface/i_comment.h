@@ -43,6 +43,8 @@ class I_Comment
 	 * @return the number of newlines in the comment
 	 */
 	const virtual int get_lines() const = 0;
+	
+	virtual ~I_Comment() {};
 };
 
 #endif

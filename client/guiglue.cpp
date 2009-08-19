@@ -15,13 +15,7 @@
  */
 
 #include "guiglue.h"
-#include "runtimemodel.h"
 #include "workspace.h"
-
-WorkspaceGui *setupWorkspaceGui(Workspace &doc)
-{ 
-	return QTRuntimeModel::create(doc);
-}
 
 WorkspaceGui::~WorkspaceGui()
 {}

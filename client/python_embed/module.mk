@@ -7,5 +7,5 @@ BINDINGSSRC :=  bind_analysis.cpp bind_codeblocks.cpp bind_document.cpp \
 PYEMBEDSRC := globalpythoninterpreter.cpp localpythoninterpreter.cpp $(addprefix bindings/, $(BINDINGSSRC))
 
 SRC += $(addprefix python_embed/, $(PYEMBEDSRC))
-
+TEST_SRC += $(addprefix python_embed/, $(PYEMBEDSRC))
 INCPATHS += -Ipython_embed/bindings

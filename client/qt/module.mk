@@ -11,7 +11,6 @@ QTRC =  qt/resources.qrc
 
 QTSRC := qt/application.cpp \
 	 qt/guiproxy.cpp \
-	 qt/guiglue.cpp \
 	 qt/dialog.cpp \
 	 qt/codeview.cpp \
 	 qt/codemodel.cpp \

@@ -1,7 +1,4 @@
-MBSRC := kvs/i_kvs.cpp kvs/localkvsstore.cpp kvs/kvs_node.cpp
+KVSRC := kvs/i_kvs.cpp kvs/localkvsstore.cpp kvs/kvs_node.cpp
 
-SRC += $(MBSRC)
-
-MBOBJS := $(patsubst %.cpp,$(BUILDDIR)/%.o, $(MBSRC))
-MBDEPS := $(patsubst %.cpp,$(BUILDDIR)/%.d, $(MBSRC))
-MBTARG := $(MBOBJS) $(MBDEPS)
+SRC += $(KVSRC)
+TEST_SRC += $(KVSRC)

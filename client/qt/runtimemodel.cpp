@@ -17,7 +17,7 @@
 #include <QTimer>
 #include "runtimemodel.h"
 #include "workspace.h"
-
+#include "guiglue.h"
 
 QTRuntimeEvent::QTRuntimeEvent(QTRuntimeModel *model, QTRuntimeEvent::Type type,
 		address_t start, address_t end)
@@ -127,3 +127,10 @@ QTRuntimeModel *QTRuntimeModel::create(Workspace &rt)
 
 QTRuntimeModelListener::~QTRuntimeModelListener() 
 {}
+
+
+WorkspaceGui *setupWorkspaceGui(Workspace &doc)
+{ 
+	return QTRuntimeModel::create(doc);
+}
+

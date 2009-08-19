@@ -7,27 +7,47 @@ INCDIRS := $(MODULES)
 INCPATHS := -I. -Icontrib
 
 LIBS :=
+
 SRC := 	xref.cpp symbol_analysis.cpp \
 	datatypereg.cpp memlocmanager.cpp run_queue.cpp exception.cpp \
 	app_main.cpp workspace.cpp memsegment.cpp  \
 	xrefmanager.cpp search.cpp \
 	memsegmentmanager.cpp symlist.cpp address.cpp \
-	program_flow_analysis.cpp
+	program_flow_analysis.cpp guiglue.cpp
 
+TEST_SRC := xref.cpp symbol_analysis.cpp \
+	datatypereg.cpp memlocmanager.cpp run_queue.cpp exception.cpp \
+	workspace.cpp memsegment.cpp  \
+	xrefmanager.cpp search.cpp \
+	memsegmentmanager.cpp symlist.cpp address.cpp \
+	program_flow_analysis.cpp guiglue.cpp
+	
+	
 BUILDDIR := build
 PROG := $(BUILDDIR)/dismember
+
+
+TEST := $(BUILDDIR)/run-tests
 
 # Default build target
 all: $(PROG)
 
+run-tests: $(TEST)
+	$(TEST)
+	
 include $(patsubst %, %/module.mk, $(MODULES))
 
+# Do this separately; we don't want it in the include path
+include tests/tests.mk
 
 INCPATHS += $(patsubst %, -I%, $(INCDIRS))
 
 CPPSRCS := $(filter %.cpp, $(SRC) )
 CPPOBJS := $(patsubst %.cpp,$(BUILDDIR)/%.o, $(CPPSRCS) )
 CPPDEPS := $(CPPOBJS:.o=.d)
+
+CPPTESTSRCS := $(filter %.cpp, $(TEST_SRC) )
+CPPTESTOBJS := $(patsubst %.cpp,$(BUILDDIR)/%.o, $(CPPTESTSRCS) )
 
 CPPDEFS = -DDISABLE_ADDRESS_T_HASH
 
@@ -42,12 +62,18 @@ CPPFLAGS += $(INCPATHS) $(EXTCPP) -Wall -Wno-unknown-pragmas -Wno-reorder \
 
 CPPFLAGS += $(INCPATHS) $(EXTCPP)
 LIBS += -lboost_python-mt -lboost_thread-mt -lboost_serialization-mt -lpthread $(PYEXTLD)
+TEST_LIBS := -lboost_test_exec_monitor
 
 $(PROG): $(CPPOBJS)
 	@echo "LD	$@"
 	@mkdir -p $(@D)
 	@$(CXX) $(LDFLAGS) $(LIBS) $^ -o $@
-
+	
+$(TEST): $(CPPTESTOBJS)
+	@echo "LD	$@"
+	@mkdir -p $(@D)
+	@$(CXX) $(LDFLAGS) $(LIBS) $(TEST_LIBS) $^ -o $@
+	
 $(BUILDDIR)/%.o: %.cpp
 	@echo "CXX	$<"
 	@mkdir -p $(@D)

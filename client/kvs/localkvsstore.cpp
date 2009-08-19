@@ -150,6 +150,8 @@ bool LocalKVSStore::serializeTo(const std::string & output_filename) const
 	
 	
 	outputfile.close();
+	
+	return true;
 }
 
 bool LocalKVSStore::overwriteContentsFrom(const std::string  & input_filename)
@@ -179,6 +181,8 @@ bool LocalKVSStore::overwriteContentsFrom(const std::string  & input_filename)
 	}
 	
 	inputstream.close();
+	
+	return true;
 }
 
 
