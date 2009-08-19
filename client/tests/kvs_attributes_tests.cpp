@@ -38,17 +38,17 @@ BOOST_AUTO_TEST_CASE(OverlayDanglingAttributes)
 	a->setAttrib("hello","frobbisher");
 	a->setAttrib("no","way");
 	
-	i_s.setValue("/foo/bar","frob");
-	i_s.setValue("/foo/bar/depth","ishere");
-	sp_I_KVS_node node_foo = i_s.getNode("/foo");
+	i_s.setPathValue("/foo/bar","frob");
+	i_s.setPathValue("/foo/bar/depth","ishere");
+	sp_I_KVS_node node_foo = i_s.getPathNode("/foo");
 	node_foo->overlayAttributes(a);
 	
 	
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/hello"), "frobbisher");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/no"), "way");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/bar"), "frob");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/bar/depth"), "ishere");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/empty"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/hello"), "frobbisher");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/no"), "way");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/bar"), "frob");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/bar/depth"), "ishere");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/empty"), "");
 	
 }
 
@@ -64,19 +64,19 @@ BOOST_AUTO_TEST_CASE(OverwriteDanglingAttributes)
 	a->setAttrib("hello","frobbisher");
 	a->setAttrib("no","way");
 	
-	i_s.setValue("/foo","value");
-	i_s.setValue("/foo/bar","frob");
-	i_s.setValue("/foo/bar/depth","ishere");
-	sp_I_KVS_node node_foo = i_s.getNode("/foo");
+	i_s.setPathValue("/foo","value");
+	i_s.setPathValue("/foo/bar","frob");
+	i_s.setPathValue("/foo/bar/depth","ishere");
+	sp_I_KVS_node node_foo = i_s.getPathNode("/foo");
 	node_foo->overwriteAttributes(a);
 	
 	
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo"), "value");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/hello"), "frobbisher");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/no"), "way");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/bar"), "");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/bar/depth"), "");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/empty"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo"), "value");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/hello"), "frobbisher");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/no"), "way");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/bar"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/bar/depth"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/empty"), "");
 	
 }
 
@@ -90,15 +90,15 @@ BOOST_AUTO_TEST_CASE(OverlayAttributes)
 	a->setAttrib("hello","frobbisher");
 	a->setAttrib("no","way");
 	
-	i_s.setValue("/foo","hasvalue");
-	i_s.setValue("/foo/bar/depth","ishere");
+	i_s.setPathValue("/foo","hasvalue");
+	i_s.setPathValue("/foo/bar/depth","ishere");
 	i_s.overlayNode("/foo", a);
 	
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo"), "hasvalue");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/hello"), "frobbisher");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/no"), "way");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/bar/depth"), "ishere");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/empty"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo"), "hasvalue");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/hello"), "frobbisher");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/no"), "way");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/bar/depth"), "ishere");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/empty"), "");
 }
 
 
@@ -111,15 +111,15 @@ BOOST_AUTO_TEST_CASE(OverlayAttributes2)
 	a->setAttrib("hello","frobbisher");
 	a->setAttrib("no","way");
 	
-	i_s.setValue("/foo","hasvalue");
-	i_s.setValue("/foo/bar/depth","ishere");
+	i_s.setPathValue("/foo","hasvalue");
+	i_s.setPathValue("/foo/bar/depth","ishere");
 	i_s.overlayNode("/foo", "newval",a);
 	
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo"), "newval");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/hello"), "frobbisher");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/no"), "way");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/bar/depth"), "ishere");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/empty"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo"), "newval");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/hello"), "frobbisher");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/no"), "way");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/bar/depth"), "ishere");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/empty"), "");
 }
 
 
@@ -135,9 +135,9 @@ BOOST_AUTO_TEST_CASE(OverlayAttributes3)
 	
 	i_s.overlayNode("/foo", "newval",a);
 	
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo"), "newval");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/hello"), "frobbisher");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/no"), "way");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo"), "newval");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/hello"), "frobbisher");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/no"), "way");
 }
 
 
@@ -150,15 +150,15 @@ BOOST_AUTO_TEST_CASE(OverwriteAttributes)
 	a->setAttrib("hello","frobbisher");
 	a->setAttrib("no","way");
 	
-	i_s.setValue("/foo","hasvalue");
-	i_s.setValue("/foo/bar/depth","ishere");
+	i_s.setPathValue("/foo","hasvalue");
+	i_s.setPathValue("/foo/bar/depth","ishere");
 	i_s.overwriteNode("/foo", "newval", a);
 	
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo"), "newval");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/hello"), "frobbisher");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/no"), "way");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/bar/depth"), "");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/empty"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo"), "newval");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/hello"), "frobbisher");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/no"), "way");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/bar/depth"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/empty"), "");
 }
 
 BOOST_AUTO_TEST_CASE(OverwriteAttributes2)
@@ -170,15 +170,15 @@ BOOST_AUTO_TEST_CASE(OverwriteAttributes2)
 	a->setAttrib("hello","frobbisher");
 	a->setAttrib("no","way");
 	
-	i_s.setValue("/foo","hasvalue");
-	i_s.setValue("/foo/bar/depth","ishere");
+	i_s.setPathValue("/foo","hasvalue");
+	i_s.setPathValue("/foo/bar/depth","ishere");
 	i_s.overwriteNode("/foo", a);
 	
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo"), "");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/hello"), "frobbisher");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/no"), "way");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/bar/depth"), "");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/empty"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/hello"), "frobbisher");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/no"), "way");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/bar/depth"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/empty"), "");
 }
 
 
@@ -193,9 +193,9 @@ BOOST_AUTO_TEST_CASE(OverwriteAttributes3)
 	
 	i_s.overwriteNode("/foo", a);
 	
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo"), "");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/hello"), "frobbisher");
-	BOOST_CHECK_EQUAL(i_s.getValue("/foo/no"), "way");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo"), "");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/hello"), "frobbisher");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/foo/no"), "way");
 }
 
 
@@ -226,15 +226,15 @@ BOOST_AUTO_TEST_CASE(AttribProxyMock)
 {
 	LocalKVSStore s;
 	I_KVS  & i_s = s;
-	i_s.setValue("/testnode/foo","value1");
+	i_s.setPathValue("/testnode/foo","value1");
 	
-	sp_I_KVS_attributes a = i_s.getNode("/testnode")->getAttributesReference();
+	sp_I_KVS_attributes a = i_s.getPathNode("/testnode")->getAttributesReference();
 	
 	AttribProxy_test_mock mock(a);
 	
 	BOOST_CHECK_EQUAL(mock.getFoo(), "value1");
 	mock.setFoo("value2");
-	BOOST_CHECK_EQUAL(i_s.getValue("/testnode/foo"), "value2");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/testnode/foo"), "value2");
 }
 
 
@@ -253,15 +253,15 @@ BOOST_AUTO_TEST_CASE(AttribProxyDangling)
 	mock.setFoo("value2");
 	BOOST_CHECK_EQUAL(a->getAttrib("foo"), "value2");
 	
-	i_s.setValue("/testnode/foo", "INVALID");
+	i_s.setPathValue("/testnode/foo", "INVALID");
 	i_s.overlayNode("/testnode", a);
 	
 	
-	BOOST_CHECK_EQUAL(i_s.getValue("/testnode/foo"), "value2");
-	i_s.setValue("/testnode/foo", "value3");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/testnode/foo"), "value2");
+	i_s.setPathValue("/testnode/foo", "value3");
 	BOOST_CHECK_EQUAL(mock.getFoo(), "value3");
 	mock.setFoo("value4");
-	BOOST_CHECK_EQUAL(i_s.getValue("/testnode/foo"), "value4");
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/testnode/foo"), "value4");
 }
 
 
@@ -271,7 +271,7 @@ BOOST_AUTO_TEST_CASE(EmptyChildIterator)
 	I_KVS  & i_s = s;
 	
 	
-	sp_I_KVS_node hello_node = i_s.setValue("/hello","world");
+	sp_I_KVS_node hello_node = i_s.setPathValue("/hello","world");
 	
 	BOOST_REQUIRE(hello_node);
 	
@@ -284,8 +284,8 @@ BOOST_AUTO_TEST_CASE(OneChildIterator)
 	LocalKVSStore s;
 	I_KVS  & i_s = s;
 	
-	sp_I_KVS_node hello_node = i_s.setValue("/hello","world");
-	sp_I_KVS_node child_orig_node = i_s.setValue("/hello/a","b");
+	sp_I_KVS_node hello_node = i_s.setPathValue("/hello","world");
+	sp_I_KVS_node child_orig_node = i_s.setPathValue("/hello/a","b");
 	
 	BOOST_REQUIRE(hello_node);
 	BOOST_REQUIRE(child_orig_node);

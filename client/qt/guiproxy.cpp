@@ -19,7 +19,7 @@
 #include <assert.h>
 #include "codeview.h"
 
-#include "memsegment.h"
+
 #include "i_memlocdata.h"
 
 GuiProxy::GuiProxy(I_ProjectModel * ctx)

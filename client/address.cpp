@@ -15,8 +15,11 @@
  */
 
 #include "exception.h"
-#include "memsegment.h"
+
 #include "address.h"
+
+// TODO: memsegment needs an interface.. this should use it.
+#include "kvs_memsegment.h"
 
 #define ASSERT_TRUE(x) \
   do { \
@@ -31,7 +34,7 @@
  * Construct invalid address.
  */
 address_t::address_t()
- : m_offset(0), m_size(0), m_memsegment(0)
+ : m_offset(0), m_size(0), m_memsegment()
 { }
 
 /**
@@ -46,7 +49,7 @@ address_t::address_t(const address_t &c)
  */
 paddr_t address_t::getValue() const
 {
-	return m_memsegment->get_start() + m_offset;
+	return m_memsegment.lock()->get_start() + m_offset;
 }
 
 /**
@@ -62,7 +65,7 @@ paddr_t address_t::getOffset() const
  */
 void address_t::setValue(paddr_t val)
 {
-	m_offset = val - m_memsegment->get_start();
+	m_offset = val - m_memsegment.lock()->get_start();
 }
 
 /**
@@ -70,10 +73,10 @@ void address_t::setValue(paddr_t val)
  */
 bool address_t::isValid() const
 {
-	if (m_memsegment != 0) {
+	if (!m_memsegment.expired()) {
 		return (m_size > 0) &&
 			(m_offset >= 0) &&
-			((paddr_t)m_offset < m_memsegment->get_length());
+			((paddr_t)m_offset < m_memsegment.lock()->get_length());
 	}
 	return false;
 }
@@ -84,7 +87,7 @@ bool address_t::isValid() const
  */
 bool address_t::comparableTo(const address_t &addr) const
 {
-	return addr.m_memsegment == m_memsegment;
+	return addr.m_memsegment.lock() == m_memsegment.lock();
 }
 
 /**
@@ -96,11 +99,11 @@ std::string address_t::toString() const
 	if (!isValid())
 		throw Exception("Invalid address!");
 	snprintf(fmt, 16, "%%s%s%%0%u%s",
-			m_memsegment->getName().length() ? ":":"0x", (u32)(m_size >> 2),
+			m_memsegment.lock()->getName().length() ? ":":"0x", (u32)(m_size >> 2),
 			(sizeof(unsigned long) == sizeof(paddr_t)) ? "lx" : "llx");
 
 	char buf[100];
-	snprintf(buf, 100, fmt, m_memsegment->getName().c_str(), getValue());
+	snprintf(buf, 100, fmt, m_memsegment.lock()->getName().c_str(), getValue());
 	return std::string(buf);
 }
 
@@ -113,13 +116,18 @@ std::string address_t::toSerialString() const
 		throw Exception("Invalid address!");
 	
 	char buf[100];
-	snprintf(buf, 100, "%s!%x", m_memsegment->getName().c_str(), getValue());
+	snprintf(buf, 100, "%s!%x", m_memsegment.lock()->getName().c_str(), getValue());
 	return std::string(buf);
+}
+
+wp_cI_MemSegment address_t::getSegment(void) const
+{
+	return m_memsegment;
 }
 
 bool address_t::readBytes(u8 bytes, u8 * buf) const
 {
-	return m_memsegment->get_bytes(*this, bytes, buf);
+	return m_memsegment.lock()->get_bytes(*this, bytes, buf);
 }
 
 bool address_t::readByte(uint8_t * data) const
@@ -127,9 +135,9 @@ bool address_t::readByte(uint8_t * data) const
 	uint8_t dummy;
 	
 	if (data)
-		return m_memsegment->get_bytes(*this, 1, data);
+		return m_memsegment.lock()->get_bytes(*this, 1, data);
 	 
-	return m_memsegment->get_bytes(*this, 1, &dummy);
+	return m_memsegment.lock()->get_bytes(*this, 1, &dummy);
 }
 
 address_t &address_t::operator+=(const address_t &r)
@@ -181,7 +189,15 @@ address_t address_t::operator--(int)
 	return ret;
 }
 
-address_t::address_t(paddr_t offset, size_t size, const MemSegment *segment)
+address_t & address_t::operator=(const address_t& in)
+{
+	m_offset = in.m_offset;
+	m_size = in.m_size;
+	m_memsegment = in.m_memsegment;
+}
+
+
+address_t::address_t(paddr_t offset, size_t size, const wp_cI_MemSegment segment)
  : m_offset(offset), m_size(size), m_memsegment(segment)
 { }
 
@@ -189,7 +205,7 @@ address_t::address_t(paddr_t offset, size_t size, const MemSegment *segment)
 address_t operator+(const address_t &l, const address_t &r)
 {
 	ASSERT_TRUE(l.m_size == r.m_size);
-	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_memsegment.lock() == r.m_memsegment.lock());
 	return address_t(l.m_offset + r.m_offset, l.m_size, l.m_memsegment);
 }
 
@@ -206,7 +222,7 @@ address_t operator+(const poffset_t &l, const address_t &r)
 address_t operator-(const address_t &l, const address_t &r)
 {
 	ASSERT_TRUE(l.m_size == r.m_size);
-	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_memsegment.lock() == r.m_memsegment.lock());
 	return address_t(l.m_offset - r.m_offset, l.m_size, l.m_memsegment);
 }
 
@@ -224,41 +240,41 @@ bool operator==(const address_t &l, const address_t &r)
 {
 	return (l.m_offset == r.m_offset) &&
 		(l.m_size == r.m_size) &&
-		(l.m_memsegment == r.m_memsegment);
+		(l.m_memsegment.lock() == r.m_memsegment.lock());
 }
 
 bool operator!=(const address_t &l, const address_t &r)
 {
 	return (l.m_offset != r.m_offset) ||
 		(l.m_size != r.m_size) ||
-		(l.m_memsegment != r.m_memsegment);
+		(l.m_memsegment.lock() != r.m_memsegment.lock());
 }
 
 bool operator> (const address_t &l, const address_t &r)
 {
 	ASSERT_TRUE(l.m_size == r.m_size);
-	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_memsegment.lock() == r.m_memsegment.lock());
 	return l.m_offset > r.m_offset;
 }
 
 bool operator<= (const address_t &l, const address_t &r)
 {
 	ASSERT_TRUE(l.m_size == r.m_size);
-	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_memsegment.lock() == r.m_memsegment.lock());
 	return l.m_offset <= r.m_offset;
 }
 
 bool operator< (const address_t &l, const address_t &r)
 {
 	ASSERT_TRUE(l.m_size == r.m_size);
-	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_memsegment.lock() == r.m_memsegment.lock());
 	return l.m_offset < r.m_offset;
 }
 
 bool operator>= (const address_t &l, const address_t &r)
 {
 	ASSERT_TRUE(l.m_size == r.m_size);
-	ASSERT_TRUE(l.m_memsegment == r.m_memsegment);
+	ASSERT_TRUE(l.m_memsegment.lock() == r.m_memsegment.lock());
 	return l.m_offset >= r.m_offset;
 }
 

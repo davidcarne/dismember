@@ -32,6 +32,8 @@
 
 #include "any_iterator.hpp"
 
+extern const std::string kvs_empty_string;
+
 // View of a node that just represents its attributes [aka, children without children]
 // Could be thought of as a leaf node; but doesn't contain name
 class I_KVS_attributes {
@@ -88,6 +90,9 @@ private:
 	using I_KVS_attribproxy::setAttrib;
 
 
+
+
+
 class I_KVS_node;
 
 typedef boost::shared_ptr<I_KVS_node> sp_I_KVS_node;
@@ -130,6 +135,19 @@ public:
 	 */
 	virtual std::string getPath() const = 0;
 	
+
+	/* 
+	 * gets value of a relative path from this node
+	 * - HAS TEST
+	 */
+	virtual std::string getPathValue(const std::string &) const = 0;
+	
+	/* 
+	 * sets value of a relative path from this node
+	 * - HAS TEST
+	 */
+	virtual void setPathValue(const std::string & key, const std::string & value) = 0;
+
 	/*
 	 * - HAS TEST
 	 */
@@ -150,8 +168,175 @@ public:
 	 */
 	virtual kvs_node_child_ci endChildren() const = 0;
 	
+	/*
+	 * - HAS TEST
+	 */
+	virtual uint32_t getChildCount() const = 0;
+	
 	virtual ~I_KVS_node() = 0;
 };
+
+
+class kvs_fake_iterator {
+public:
+	typedef std::forward_iterator_tag iterator_category;
+	typedef sp_I_KVS_node value_type;
+	typedef ptrdiff_t difference_type;
+	typedef sp_I_KVS_node * pointer;
+	typedef sp_I_KVS_node & reference;
+	
+	
+	sp_I_KVS_node operator*()
+	{
+		return sp_I_KVS_node();
+	}
+	kvs_fake_iterator operator++()
+	{
+		return kvs_fake_iterator();
+	}
+};
+bool operator==(const kvs_fake_iterator & a, const kvs_fake_iterator &b);
+
+// Privately inherit from this, and use BRING_IN_KVS_NODE
+class I_KVS_nodeproxy {
+public:
+
+protected:
+	I_KVS_nodeproxy(sp_I_KVS_node attribref) : m_attribref(attribref) {
+		
+	};
+	
+	virtual ~I_KVS_nodeproxy() {
+		
+	};
+	
+	bool isDangling()
+	{
+		return !m_attribref.lock();
+	};
+
+	
+	const std::string & getKey() const
+	{
+		sp_I_KVS_node n(m_attribref);
+		
+		if (!n)
+			return kvs_empty_string;
+		return n->getKey();
+	};
+	
+
+	std::string getPath() const
+	{
+		
+		sp_I_KVS_node n(m_attribref);
+		
+		if (!n)
+			return kvs_empty_string;
+		return n->getPath();
+	};
+	
+	
+	/*
+	 * - HAS TEST
+	 */
+	std::string getPathValue(const std::string & path) const
+	{
+		
+		sp_I_KVS_node n(m_attribref);
+		
+		if (!n)
+			return kvs_empty_string;
+		
+		return n->getPathValue(path);
+	};
+	
+	
+	/*
+	 * - HAS TEST
+	 */
+	void setPathValue(const std::string & path, const std::string & value) const
+	{
+		
+		sp_I_KVS_node n(m_attribref);
+		
+		if (!n)
+			return;
+		
+		n->setPathValue(path, value);
+	};
+	
+	std::string getValue() const
+	{		
+		sp_I_KVS_node n(m_attribref);
+		
+		if (!n)
+			return kvs_empty_string;
+		return n->getValue();
+	};
+	
+
+	void setValue(const std::string & value)
+	{
+		sp_I_KVS_node n(m_attribref);
+		
+		if (!n)
+			return;
+		
+		n->setValue(value);
+	};
+	
+
+	kvs_node_child_ci beginChildren() const
+	{
+		kvs_node_child_ci i;
+		
+		sp_I_KVS_node n(m_attribref);
+		if (!n)
+			i = kvs_fake_iterator();
+		else
+			i = n->beginChildren();
+		return i;
+		
+	};
+	
+	kvs_node_child_ci endChildren() const
+	{
+		kvs_node_child_ci i;
+		
+		sp_I_KVS_node n(m_attribref);
+		if (!n)
+			i = kvs_fake_iterator();
+		else
+			i = n->beginChildren();
+		return i;
+	};
+	
+	uint32_t getChildCount() const
+	{
+		sp_I_KVS_node n(m_attribref);
+		if (!n)
+			return 0;
+		return n->getChildCount();
+	};
+	
+	
+private:
+	wp_I_KVS_node m_attribref;
+};
+
+#define BRING_IN_KVS_NODE \
+using I_KVS_nodeproxy::isDangling; \
+using I_KVS_nodeproxy::getKey; \
+using I_KVS_nodeproxy::getPath; \
+using I_KVS_nodeproxy::getPathValue; \
+using I_KVS_nodeproxy::setPathValue; \
+using I_KVS_nodeproxy::getValue; \
+using I_KVS_nodeproxy::setValue; \
+using I_KVS_nodeproxy::beginChildren; \
+using I_KVS_nodeproxy::endChildren; \
+using I_KVS_nodeproxy::getChildCount;
+
 
 class I_KVS {
 public:
@@ -166,13 +351,13 @@ public:
 	 * Get the value of an absolute path (starting with /)
 	 * - HAS TESTS
 	 */
-	virtual const std::string & getValue(const std::string & key) const = 0;
+	virtual const std::string & getPathValue(const std::string & key) const = 0;
 	
 	/**
 	 * Get a node reference absolute path. Returns invalid pointer if does not exist
 	 * - HAS TESTS
 	 */
-	virtual sp_I_KVS_node getNode(const std::string & key) const = 0;
+	virtual sp_I_KVS_node getPathNode(const std::string & key) const = 0;
 	
 	
 	/**
@@ -209,7 +394,7 @@ public:
 	 * Get an absolute path (starting with /)
 	 * - HAS TESTS
 	 */
-	virtual sp_I_KVS_node setValue(const std::string & key, const std::string & value) = 0;
+	virtual sp_I_KVS_node setPathValue(const std::string & key, const std::string & value) = 0;
 	
 	
 	virtual ~I_KVS() = 0;

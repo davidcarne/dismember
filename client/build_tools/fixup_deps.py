@@ -17,8 +17,9 @@ def check_file(path):
 
 def parse_dep(path):
 	line = open(path).readline()
-	k,v = line.split(": ")
-	deps = v.split()
+	l = line.split(": ")
+	if len(l) == 1: return []
+	deps = l[1].split()
 	return deps
 	
 def enumerate_deps(path):

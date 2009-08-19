@@ -33,7 +33,7 @@ LocalKVSStore::LocalKVSStore()
 	m_root = LocalKVSNode::createKVSNode("");
 }
 
-const std::string & LocalKVSStore::getValue(const std::string & key) const
+const std::string & LocalKVSStore::getPathValue(const std::string & key) const
 {
 	std::string mykey = key;
 	assert(mykey[0] == '/');
@@ -58,7 +58,7 @@ const std::string & LocalKVSStore::getValue(const std::string & key) const
 	return cursor->m_value;
 }
 
-sp_I_KVS_node LocalKVSStore::setValue(const std::string & key, const std::string & value)
+sp_I_KVS_node LocalKVSStore::setPathValue(const std::string & key, const std::string & value)
 {
 	std::string mykey = key;
 	assert(mykey[0] == '/');
@@ -90,7 +90,7 @@ sp_I_KVS_attributes LocalKVSStore::createDanglingAttributes()
 	return sp_I_KVS_attributes(new LocalKVSAttributes_transferrableFacade());
 }
 
-sp_I_KVS_node LocalKVSStore::getNode(const std::string & key) const
+sp_I_KVS_node LocalKVSStore::getPathNode(const std::string & key) const
 {
 	std::string mykey = key;
 	assert(mykey[0] == '/');
@@ -133,7 +133,6 @@ bool LocalKVSStore::serializeTo(const std::string & output_filename) const
 	
 	std::list<sp_LocalKVSNode> ser_q;
 	ser_q.push_back(m_root);
-	int level = 0;
 	while (ser_q.size())
 	{
 		sp_LocalKVSNode node = ser_q.front();
@@ -176,7 +175,7 @@ bool LocalKVSStore::overwriteContentsFrom(const std::string  & input_filename)
 		{
 			std::string key = line.substr(0, pos);
 			std::string value = line.substr(pos + 2, line.size());
-			setValue(key, value);
+			setPathValue(key, value);
 		}
 		
 	}
@@ -189,12 +188,12 @@ bool LocalKVSStore::overwriteContentsFrom(const std::string  & input_filename)
 
 sp_I_KVS_node LocalKVSStore::overlayNode(const std::string & key, const std::string & value, sp_I_KVS_attributes attribs)
 {
-	sp_I_KVS_node n = getNode(key);
+	sp_I_KVS_node n = getPathNode(key);
 	
 	if (!n)
 	{
-		setValue(key, value);
-		n = getNode(key);
+		setPathValue(key, value);
+		n = getPathNode(key);
 	}
 	
 	if (!n)
@@ -211,8 +210,8 @@ sp_I_KVS_node LocalKVSStore::overlayNode(const std::string & key, const std::str
 sp_I_KVS_node LocalKVSStore::overwriteNode(const std::string & key, const std::string & value, sp_I_KVS_attributes attribs)
 {
 	
-	setValue(key, value);
-	sp_I_KVS_node n = getNode(key);
+	setPathValue(key, value);
+	sp_I_KVS_node n = getPathNode(key);
 	
 	if (!n)
 		return sp_I_KVS_node();

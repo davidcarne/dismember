@@ -14,8 +14,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _KVS_NODE_PRIVATE_H_
-#define _KVS_NODE_PRIVATE_H_
+#ifndef _LOCALKVSNODE_PRIVATE_H_
+#define _LOCALKVSNODE_PRIVATE_H_
 
 #include "i_kvs.h"
 
@@ -120,6 +120,41 @@ public:
 		return child->m_value;
 	}
 	
+	virtual std::string getPathValue(const std::string & path) const
+	{
+		assert(path[0] != '/');
+		
+		size_t sep_pos = path.find("/");
+		
+		// No separator character, that means its an attribute on us.
+		// Same logical code gets executed right now, but it might change in the future
+		if (sep_pos == std::string::npos)
+			return getAttrib(path);
+		
+		sp_LocalKVSNode child = findChild(path.substr(0,sep_pos));
+		if (!child)
+			return LKVS_EMPTY_NODE;
+		
+		return child->getPathValue(path.substr(sep_pos + 1, path.size()));
+	}
+	
+	virtual void setPathValue(const std::string & path, const std::string & value)
+	{
+		assert(path[0] != '/');
+		
+		size_t sep_pos = path.find("/");
+		
+		// No separator character, that means its an attribute on us.
+		// Same logical code gets executed right now, but it might change in the future
+		if (sep_pos == std::string::npos)
+			return setAttrib(path, value);
+		
+		sp_LocalKVSNode child = findChild(path.substr(0,sep_pos));
+		if (!child)
+			return;
+		
+		return child->setPathValue(path.substr(sep_pos + 1, path.size()), value);
+	}
 	
 	virtual sp_I_KVS_attributes LocalKVSNode::getAttributesReference()
 	{
@@ -196,6 +231,11 @@ public:
 		select2nd_transform_iterator i(m_children.end(), selectSecond<LocalKVS_children::const_iterator::value_type>());
 		r=i;
 		return r;
+	}
+	
+	virtual uint32_t getChildCount() const
+	{
+		return m_children.size();
 	}
 	
 	virtual ~LocalKVSNode()

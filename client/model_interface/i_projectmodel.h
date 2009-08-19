@@ -24,6 +24,7 @@
 #include <string>
 #include <stdint.h>
 #include <boost/noncopyable.hpp>
+#include "any_iterator.hpp"
 
 
 // Forward Declarations to reduce compile times
@@ -39,14 +40,12 @@ class MemSegment;
 #include "callback.h"
 #include "address.h"
 #include "datatype.h"
-#include "any_iterator.hpp"
-
-
+#include "i_memsegment.h"
 
 // Constructor fucked for this one, use such that assignment operator is used.
 typedef IteratorTypeErasure::any_iterator<std::pair<const address_t, I_MemlocData *>, std::bidirectional_iterator_tag, std::pair<const address_t, I_MemlocData *> > memloc_addr_pair_ci;
 typedef IteratorTypeErasure::any_iterator<const I_Symbol *, std::bidirectional_iterator_tag> symbol_ci;
-typedef IteratorTypeErasure::any_iterator<const MemSegment *, std::bidirectional_iterator_tag> memsegment_ci;
+typedef IteratorTypeErasure::any_iterator<sp_cI_MemSegment, std::forward_iterator_tag, sp_cI_MemSegment> memsegment_ci;
 typedef IteratorTypeErasure::any_iterator<const sp_DataType, std::bidirectional_iterator_tag> datatype_ci;
 
 class I_ProjectModel : boost::noncopyable
@@ -88,12 +87,10 @@ public:
 	
 #pragma mark Memsegment Management		
 	/*################ Memsegment managment ################*/
-	virtual bool addSegment(MemSegment * m) = 0;
-	virtual bool readByte(address_t taddr, uint8_t * data) const = 0;
-	virtual bool readBytes(address_t, u8, u8*) const = 0;
+	virtual sp_I_MemSegment addSegment(paddr_t base, psize_t len,  const std::string & name, void * buffer = NULL, psize_t initLength = 0) = 0;
 	virtual memsegment_ci memsegs_begin() const = 0;
 	virtual memsegment_ci memsegs_end() const = 0;
-	virtual address_t locateAddress(uint64_t address) const = 0;
+	virtual address_t locateAddress(paddr_t address) const = 0;
 	
 #pragma mark Datatype Management	
 	/*################ Datatype management ################*/

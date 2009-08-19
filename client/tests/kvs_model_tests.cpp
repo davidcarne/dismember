@@ -21,6 +21,7 @@ BOOST_AUTO_TEST_SUITE_END()
 
 
 /****************** memsegment *********************/
+
 struct mem_test_fixture {
     mem_test_fixture() : model( &store ) {}
     ~mem_test_fixture()         {}
@@ -54,14 +55,77 @@ BOOST_AUTO_TEST_CASE(testlocateAddressWithNoSegments)
 }
 
 
-BOOST_AUTO_TEST_CASE(testCreateReadComment)
+
+BOOST_AUTO_TEST_CASE(test_add_empty_segment)
 {
-	LocalKVSStore s;
-	I_KVS  & i_s = s;
+	sp_I_MemSegment s = model.addSegment(0x640, 0x480, "MySegment");
 	
-	BOOST_CHECK(i_s.createDanglingAttributes());
+	BOOST_REQUIRE(s);
+	BOOST_CHECK_EQUAL(s->getName(), "MySegment");
+	BOOST_CHECK_EQUAL(s->is_defined(), false);
+	BOOST_CHECK_EQUAL(s->get_start(), (unsigned long)0x640);
+	BOOST_CHECK_EQUAL(s->get_length(), (unsigned long)0x480);
+	
+	address_t base = s->getBaseAddress();
+	BOOST_CHECK_EQUAL(base.getValue(), (unsigned long)0x640);
+	BOOST_CHECK(base.isValid());
+	BOOST_CHECK_EQUAL(base.getOffset(), (unsigned long)0);
+	BOOST_CHECK(base.getSegment().lock() == s);
+	
+	address_t locatedBase = model.locateAddress(0x640);
+	
+	BOOST_CHECK(locatedBase == base);
+	
+	BOOST_CHECK_EQUAL(locatedBase.readByte(NULL), false);
+	
+	BOOST_CHECK_EQUAL(s->get_bytes(locatedBase, 4, NULL), false);
 }
+
+BOOST_AUTO_TEST_CASE(test_empty_memsegment_iterators)
+{
+	BOOST_CHECK(model.memsegs_begin() == model.memsegs_end());
+}
+
+BOOST_AUTO_TEST_CASE(test_single_memsegment_iterators)
+{
+	sp_I_MemSegment s = model.addSegment(0x640, 0x480, "MySegment");
+	
+	BOOST_REQUIRE(s);
+	
+	memsegment_ci i = model.memsegs_begin();
+	memsegment_ci i_end = model.memsegs_end();
+	
+	BOOST_CHECK(i != i_end);
+	
+	BOOST_CHECK(*i == s);
+	i++;
+	BOOST_CHECK(i == i_end);
+}
+
+
 
 
 BOOST_AUTO_TEST_SUITE_END()
 
+BOOST_AUTO_TEST_CASE(testKVSSaveMemoryLocations)
+{
+	LocalKVSStore store;
+	{
+		
+		KVSBackedProjectModel model(&store);
+		model.addSegment(0x640, 0x480, "MySegment");
+		BOOST_REQUIRE(model.locateAddress(0x642).isValid());
+	}
+	
+	{
+		KVSBackedProjectModel model(&store);
+		address_t da = model.locateAddress(0x642);
+		BOOST_REQUIRE(da.isValid());
+		sp_cI_MemSegment ms = da.getSegment().lock();
+		
+		BOOST_CHECK_EQUAL(ms->getName(), "MySegment");
+		BOOST_CHECK_EQUAL(ms->get_start(), (unsigned long)0x640);
+		BOOST_CHECK_EQUAL(ms->get_length(), (unsigned long)0x480);
+		BOOST_CHECK_EQUAL(ms->is_defined(), false);
+	}
+}

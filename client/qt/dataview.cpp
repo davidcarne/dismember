@@ -19,7 +19,6 @@
 
 #include "workspace.h"
 #include "i_memlocdata.h"
-#include "memsegment.h"
 #include "dataview.h"
 
 #define dataColor QColor(0xb9,0x47,0x1b)

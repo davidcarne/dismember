@@ -14,16 +14,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "memsegmentmanager.h"
+#include "kvs_memsegmentmanager.h"
 #include <assert.h>
 #include "exception.h"
 
-MemSegmentManager::MemSegmentManager()
+KVS_MemSegmentManager::KVS_MemSegmentManager()
 {
 	
 }
 /* Factor out */
-bool MemSegmentManager::addSegment(MemSegment * m)
+bool KVS_MemSegmentManager::addSegment(sp_KVS_MemSegment m)
 {
 	assert(m);
 	
@@ -32,7 +32,7 @@ bool MemSegmentManager::addSegment(MemSegment * m)
 	memseglist_ci ci = m_mem_segments.begin(),
 	endi = m_mem_segments.end();
 	for (; ci != endi; ++ci) {
-		MemSegment *mi = *ci;
+		sp_KVS_MemSegment mi = *ci;
 		paddr_t cstart = mi->get_start();
 		paddr_t cend = cstart + mi->get_length();
 		if ((cstart > start && cstart < end) ||
@@ -44,42 +44,25 @@ bool MemSegmentManager::addSegment(MemSegment * m)
 	return true;
 }
 
-address_t MemSegmentManager::locateAddress(uint64_t address) const
+address_t KVS_MemSegmentManager::locateAddress(uint64_t address) const
 {
 	
 	memseglist_ci ci = m_mem_segments.begin(),
 	endi = m_mem_segments.end();
 	for (; ci != endi; ++ci) {
-		MemSegment *m = (*ci);
+		sp_KVS_MemSegment m = (*ci);
 		if (m->can_resolve(address))
 			return m->getBaseAddress() + (address - m->get_start());
 	}
 	return address_t();
 }
 
-bool MemSegmentManager::readBytes(const address_t & addr,u8 bytes, u8 * buf) const
-{
-	assert(buf);
-	return addr.readBytes(bytes, buf);
-}
-
-bool MemSegmentManager::readByte(const address_t & taddr, uint8_t * data) const
-{
-	uint8_t dummy;
-	
-	if (data)
-		return readBytes(taddr,1, data);
-	
-	return readBytes(taddr,1, &dummy);
-}
-
-
-MemSegmentManager::memseglist_ci MemSegmentManager::memsegs_begin() const
+KVS_MemSegmentManager::memseglist_ci KVS_MemSegmentManager::memsegs_begin() const
 {
 	return m_mem_segments.begin();
 }
 
-MemSegmentManager::memseglist_ci MemSegmentManager::memsegs_end() const
+KVS_MemSegmentManager::memseglist_ci KVS_MemSegmentManager::memsegs_end() const
 {
 	return m_mem_segments.end();
 }

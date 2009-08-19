@@ -16,7 +16,7 @@
  */
 
 #include "i_kvs.h"
-
+const std::string kvs_empty_string = "";
 I_KVS::~I_KVS()
 {}
 
@@ -26,3 +26,7 @@ I_KVS_node::~I_KVS_node()
 I_KVS_attributes::~I_KVS_attributes()
 {}
 
+bool operator==(const kvs_fake_iterator & a, const kvs_fake_iterator &b)
+{
+	return true;
+}

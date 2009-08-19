@@ -16,7 +16,7 @@
 
 #include <string.h>
 #include "../loaderfactory.h"
-#include "memsegment.h"
+
 
 #define	MH_MAGIC	0xfeedface	/* the mach magic number */
 #define MH_CIGAM	0xcefaedfe	/* NXSwapInt(MH_MAGIC) */

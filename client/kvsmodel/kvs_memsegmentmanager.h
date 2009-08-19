@@ -14,42 +14,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _memsegmentmanager_H_
-#define _memsegmentmanager_H_
+#ifndef _KVS_MEMSEGMENTMANAGER_H_
+#define _KVS_MEMSEGMENTMANAGER_H_
 #include <set>
-#include "memsegment.h"
 
-#include <boost/serialization/utility.hpp>
-#include <boost/serialization/version.hpp>
-#include <boost/serialization/tracking.hpp>
+#include "i_memsegment.h"
+#include "kvs_memsegment.h"
 
-class MemSegmentManager {
+class KVS_MemSegmentManager {
 public:
-	MemSegmentManager();
+	KVS_MemSegmentManager();
 	
-	typedef std::set<MemSegment *, MemSegment::less> memseglist_t;
+	typedef std::set<sp_KVS_MemSegment, KVS_MemSegment::less> memseglist_t;
 	typedef memseglist_t::const_iterator memseglist_ci;
 	
-	bool addSegment(MemSegment * m);
-	bool readByte(const address_t & taddr, uint8_t * data) const;
-	bool readBytes(const address_t &, u8, u8*) const;
+	bool addSegment(sp_KVS_MemSegment m);
 	memseglist_ci memsegs_begin() const;
 	memseglist_ci memsegs_end() const;
 
 	address_t locateAddress(uint64_t address) const;
 
 private:
-	
-	template<class Archive> void serialize(Archive & ar, const unsigned int)
-	{
-		ar & m_mem_segments;
-	}
-	
-	friend class boost::serialization::access;
-	
-	/* Needs serializing */
 	memseglist_t m_mem_segments;
-	
 };
 
 #endif

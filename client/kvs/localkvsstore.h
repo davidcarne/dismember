@@ -28,11 +28,11 @@ typedef boost::shared_ptr<LocalKVSStore> sp_LocalKVSStore;
 class LocalKVSStore : public I_KVS {
 public:
 	LocalKVSStore();
-	virtual const std::string & getValue(const std::string & key) const;
-	virtual sp_I_KVS_node setValue(const std::string & key, const std::string & value);
+	virtual const std::string & getPathValue(const std::string & key) const;
+	virtual sp_I_KVS_node setPathValue(const std::string & key, const std::string & value);
 
 	virtual sp_I_KVS_attributes createDanglingAttributes();
-	virtual sp_I_KVS_node getNode(const std::string & key) const;
+	virtual sp_I_KVS_node getPathNode(const std::string & key) const;
 	
 	virtual sp_I_KVS_node overlayNode(const std::string & key, const std::string & value = "", sp_I_KVS_attributes attribs = sp_I_KVS_attributes());
 	virtual sp_I_KVS_node overwriteNode(const std::string & key, const std::string & value = "", sp_I_KVS_attributes attribs = sp_I_KVS_attributes());

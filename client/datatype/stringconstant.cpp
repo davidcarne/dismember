@@ -53,7 +53,7 @@ protected:
 		
 		while (!done)
 		{
-			if (!getProjectModelContext()->readByte(stadr, &unitchar))
+			if (!stadr.readByte(&unitchar))
 			{
 				break;
 			}

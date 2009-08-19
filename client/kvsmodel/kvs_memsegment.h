@@ -14,55 +14,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _MEMSEGMENT_H_
-#define _MEMSEGMENT_H_
+#ifndef _KVS_MEMSEGMENT_H_
+#define _KVS_MEMSEGMENT_H_
 #include <stdio.h>
 #include <stdint.h>
 #include "address.h"
 #include "types.h"
+#include "i_memsegment.h"
+
+class KVS_MemSegment;
+
+typedef boost::shared_ptr<KVS_MemSegment> sp_KVS_MemSegment;
+typedef boost::weak_ptr<KVS_MemSegment> wp_KVS_MemSegment;
 
 /**
  * \brief Represents a memory segment, optionally backed by a stretch of data
  */
-class MemSegment {
+class KVS_MemSegment : public I_MemSegment{
 public:
-	/**
-	 * \brief Create a new fully initialized memory segment.
-	 * @param base base address of the new memory segment
-	 * @param len length of the new memory segment
-	 * @param buffer data buffer to source contents from. May be released after buffer is created
-	 * @param name name of memory segment [eg: RAM, ROM, BSS, TXT]
-	 */
-	MemSegment(paddr_t base, psize_t len, void * buffer, const std::string & name = "");
-
-	/**
-	 * \brief Create a new memory segment with specified initialized length.
-	 * @param base base address of the new memory segment
-	 * @param len length of the new memory segment
-	 * @param buffer data buffer to source contents from. May be released after buffer is created
-	 * @param initLength length of the initialized data for the segment [ie, for a data segment]
-	 * @param name name of memory segment [eg: RAM, ROM, BSS, TXT]
-	 */
-	MemSegment(paddr_t base, psize_t len, void * buffer, psize_t initLength, const std::string & name = "");
-
-	/**
-	 * \brief Create a new uninitialized memory segment.
-	 * @param base base address of the new memory segment
-	 * @param len length of the new memory segment
-	 * @param name name of memory segment [eg: RAM, ROM, BSS, TXT]
-	 */
-	MemSegment(paddr_t base, psize_t len, const std::string & name = "");
+	static sp_KVS_MemSegment createKVS_MemSegment(paddr_t base, psize_t len, void * buffer, psize_t initLength, const std::string & name = "");
 	
 	/** Destructor for a memory segment */
-	~MemSegment();
+	~KVS_MemSegment();
 	
 	/** @return the start address of the memory segment */
-	paddr_t get_start() const;
+	virtual paddr_t get_start() const;
 
-	address_t getBaseAddress() const;
+	virtual address_t getBaseAddress() const;
 	
 	/** @return the length of the memory segment */
-	psize_t get_length() const;	
+	virtual psize_t get_length() const;	
 	
 	/**
 	 * \brief retrieve length bytes from the memory segment into the dest buffer
@@ -75,44 +56,46 @@ public:
 	 * @param dest destination buffer. May be null.
 	 * @return if the copy succeeded, or would have succeeded had dest been non-null
 	 */
-	bool get_bytes(const address_t & addr, psize_t length, void * dest) const;
+	virtual bool get_bytes(const address_t & addr, psize_t length, void * dest) const ;
 	
 	/** 
 	 * @return the name of the memory section
 	 */
-	const std::string & getName() const;
+	virtual const std::string & getName() const;
 	
 	/**
 	 * @param addr address to check
 	 * @return is addr valid within this block
 	 */
-	bool can_resolve(const paddr_t & addr) const;
+	virtual bool can_resolve(const paddr_t & addr) const;
 
-	/**
-	 * @param addr address to check
-	 * @return is addr valid within this block
-	 */
-	bool DEPRECATED(can_resolve(const address_t & addr) const);
 	
 	/**
 	 * @return if the memory block has data, or if its virtual.
 	 */
 	bool is_defined() const;
-	
-	/**
-	 * \deprecated this function will go away after the trace load/save refactoring
-	 * @return a pointer to the data inside the datablock.
-	 */
-	
-	const uint8_t * DEPRECATED(data_ptr() const);
 
 	/** Less comparison functor for MemSegment */
 	struct less {
 		/** Less comparison operator for MemSegment */
-		bool operator()(MemSegment *a, MemSegment *b) const;
+		bool operator()(sp_KVS_MemSegment a, sp_KVS_MemSegment b) const;
 	};
 
 private:
+	
+	/**
+	 * \brief Create a new memory segment with specified initialized length.
+	 * @param base base address of the new memory segment
+	 * @param len length of the new memory segment
+	 * @param buffer data buffer to source contents from. May be released after buffer is created
+	 * @param initLength length of the initialized data for the segment [ie, for a data segment]
+	 * @param name name of memory segment [eg: RAM, ROM, BSS, TXT]
+	 */
+	KVS_MemSegment(paddr_t base, psize_t len, void * buffer, psize_t initLength, const std::string & name = "");
+
+	
+	wp_KVS_MemSegment m_me;
+	
 	void init(void *data, psize_t initLength);
 	
 	paddr_t m_base;

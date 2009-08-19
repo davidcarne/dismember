@@ -15,7 +15,7 @@
  */
 
 #include "../loaderfactory.h"
-#include "memsegment.h"
+
 #include "guidialog.h"
 
 class BinaryLoader : public FileLoaderMaker {

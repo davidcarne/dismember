@@ -16,8 +16,7 @@
 
 #include "i_projectmodel.h"
 #include "search.h"
-#include "memsegment.h"
-#include "memsegmentmanager.h"
+
 
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
@@ -88,7 +87,7 @@ SearchResults *Search::submitSearchJob(Workspace *d, uint8_t *b, psize_t len)
 bool Search::search(Workspace * d, uint8_t *b, psize_t len, SearchResults *sr)
 {
 	I_ProjectModel *t = d->getProjectModel();
-
+/*	TODO: Renenable with new memsegment model
 	memsegment_ci mi;
 	memsegment_ci begin = t->memsegs_begin();
 	memsegment_ci end = t->memsegs_end();
@@ -112,7 +111,7 @@ bool Search::search(Workspace * d, uint8_t *b, psize_t len, SearchResults *sr)
 			if (++mi != end)
 				addr = (*mi)->getBaseAddress();
 		}
-	}
+	}*/
 	sr->setJobFinished(true);
 	return true;
 }

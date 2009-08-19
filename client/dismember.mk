@@ -39,7 +39,7 @@ INCPATHS += $(patsubst %, -I%, $(INCDIRS))
 
 CPPSRCS := $(filter %.cpp, $(SRC) )
 CPPOBJS := $(patsubst %.cpp,$(BUILDDIR)/%.o, $(CPPSRCS) )
-CPPDEPS := $(CPPOBJS:.o=.d)
+CPPDEPS := $(CPPOBJS:.o=.d) $(TESTOBJS:.o=.d)
 
 CPPTESTSRCS := $(filter %.cpp, $(TEST_SRC) )
 CPPTESTOBJS := $(patsubst %.cpp,$(BUILDDIR)/%.o, $(CPPTESTSRCS) )
@@ -65,6 +65,10 @@ TEST_LIBS := -lboost_test_exec_monitor
 # Fake var to force execution
 FOO := $(shell ./build_tools/fixup_deps.py)
 
+# Target for various sanity checks
+verify-codebase:
+	./build_tools/verify_header_define.py
+	
 $(PROG): $(CPPOBJS)
 	@echo "LD	$@"
 	@mkdir -p $(@D)
@@ -75,7 +79,7 @@ $(TEST): $(CPPTESTOBJS)
 	@mkdir -p $(@D)
 	@$(CXX) $(LDFLAGS) $(LIBS) $(TEST_LIBS) $^ -o $@
 	
-$(BUILDDIR)/%.o: %.cpp
+$(BUILDDIR)/%.o: %.cpp $(BUILDDIR)/%.d
 	@echo "CXX	$<"
 	@mkdir -p $(@D)
 	@$(CXX) $(CPPFLAGS) -c -o $@ $<

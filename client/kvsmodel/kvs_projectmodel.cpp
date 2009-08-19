@@ -24,9 +24,8 @@
 #include <stack>
 
 #include "kvs_projectmodel.h"
+#include "kvs_memsegment.h"
 
-
-#define ASSERT_RESOLVE(addr) assert(readByte(addr, NULL))
 
 address_t KVSBackedProjectModel::addressFromString(std::string k)
 {/*
@@ -43,32 +42,36 @@ address_t KVSBackedProjectModel::addressFromString(std::string k)
 }
 
 KVSBackedProjectModel::KVSBackedProjectModel(I_KVS * root_node) : 
-	I_KVS_attribproxy(root_node->getNode("/")->getAttributesReference())
+	I_KVS_attribproxy(root_node->getPathNode("/")->getAttributesReference())
 {}
 
-bool KVSBackedProjectModel::addSegment(MemSegment * m)
+sp_I_MemSegment KVSBackedProjectModel::addSegment(paddr_t base, psize_t len,  const std::string & name, void * buffer, psize_t initLength)
 {
+	sp_KVS_MemSegment seg =  KVS_MemSegment::createKVS_MemSegment(base, len, buffer, initLength, name);
+	if (m_memsegmentmanager.addSegment(seg))
+		return seg;
+	return sp_KVS_MemSegment();
 }
 
 
-bool KVSBackedProjectModel::readByte(address_t taddr, uint8_t * data) const
-{
-}
-
-bool KVSBackedProjectModel::readBytes(address_t taddr, u8 len, u8* data) const
-{
-}
 
 memsegment_ci KVSBackedProjectModel::memsegs_begin() const
 {
+	memsegment_ci i;
+	i = m_memsegmentmanager.memsegs_begin();
+	return i;
 }
 
 memsegment_ci KVSBackedProjectModel::memsegs_end() const
 {
+	memsegment_ci i;
+	i = m_memsegmentmanager.memsegs_end();
+	return i;
 }
 
-address_t KVSBackedProjectModel::locateAddress(uint64_t address) const
+address_t KVSBackedProjectModel::locateAddress(paddr_t address) const
 {
+	return m_memsegmentmanager.locateAddress(address);
 }
 
 I_MemlocData * KVSBackedProjectModel::createMemlocDataAt(DataType * d, address_t addr)

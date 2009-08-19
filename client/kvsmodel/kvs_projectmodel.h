@@ -33,7 +33,7 @@ class DataType;
 class Symbol;
 class Xref;
 
-class MemSegmentManager;
+#include "kvs_memsegmentmanager.h"
 
 #include "i_projectmodel.h"
 #include "types.h"
@@ -78,12 +78,10 @@ public:
 
 #pragma mark Memsegment Management		
 	/*################ Memsegment managment ################*/
-	virtual bool addSegment(MemSegment * m);
-	virtual bool readByte(address_t taddr, uint8_t * data) const;
-	virtual bool readBytes(address_t, u8, u8*) const;
+	virtual sp_I_MemSegment addSegment(paddr_t base, psize_t len,  const std::string & name, void * buffer = NULL, psize_t initLength = 0);
 	virtual memsegment_ci memsegs_begin() const;
 	virtual memsegment_ci memsegs_end() const;
-	virtual address_t locateAddress(uint64_t address) const;
+	virtual address_t locateAddress(paddr_t address) const;
 	
 #pragma mark Datatype Management	
 	/*################ Datatype management ################*/
@@ -104,10 +102,10 @@ public:
 	virtual void unregisterSymbolHook(CallbackBase<Symbol *> *);
 	
 	BRING_IN_KVS_ATTRIBS
-protected:
 
 	
 private:
+	KVS_MemSegmentManager m_memsegmentmanager;
 	address_t addressFromString(std::string);
 	
 #pragma mark Internals 
