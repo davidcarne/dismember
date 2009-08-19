@@ -33,6 +33,8 @@ class DataType;
 class Symbol;
 class Xref;
 
+class MemSegmentManager;
+
 #include "i_projectmodel.h"
 #include "types.h"
 

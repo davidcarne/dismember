@@ -16,8 +16,9 @@
  */
 
 
+#include "i_kvs.h"
+#include "localkvsnode_private.h"
 #include "localkvsstore.h"
-
 #include <boost/tokenizer.hpp>
 
 #include <stdio.h>

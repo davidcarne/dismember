@@ -19,7 +19,7 @@
 #include "kvs_memlocdata.h"
 
 
-MemlocData::MemlocData(const sp_LocalKVSNode sourceNode, const I_ProjectModel * ctx) : I_KVS_attribproxy(sourceNode->getAttributesReference())
+MemlocData::MemlocData(const sp_I_KVS_node sourceNode, const I_ProjectModel * ctx) : I_KVS_attribproxy(sourceNode->getAttributesReference())
 {
 	m_decoded_length = atoi(getAttrib("length").c_str());
 }

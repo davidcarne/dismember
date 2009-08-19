@@ -14,8 +14,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _KVS_NODE_H_
-#define _KVS_NODE_H_
+#ifndef _KVS_NODE_PRIVATE_H_
+#define _KVS_NODE_PRIVATE_H_
 
 #include "i_kvs.h"
 

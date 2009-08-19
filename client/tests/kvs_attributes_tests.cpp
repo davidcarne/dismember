@@ -2,7 +2,6 @@
 #include <unistd.h>
 #include <boost/test/unit_test.hpp>
 
-#include "kvs/kvs_node.h"
 #include "kvs/i_kvs.h"
 #include "kvs/localkvsstore.h"
 

@@ -18,12 +18,11 @@
 #define _LOCALKVSSTORE_H_
 
 #include "i_kvs.h"
-#include "kvs_node.h"
 #include <boost/shared_ptr.hpp>
 
-#include "hash_map.h"
 class LocalKVSStore;
-
+class LocalKVSNode;
+typedef boost::shared_ptr<LocalKVSNode> sp_LocalKVSNode;
 typedef boost::shared_ptr<LocalKVSStore> sp_LocalKVSStore;
 
 class LocalKVSStore : public I_KVS {

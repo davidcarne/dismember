@@ -22,7 +22,6 @@
 #include "i_memlocdata.h"
 #include "xrefmanager.h"
 #include "i_kvs.h"
-#include "kvs_node.h"
 
 class I_ProjectModel;
 /**
@@ -152,7 +151,7 @@ public:
 	/** 
 	 * \brief Create a new memoryloc given a the KVS attributes, project context, and address
 	 */
-	MemlocData(sp_LocalKVSNode sourceNode, const I_ProjectModel * ctx);
+	MemlocData(sp_I_KVS_node sourceNode, const I_ProjectModel * ctx);
 	
 	BRING_IN_KVS_ATTRIBS
 protected:

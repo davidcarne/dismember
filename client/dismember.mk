@@ -8,20 +8,15 @@ INCPATHS := -I. -Icontrib
 
 LIBS :=
 
-SRC := 	xref.cpp symbol_analysis.cpp \
+COMMON_SRC := xref.cpp symbol_analysis.cpp \
 	datatypereg.cpp memlocmanager.cpp run_queue.cpp exception.cpp \
-	app_main.cpp workspace.cpp memsegment.cpp  \
+	workspace.cpp \
 	xrefmanager.cpp search.cpp \
-	memsegmentmanager.cpp symlist.cpp address.cpp \
-	program_flow_analysis.cpp guiglue.cpp
-
-TEST_SRC := xref.cpp symbol_analysis.cpp \
-	datatypereg.cpp memlocmanager.cpp run_queue.cpp exception.cpp \
-	workspace.cpp memsegment.cpp  \
-	xrefmanager.cpp search.cpp \
-	memsegmentmanager.cpp symlist.cpp address.cpp \
+        symlist.cpp address.cpp \
 	program_flow_analysis.cpp guiglue.cpp
 	
+TEST_SRC := $(COMMON_SRC)
+SRC := $(COMMON_SRC) app_main.cpp
 	
 BUILDDIR := build
 PROG := $(BUILDDIR)/dismember
@@ -63,6 +58,12 @@ CPPFLAGS += $(INCPATHS) $(EXTCPP) -Wall -Wno-unknown-pragmas -Wno-reorder \
 CPPFLAGS += $(INCPATHS) $(EXTCPP)
 LIBS += -lboost_python-mt -lboost_thread-mt -lboost_serialization-mt -lpthread $(PYEXTLD)
 TEST_LIBS := -lboost_test_exec_monitor
+
+# Before building anything; parse any dep files + delete ones that reference 
+# nonexistant files [workaround a make bug in which it terminates building 
+# when dep missing]
+# Fake var to force execution
+FOO := $(shell ./build_tools/fixup_deps.py)
 
 $(PROG): $(CPPOBJS)
 	@echo "LD	$@"

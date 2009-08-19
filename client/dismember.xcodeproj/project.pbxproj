@@ -6,10 +6,15 @@
 	objectVersion = 42;
 	objects = {
 
+/* Begin PBXFileReference section */
+		67BDCD5E103BB5B300424864 /* client */ = {isa = PBXFileReference; lastKnownFileType = folder; name = client; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
 		08FB7794FE84155DC02AAC07 /* armtrace */ = {
 			isa = PBXGroup;
 			children = (
+				67BDCD5E103BB5B300424864 /* client */,
 				67CD5B9E0D284D00003B72E8 /* Products */,
 			);
 			name = armtrace;
@@ -25,18 +30,31 @@
 /* End PBXGroup section */
 
 /* Begin PBXLegacyTarget section */
-		6798D85C1037B8F20096293D /* Untitled */ = {
+		6798D85C1037B8F20096293D /* Dismember */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 6798D8661037B9190096293D /* Build configuration list for PBXLegacyTarget "Untitled" */;
+			buildConfigurationList = 6798D8661037B9190096293D /* Build configuration list for PBXLegacyTarget "Dismember" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
 			dependencies = (
 			);
-			name = Untitled;
+			name = Dismember;
 			passBuildSettingsInEnvironment = 1;
 			productName = Untitled;
+		};
+		67BDCF22103BB5DC00424864 /* run-tests */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "run-tests";
+			buildConfigurationList = 67BDCF39103BB5FF00424864 /* Build configuration list for PBXLegacyTarget "run-tests" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			dependencies = (
+			);
+			name = "run-tests";
+			passBuildSettingsInEnvironment = 1;
+			productName = "run-tests";
 		};
 /* End PBXLegacyTarget section */
 
@@ -51,7 +69,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6798D85C1037B8F20096293D /* Untitled */,
+				6798D85C1037B8F20096293D /* Dismember */,
+				67BDCF22103BB5DC00424864 /* run-tests */,
 			);
 		};
 /* End PBXProject section */
@@ -83,7 +102,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = Untitled;
+				PRODUCT_NAME = Dismember;
 			};
 			name = Debug;
 		};
@@ -94,6 +113,27 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = Untitled;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		67BDCF23103BB5DD00424864 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "run-tests";
+			};
+			name = Debug;
+		};
+		67BDCF24103BB5DD00424864 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "run-tests";
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -110,11 +150,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6798D8661037B9190096293D /* Build configuration list for PBXLegacyTarget "Untitled" */ = {
+		6798D8661037B9190096293D /* Build configuration list for PBXLegacyTarget "Dismember" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6798D85D1037B8F20096293D /* Debug */,
 				6798D85E1037B8F20096293D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		67BDCF39103BB5FF00424864 /* Build configuration list for PBXLegacyTarget "run-tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67BDCF23103BB5DD00424864 /* Debug */,
+				67BDCF24103BB5DD00424864 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
