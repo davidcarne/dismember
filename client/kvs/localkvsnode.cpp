@@ -43,3 +43,28 @@ void LocalKVSNode::overwriteAttributes(const sp_I_KVS_attributes attsrc)
 	m_children = LocalKVS_children();
 	overlayAttributes(attsrc);
 }
+
+sp_subscription LocalKVSNode::subscribeChanges(const cb_kvs_tree_changed & fnobj)
+{
+	
+	sp_subscription sub = sp_subscription(new cb_kvs_tree_changed(fnobj));
+	m_subs.insert(sub);
+	return sub;
+}
+void LocalKVSNode::postChange(const std::string & path) const
+{
+	for (std::set<wp_subscription>::iterator i = m_subs.begin(); i!=m_subs.end(); i++)
+	{
+		sp_subscription subptr = (*i).lock();
+		if (subptr)
+		{
+			cb_kvs_tree_changed fn = (*subptr.get());
+			fn(path);
+			
+		}
+	}
+	
+	sp_c_LocalKVSNode pptr = m_parent.lock();
+	if (pptr)
+		pptr->postChange(path);
+}

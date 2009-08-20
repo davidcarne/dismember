@@ -51,9 +51,32 @@ class NodeProxyMock1 : private I_KVS_nodeproxy
 	{
 		return getPathValue("sub/b");
 	}
-private:
+	
+	std::string last_subscription_event;
+	
+	KVS_NODEPROXY_NOTIFYCHANGES(evt)
+	{
+		last_subscription_event = evt;
+	}
+	
 	BRING_IN_KVS_NODE
 };
+
+BOOST_AUTO_TEST_CASE(nodeproxykeyvaluepath)
+{
+	LocalKVSStore s;
+	I_KVS  & i_s = s;
+	i_s.setPathValue("/mockobj","hasavalue");
+	NodeProxyMock1 mock(i_s.getPathNode("/mockobj"));
+	
+	BOOST_CHECK_EQUAL(mock.isDeleted(), false);
+	BOOST_CHECK_EQUAL(mock.getKey(), "mockobj");
+	BOOST_CHECK_EQUAL(mock.getPath(), "/mockobj");
+	BOOST_CHECK_EQUAL(mock.getValue(), "hasavalue");
+	mock.setValue("hasavalue2");
+	
+	BOOST_CHECK_EQUAL(i_s.getPathValue("/mockobj"), "hasavalue2");
+}
 
 BOOST_AUTO_TEST_CASE(testNodeProxyAttribReadWrite)
 {
@@ -79,4 +102,82 @@ BOOST_AUTO_TEST_CASE(testNodeProxyAttribReadWrite)
 	BOOST_CHECK_EQUAL(i_s.getPathValue("/mockobj/b"), "@");
 	BOOST_CHECK_EQUAL(i_s.getPathValue("/mockobj/sub/a"), "#");
 	BOOST_CHECK_EQUAL(i_s.getPathValue("/mockobj/sub/b"), "$");
+}
+
+BOOST_AUTO_TEST_CASE(nodeproxynochildren)
+{
+	LocalKVSStore s;
+	I_KVS  & i_s = s;
+	i_s.setPathValue("/mockobj","hasavalue");
+	NodeProxyMock1 mock(i_s.getPathNode("/mockobj"));
+	
+	BOOST_CHECK_EQUAL(mock.getChildCount(), (unsigned int)0);
+	BOOST_CHECK(mock.beginChildren() == mock.endChildren());
+}
+
+BOOST_AUTO_TEST_CASE(nodeproxyhaschildren)
+{
+	LocalKVSStore s;
+	I_KVS  & i_s = s;
+	i_s.setPathValue("/mockobj","hasavalue");
+	sp_I_KVS_node cn = i_s.setPathValue("/mockobj/snarf","hasavalue");
+	NodeProxyMock1 mock(i_s.getPathNode("/mockobj"));
+	
+	BOOST_CHECK_EQUAL(mock.getChildCount(), (unsigned int)1);
+	BOOST_CHECK(mock.beginChildren() != mock.endChildren());
+	
+	kvs_node_child_ci i = mock.beginChildren();
+	kvs_node_child_ci i_end = mock.endChildren();
+	
+	BOOST_REQUIRE(i != i_end);
+	BOOST_CHECK(*i == cn);
+	i++;
+	BOOST_CHECK(i == i_end);
+}
+
+BOOST_AUTO_TEST_CASE(nodeproxydangling)
+{	
+	sp_I_KVS_node fake;
+	NodeProxyMock1 mock(fake);
+	
+	BOOST_CHECK_EQUAL(mock.getKey(), "");
+	BOOST_CHECK_EQUAL(mock.getPath(), "");
+	BOOST_CHECK_EQUAL(mock.getPathValue("fakestring/nowheretown"), "");
+	mock.setPathValue("fakestring/nowheretown", "val");
+	mock.setValue("!!!");
+	BOOST_CHECK_EQUAL(mock.getValue(), "");
+	
+	BOOST_CHECK(mock.beginChildren() == mock.endChildren());
+	
+	kvs_node_child_ci i = mock.beginChildren();
+	kvs_node_child_ci i_end = mock.endChildren();
+	
+	BOOST_CHECK(i == i_end);
+
+	BOOST_CHECK(!*i);
+	
+	// Fake iterator, should be able to increment all we want
+	i++;
+	i++;
+	i++;
+	i++;
+	
+	BOOST_CHECK(i == i_end);
+	
+}
+
+BOOST_AUTO_TEST_CASE(nodesubscription)
+{	
+	LocalKVSStore s;
+	I_KVS  & i_s = s;
+	i_s.setPathValue("/mockobj","hasavalue");
+	sp_I_KVS_node cn = i_s.setPathValue("/mockobj/snarf","hasavalue");
+	NodeProxyMock1 mock(i_s.getPathNode("/mockobj"));
+	
+	BOOST_CHECK_EQUAL(mock.last_subscription_event, "");
+	i_s.setPathValue("/mockobj/snarf","hasavalue");
+	BOOST_CHECK_EQUAL(mock.last_subscription_event, "/mockobj/snarf");
+	i_s.setPathValue("/mockobj/snarf/barcamp","hasavalue");
+	BOOST_CHECK_EQUAL(mock.last_subscription_event, "/mockobj/snarf/barcamp");
+	
 }

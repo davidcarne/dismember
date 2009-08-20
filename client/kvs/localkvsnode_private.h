@@ -22,9 +22,12 @@
 #include "hash_map.h"
 
 #include <iostream>
+#include <set>
+#include <map>
 
 #include <boost/iterator/transform_iterator.hpp>
 #include "iterator_hacks.h"
+
 class LocalKVSNode;
 
 //#define KVS_ALLOCATION_DEBUG
@@ -164,7 +167,7 @@ public:
 	virtual void setAttrib(const std::string & key, const std::string & value) {
 		
 		sp_LocalKVSNode sp_child = findChild_create(key);
-		sp_child->m_value = value;
+		sp_child->setValue(value);
 	}
 	
 	
@@ -199,6 +202,7 @@ public:
 	virtual void setValue(const std::string & value)
 	{
 		m_value = value;
+		postChange();
 	}
 	static sp_LocalKVSNode createKVSNode(const std::string & key, const wp_LocalKVSNode & parent = wp_LocalKVSNode())
 	{
@@ -243,6 +247,17 @@ public:
 		KVS_ALLOCATION_PRINT("Deleting node: " << m_key);
 	};
 	
+	
+	virtual sp_subscription subscribeChanges(const cb_kvs_tree_changed & fnobj);
+	
+	void postChange(const std::string & path) const;
+
+	void postChange() const
+	{
+		return postChange(getPath());
+	}
+	
+
 private:
 
 	LocalKVSNode(const std::string & key, const wp_LocalKVSNode & parent = wp_LocalKVSNode()) : m_key(key), m_parent(parent) {
@@ -276,7 +291,7 @@ private:
 	const std::string m_key;
 	LocalKVS_children m_children;
 	std::string m_value;
-
+	std::set<wp_subscription> m_subs;
 	friend class LocalKVSStore;
 };
 

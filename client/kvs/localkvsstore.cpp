@@ -80,7 +80,7 @@ sp_I_KVS_node LocalKVSStore::setPathValue(const std::string & key, const std::st
 			return sp_I_KVS_node();
 	}
 	
-	cursor->m_value = value;
+	cursor->setValue(value);
 	
 	return cursor;
 }

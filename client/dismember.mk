@@ -39,11 +39,11 @@ INCPATHS += $(patsubst %, -I%, $(INCDIRS))
 
 CPPSRCS := $(filter %.cpp, $(SRC) )
 CPPOBJS := $(patsubst %.cpp,$(BUILDDIR)/%.o, $(CPPSRCS) )
-CPPDEPS := $(CPPOBJS:.o=.d) $(TESTOBJS:.o=.d)
 
 CPPTESTSRCS := $(filter %.cpp, $(TEST_SRC) )
 CPPTESTOBJS := $(patsubst %.cpp,$(BUILDDIR)/%.o, $(CPPTESTSRCS) )
 
+CPPDEPS := $(CPPOBJS:.o=.d) $(CPPTESTOBJS:.o=.d)
 CPPDEFS = -DDISABLE_ADDRESS_T_HASH
 
 # Some python implementations add flags they shouldn't in --cflags

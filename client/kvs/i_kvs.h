@@ -29,6 +29,8 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
 
 #include "any_iterator.hpp"
 
@@ -99,6 +101,10 @@ typedef boost::shared_ptr<I_KVS_node> sp_I_KVS_node;
 typedef boost::weak_ptr<I_KVS_node> wp_I_KVS_node;
 
 typedef IteratorTypeErasure::any_iterator<sp_I_KVS_node, std::forward_iterator_tag, sp_I_KVS_node> kvs_node_child_ci;
+
+typedef boost::function<void(const std::string &)> cb_kvs_tree_changed;
+typedef boost::shared_ptr<cb_kvs_tree_changed> sp_subscription;
+typedef boost::weak_ptr<cb_kvs_tree_changed> wp_subscription;
 
 // View of a node that represents it + its children
 class I_KVS_node {
@@ -173,6 +179,10 @@ public:
 	 */
 	virtual uint32_t getChildCount() const = 0;
 	
+	
+	// This subscription is only valid while the pointer is held by the subscriber.
+	virtual sp_subscription subscribeChanges(const cb_kvs_tree_changed & fnobj) = 0;
+	
 	virtual ~I_KVS_node() = 0;
 };
 
@@ -195,7 +205,11 @@ public:
 		return kvs_fake_iterator();
 	}
 };
+
 bool operator==(const kvs_fake_iterator & a, const kvs_fake_iterator &b);
+
+#define KVS_NODEPROXY_NOTIFYCHANGES(name) virtual void notifyChanges(const std::string & name)
+
 
 // Privately inherit from this, and use BRING_IN_KVS_NODE
 class I_KVS_nodeproxy {
@@ -204,32 +218,43 @@ public:
 protected:
 	I_KVS_nodeproxy(sp_I_KVS_node attribref) : m_attribref(attribref) {
 		
+		cb_kvs_tree_changed fbo = boost::bind(&I_KVS_nodeproxy::rcvChangeNotify, this, _1);
+		if (attribref)
+			m_subscription = attribref->subscribeChanges(fbo);
 	};
 	
 	virtual ~I_KVS_nodeproxy() {
 		
 	};
 	
-	bool isDangling()
+	/* Node reference has been deleted from the tree */
+	// HAS TEST
+	bool isDeleted()
 	{
 		return !m_attribref.lock();
 	};
 
 	
+	/*
+	 * - HAS TEST
+	 */
 	const std::string & getKey() const
 	{
-		sp_I_KVS_node n(m_attribref);
+		sp_I_KVS_node n(m_attribref.lock());
 		
 		if (!n)
 			return kvs_empty_string;
 		return n->getKey();
 	};
 	
-
+	
+	/*
+	 * - HAS TEST
+	 */
 	std::string getPath() const
 	{
 		
-		sp_I_KVS_node n(m_attribref);
+		sp_I_KVS_node n(m_attribref.lock());
 		
 		if (!n)
 			return kvs_empty_string;
@@ -243,7 +268,7 @@ protected:
 	std::string getPathValue(const std::string & path) const
 	{
 		
-		sp_I_KVS_node n(m_attribref);
+		sp_I_KVS_node n(m_attribref.lock());
 		
 		if (!n)
 			return kvs_empty_string;
@@ -258,7 +283,7 @@ protected:
 	void setPathValue(const std::string & path, const std::string & value) const
 	{
 		
-		sp_I_KVS_node n(m_attribref);
+		sp_I_KVS_node n(m_attribref.lock());
 		
 		if (!n)
 			return;
@@ -266,19 +291,24 @@ protected:
 		n->setPathValue(path, value);
 	};
 	
+	/*
+	 * - HAS TEST
+	 */
 	std::string getValue() const
 	{		
-		sp_I_KVS_node n(m_attribref);
+		sp_I_KVS_node n(m_attribref.lock());
 		
 		if (!n)
 			return kvs_empty_string;
 		return n->getValue();
 	};
 	
-
+	/*
+	 * - HAS TEST
+	 */
 	void setValue(const std::string & value)
 	{
-		sp_I_KVS_node n(m_attribref);
+		sp_I_KVS_node n(m_attribref.lock());
 		
 		if (!n)
 			return;
@@ -286,12 +316,14 @@ protected:
 		n->setValue(value);
 	};
 	
-
+	/*
+	 * - HAS TEST
+	 */
 	kvs_node_child_ci beginChildren() const
 	{
 		kvs_node_child_ci i;
 		
-		sp_I_KVS_node n(m_attribref);
+		sp_I_KVS_node n(m_attribref.lock());
 		if (!n)
 			i = kvs_fake_iterator();
 		else
@@ -299,34 +331,50 @@ protected:
 		return i;
 		
 	};
-	
+	/*
+	 * - HAS TEST
+	 */
 	kvs_node_child_ci endChildren() const
 	{
 		kvs_node_child_ci i;
 		
-		sp_I_KVS_node n(m_attribref);
+		sp_I_KVS_node n(m_attribref.lock());
 		if (!n)
 			i = kvs_fake_iterator();
 		else
-			i = n->beginChildren();
+			i = n->endChildren();
 		return i;
 	};
 	
+	/*
+	 * - HAS TEST
+	 */
 	uint32_t getChildCount() const
 	{
-		sp_I_KVS_node n(m_attribref);
+		sp_I_KVS_node n(m_attribref.lock());
 		if (!n)
 			return 0;
 		return n->getChildCount();
 	};
 	
-	
+	// Override me in the client if notifications are needed
+	KVS_NODEPROXY_NOTIFYCHANGES(path)
+	{
+	}
+							
 private:
+	// Indirection; otherwise boost::function points to this class ignoring virtual
+	void rcvChangeNotify(const std::string & path)
+	{
+		notifyChanges(path);
+	}
+	
+	sp_subscription m_subscription;
 	wp_I_KVS_node m_attribref;
 };
 
 #define BRING_IN_KVS_NODE \
-using I_KVS_nodeproxy::isDangling; \
+using I_KVS_nodeproxy::isDeleted; \
 using I_KVS_nodeproxy::getKey; \
 using I_KVS_nodeproxy::getPath; \
 using I_KVS_nodeproxy::getPathValue; \
@@ -336,7 +384,6 @@ using I_KVS_nodeproxy::setValue; \
 using I_KVS_nodeproxy::beginChildren; \
 using I_KVS_nodeproxy::endChildren; \
 using I_KVS_nodeproxy::getChildCount;
-
 
 class I_KVS {
 public:
