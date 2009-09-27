@@ -1,0 +1,14 @@
+1)
+	Global Tree lock
+		Simple to implement
+		Crap for performance
+		
+		
+2)
+	[recursive?] node based lock
+		Harder to implement, good performance
+		- Lock when there's an iterator out.
+			- do this how? llocks will need to know which thread they're on
+			- Boost::recursive_mutex to the rescue!
+		- Lock during change / refresh
+		
