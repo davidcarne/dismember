@@ -1,3 +1,7 @@
+#!/bin/bash
+
+rm -f config.mk
+
 CPPDEFS=
 test=ztest$$
 cat > $test.c <<EOF
@@ -8,7 +12,7 @@ int main() {
 EOF
 
 echo -n "checking necessity for hash<address_t>... "
-cc $test.c -o $test &> /dev/null
+c++ $test.c -o $test > /dev/null
 ./$test
 if test $? -eq 0; then
 	echo "Needed."
@@ -16,8 +20,32 @@ else
 	echo "Not needed."
 	CPPDEFS="$CPPDEFS -DDISABLE_ADDRESS_T_HASH"
 fi
-
 rm -f $test.[co] $test
 
-sed -i -e "/^CPPDEFS *=/s#=.*#=$CPPDEFS#" dismember.mk
 
+cat > $test.c <<EOF
+#include "boost/version.hpp"
+#include <stdio.h>
+
+int main() {
+	printf("%d\n", BOOST_VERSION);
+}
+EOF
+
+echo -n "checking boost version... "
+c++ $test.c -o $test > /dev/null
+BOOST_VERSION=`./$test`
+echo -n $BOOST_VERSION
+
+if test $BOOST_VERSION -ge 104000 ; then
+	echo " no -mt"
+	echo "LIBS += -lboost_python -lboost_thread" >> config.mk
+else
+	echo " use -mt"
+	echo "LIBS += -lboost_python-mt -lboost_thread-mt" >> config.mk
+fi
+rm -f $test.[co] $test
+
+
+
+echo "CPPDEFS=$CPPDEFS" >> config.mk

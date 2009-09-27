@@ -123,7 +123,9 @@ void QTApplication::save()
 		saveas(); // calls us back
 		return;
 	}
-	m_runtime->saveTo(m_filename.toStdString());
+	
+	// Todo: Actual saving would be a good thing
+	
 	m_fileChanged = false;
 }
 

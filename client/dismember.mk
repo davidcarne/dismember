@@ -43,7 +43,14 @@ CPPFLAGS += $(INCPATHS) $(EXTCPP) -Wall -Wno-unknown-pragmas -Wno-reorder \
 
 
 CPPFLAGS += $(INCPATHS) $(EXTCPP)
-LIBS += -lboost_python-mt -lboost_thread-mt -lboost_serialization-mt -lpthread $(PYEXTLD)
+LIBS += -lpthread $(PYEXTLD)
+
+
+config.mk: configure
+	./configure
+	
+-include config.mk
+
 
 $(PROG): $(CPPOBJS)
 	@echo "LD	$@"
@@ -65,7 +72,7 @@ $(BUILDDIR)/%.d: %.cpp
 
 clean:
 	@echo CLEAN
-	@$(RM) $(CPPOBJS) $(PROG)
+	@$(RM) $(CPPOBJS) $(PROG) config.mk
 
 distclean:
 	@echo DISTCLEAN
