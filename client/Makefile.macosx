@@ -1,5 +1,5 @@
-OSXVERS := 10.5
-SDKVERS := 10.5
+OSXVERS := 10.6.0
+SDKVERS := 10.6
 GUI := qt
 ARCH = $(shell uname -p)
 CPPFLAGS += -arch $(ARCH)  -mmacosx-version-min=$(OSXVERS)

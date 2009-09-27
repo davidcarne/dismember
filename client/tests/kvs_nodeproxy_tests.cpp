@@ -3,8 +3,11 @@
 
 #include "kvs/i_kvs.h"
 #include "kvs/localkvsstore.h"
+#include "kvs/kvs_proxies.h"
 
 #include <string>
+
+
 class NodeProxyMock1 : private I_KVS_nodeproxy 
 {
 	public:

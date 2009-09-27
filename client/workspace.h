@@ -79,22 +79,12 @@ public:
 
 private:
 	
-	friend class boost::serialization::access;
-	template<class Archive> void serialize(Archive & ar,  const unsigned int)
-	{
-		ar & m_trace & m_name;
-	}
-	
 	IRunQueueControl * m_runQueue;
 	WorkspaceGui * m_docgui;
 	std::string m_name;
 	I_ProjectModel * m_trace;
 	LocalPythonInterpreter * m_pyInterpreter;
 };
-
-BOOST_CLASS_VERSION(Workspace, 1)
-BOOST_CLASS_TRACKING(Workspace, boost::serialization::track_never)
-
 
 #endif
 

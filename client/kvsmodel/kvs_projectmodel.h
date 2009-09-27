@@ -34,11 +34,11 @@ class Symbol;
 class Xref;
 
 #include "kvs_memsegmentmanager.h"
-
+#include "kvs_proxies.h"
 #include "i_projectmodel.h"
 #include "types.h"
 
-class KVSBackedProjectModel : public I_ProjectModel, private I_KVS_attribproxy
+class KVSBackedProjectModel : public I_ProjectModel, private I_KVS_nodeproxy
 {	
 public:
 #pragma mark Constructor/Destructor
@@ -100,8 +100,6 @@ public:
 	virtual void unregisterMemlocHook(CallbackBase<I_MemlocData *> *);
 	virtual void unregisterXrefHook(CallbackBase<Xref *> *);
 	virtual void unregisterSymbolHook(CallbackBase<Symbol *> *);
-	
-	BRING_IN_KVS_ATTRIBS
 
 	
 private:

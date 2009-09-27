@@ -44,7 +44,7 @@ CPPTESTSRCS := $(filter %.cpp, $(TEST_SRC) )
 CPPTESTOBJS := $(patsubst %.cpp,$(BUILDDIR)/%.o, $(CPPTESTSRCS) )
 
 CPPDEPS := $(CPPOBJS:.o=.d) $(CPPTESTOBJS:.o=.d)
-CPPDEFS = -DDISABLE_ADDRESS_T_HASH
+CPPDEFS = 
 
 # Some python implementations add flags they shouldn't in --cflags
 PYEXTCPP := $(shell python-config --includes)
@@ -56,7 +56,7 @@ CPPFLAGS += $(INCPATHS) $(EXTCPP) -Wall -Wno-unknown-pragmas -Wno-reorder \
 
 
 CPPFLAGS += $(INCPATHS) $(EXTCPP)
-LIBS += -lboost_python-mt -lboost_thread-mt -lboost_serialization-mt -lpthread $(PYEXTLD)
+LIBS += -lboost_python -lboost_thread -lpthread $(PYEXTLD)
 TEST_LIBS := -lboost_test_exec_monitor
 
 # Before building anything; parse any dep files + delete ones that reference 
@@ -91,8 +91,6 @@ $(BUILDDIR)/%.d: %.cpp
 	@./build_tools/fast_dep.py $(CPPFLAGS) $< | sed -e "s@^\(.*\)\.o:@$(@D)/\1.d $(@D)/\1.o:@" > $@
 -include $(CPPDEPS)
 
-test:
-	make -C tests
 
 clean:
 	@echo CLEAN

@@ -42,7 +42,7 @@ address_t KVSBackedProjectModel::addressFromString(std::string k)
 }
 
 KVSBackedProjectModel::KVSBackedProjectModel(I_KVS * root_node) : 
-	I_KVS_attribproxy(root_node->getPathNode("/")->getAttributesReference())
+	I_KVS_nodeproxy(root_node->getPathNode("/")), m_memsegmentmanager(root_node->getPathNode("/segments"))
 {}
 
 sp_I_MemSegment KVSBackedProjectModel::addSegment(paddr_t base, psize_t len,  const std::string & name, void * buffer, psize_t initLength)

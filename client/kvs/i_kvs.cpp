@@ -16,6 +16,8 @@
  */
 
 #include "i_kvs.h"
+#include "kvs_proxies.h"
+
 const std::string kvs_empty_string = "";
 I_KVS::~I_KVS()
 {}

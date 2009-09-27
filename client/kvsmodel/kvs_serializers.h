@@ -25,6 +25,8 @@
  * so they can be used as part of a key
  */
 
+template<typename T> convertToKVS<T>(const T & src);
+
 std::string convertToKVS(const endian_e & value);
 std::string convertToKVS(const nparse_e & value);
 std::string convertToKVS(const nparse_sign_e & value);

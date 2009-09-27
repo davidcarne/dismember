@@ -3,6 +3,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "kvs/i_kvs.h"
+#include "kvs/kvs_proxies.h"
 #include "kvs/localkvsstore.h"
 
 BOOST_AUTO_TEST_CASE(CreateDanglingAttribute)

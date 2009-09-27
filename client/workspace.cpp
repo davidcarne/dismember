@@ -20,18 +20,6 @@
 #include <string>
 #include <climits> // workaround for boost < 1.38
 
-#include <boost/archive/tmpdir.hpp>
-
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
-
-#include <boost/serialization/base_object.hpp>
-#include <boost/serialization/utility.hpp>
-#include <boost/serialization/list.hpp>
-
-#include <boost/serialization/set.hpp>
-#include <boost/serialization/map.hpp>
-
 #include "i_memlocdata.h"
 #include "i_projectmodel.h"
 #include "kvs_projectmodel.h"
@@ -99,7 +87,4 @@ void Workspace::postGuiUpdate()
 
 void Workspace::saveTo(const std::string & filename)
 {
-	std::ofstream ofs(filename.c_str(), std::ios::binary);
-	boost::archive::text_oarchive oa(ofs);
-	oa << this;
 }

@@ -159,7 +159,7 @@ public:
 		return child->setPathValue(path.substr(sep_pos + 1, path.size()), value);
 	}
 	
-	virtual sp_I_KVS_attributes LocalKVSNode::getAttributesReference()
+	virtual sp_I_KVS_attributes getAttributesReference()
 	{
 		return sp_I_KVS_attributes(m_me);
 	}

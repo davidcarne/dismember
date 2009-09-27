@@ -20,10 +20,10 @@
 
 #include "i_memsegment.h"
 #include "kvs_memsegment.h"
-
-class KVS_MemSegmentManager {
+#include "kvs_proxies.h"
+class KVS_MemSegmentManager : private I_KVS_nodeproxy {
 public:
-	KVS_MemSegmentManager();
+	KVS_MemSegmentManager(sp_I_KVS_node noderef);
 	
 	typedef std::set<sp_KVS_MemSegment, KVS_MemSegment::less> memseglist_t;
 	typedef memseglist_t::const_iterator memseglist_ci;

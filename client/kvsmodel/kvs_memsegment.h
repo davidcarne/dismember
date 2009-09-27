@@ -21,6 +21,8 @@
 #include "address.h"
 #include "types.h"
 #include "i_memsegment.h"
+#include "i_kvs.h"
+#include "kvs_proxies.h"
 
 class KVS_MemSegment;
 
@@ -30,9 +32,11 @@ typedef boost::weak_ptr<KVS_MemSegment> wp_KVS_MemSegment;
 /**
  * \brief Represents a memory segment, optionally backed by a stretch of data
  */
-class KVS_MemSegment : public I_MemSegment{
+class KVS_MemSegment : public I_MemSegment, private I_KVS_attribproxy{
 public:
 	static sp_KVS_MemSegment createKVS_MemSegment(paddr_t base, psize_t len, void * buffer, psize_t initLength, const std::string & name = "");
+	
+	static sp_KVS_MemSegment createKVS_MemSegment(sp_I_KVS_attributes attribs);
 	
 	/** Destructor for a memory segment */
 	~KVS_MemSegment();
@@ -91,9 +95,10 @@ private:
 	 * @param initLength length of the initialized data for the segment [ie, for a data segment]
 	 * @param name name of memory segment [eg: RAM, ROM, BSS, TXT]
 	 */
-	KVS_MemSegment(paddr_t base, psize_t len, void * buffer, psize_t initLength, const std::string & name = "");
+	KVS_MemSegment(sp_I_KVS_attributes noderef, paddr_t base, psize_t len, void * buffer, psize_t initLength, const std::string & name = "");
 
-	
+	KVS_MemSegment(sp_I_KVS_attributes noderef);
+
 	wp_KVS_MemSegment m_me;
 	
 	void init(void *data, psize_t initLength);
